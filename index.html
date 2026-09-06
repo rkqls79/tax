@@ -78,6 +78,8 @@
   ul.tool-list li:nth-child(5) { animation-delay: 0.20s; }
   ul.tool-list li:nth-child(6) { animation-delay: 0.24s; }
   ul.tool-list li:nth-child(7) { animation-delay: 0.28s; }
+  ul.tool-list li:nth-child(8) { animation-delay: 0.32s; }
+  ul.tool-list li:nth-child(9) { animation-delay: 0.36s; }
 
   ul.tool-list a {
     display: flex;
@@ -123,6 +125,8 @@
   li:nth-child(5) .icon { background: #eee3fb; }
   li:nth-child(6) .icon { background: #fff3cf; }
   li:nth-child(7) .icon { background: #e6ecfb; }
+  li:nth-child(8) .icon { background: #f6e3d6; }
+  li:nth-child(9) .icon { background: #e3ede6; }
   @media (prefers-color-scheme: dark) {
     li:nth-child(1) .icon,
     li:nth-child(2) .icon,
@@ -130,7 +134,9 @@
     li:nth-child(4) .icon,
     li:nth-child(5) .icon,
     li:nth-child(6) .icon,
-    li:nth-child(7) .icon { background: var(--accent-soft); }
+    li:nth-child(7) .icon,
+    li:nth-child(8) .icon,
+    li:nth-child(9) .icon { background: var(--accent-soft); }
   }
 
   .info { flex: 1; min-width: 0; }
@@ -260,6 +266,26 @@
           <span class="info">
             <div class="name">지방세세목별과세증명서 변환기</div>
             <div class="desc">지방세세목별과세증명서를 확인하고 전표로 변환합니다</div>
+          </span>
+          <span class="arrow">→</span>
+        </a>
+      </li>
+      <li>
+        <a href="CMS 매입매출전표 입력기/CMS 매입매출전표 입력기.html">
+          <span class="icon">💳</span>
+          <span class="info">
+            <div class="name">CMS 매입매출전표 입력기</div>
+            <div class="desc">CMS 출금 결과를 담당자별로 조회하고 전표를 생성합니다</div>
+          </span>
+          <span class="arrow">→</span>
+        </a>
+      </li>
+      <li>
+        <a href="수임등록 및 EDI 가입신청/수임등록 및 EDI 가입신청.html">
+          <span class="icon">📝</span>
+          <span class="info">
+            <div class="name">수임등록 및 EDI 가입신청</div>
+            <div class="desc">수임계약서와 EDI 가입신청서를 작성하고 출력합니다</div>
           </span>
           <span class="arrow">→</span>
         </a>
