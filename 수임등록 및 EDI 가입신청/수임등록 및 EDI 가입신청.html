@@ -114,6 +114,34 @@ div.fi-ro { display: flex; align-items: flex-end; min-height: 3mm; overflow: vis
 <body>
 <div id="sidebar">
 
+  <div class="sb-title" id="agency-panel-toggle" onclick="toggleAgencyPanel()" style="cursor:pointer; display:flex; align-items:center; justify-content:space-between;">
+    <span>🏢 업무대행기관 정보</span>
+    <span id="agency-panel-chevron" style="transition:transform .15s;">▾</span>
+  </div>
+  <div id="agency-panel-body">
+  <div class="sf"><label>기관명(상호)</label>
+    <input type="text" id="ag_name" oninput="onAgencyChange()"></div>
+  <div class="sf"><label>사업자등록번호</label>
+    <input type="text" id="ag_biz" placeholder="000-00-00000" maxlength="12" oninput="fmtAgencyBiz(this)"></div>
+  <div class="sf"><label>법인등록번호</label>
+    <input type="text" id="ag_corp" placeholder="000000-0000000" maxlength="14" oninput="fmtAgencyCorp(this)"></div>
+  <div class="sf"><label>대표자 성명</label>
+    <input type="text" id="ag_rep" oninput="onAgencyChange()"></div>
+  <div class="sf"><label>대표자 주민등록번호</label>
+    <input type="text" id="ag_rep_rrn" placeholder="000000-0000000" maxlength="14" oninput="fmtAgencyRrn(this)"></div>
+  <div class="sf"><label>대표자 생년월일</label>
+    <input type="text" id="ag_rep_birth" placeholder="1990-01-01" maxlength="10" oninput="fmtAgencyBirth(this)"></div>
+  <div class="sf"><label>소재지</label>
+    <input type="text" id="ag_addr" oninput="onAgencyChange()"></div>
+  <div class="sf"><label>전화번호</label>
+    <input type="text" id="ag_phone" oninput="onAgencyChange()"></div>
+  <div class="sb-btns" style="margin-top:6px;padding-top:0;">
+    <button class="sb-btn sb-btn-clear" type="button" onclick="resetAgencyInfo()">↺ 기본값으로 되돌리기</button>
+  </div>
+  </div>
+
+  <div class="divider"></div>
+
   <div class="sb-title">⚡ 거래처 정보</div>
 
   <div class="sr" style="margin-bottom:6px;">
@@ -433,27 +461,27 @@ div.fi-ro { display: flex; align-items: flex-end; min-height: 3mm; overflow: vis
     </colgroup>
     <tbody>
 
-    <!-- 업무대행기관 (고정값) -->
+    <!-- 업무대행기관 (사이드바 '업무대행기관 정보'에서 값 관리) -->
     <tr>
       <td rowspan="4" class="sec-lbl" style="height:44mm;">업무대행<br>기관</td>
       <td class="lbl" style="height:10mm;">사업장관리번호</td>
-      <td colspan="2" style="height:10mm;"><div class="fi-ro">129-81-68431-0</div></td>
+      <td colspan="2" style="height:10mm;"><div class="fi-ro" id="ag_hi_mgmt"></div></td>
     </tr>
     <tr>
       <td class="lbl" style="height:10mm;">기&nbsp;&nbsp;관&nbsp;&nbsp;명</td>
-      <td colspan="2" style="height:10mm;"><div class="fi-ro">대한세무법인</div></td>
+      <td colspan="2" style="height:10mm;"><div class="fi-ro" id="ag_hi_name"></div></td>
     </tr>
     <tr>
       <td class="lbl" style="height:10mm;">소&nbsp;&nbsp;재&nbsp;&nbsp;지</td>
       <td colspan="2" style="height:10mm; overflow:visible;">
-        <div class="fi-ro" style="border-bottom:none !important;">경기도 성남시 분당구 야탑동 367-1 BYC빌딩 515호&nbsp;&nbsp;(전화번호 : 031-783-8877 )</div>
+        <div class="fi-ro" style="border-bottom:none !important;" id="ag_hi_addr"></div>
       </td>
     </tr>
     <tr>
       <td class="lbl" style="height:10mm;">대&nbsp;&nbsp;표&nbsp;&nbsp;자</td>
-      <td style="height:10mm;"><div class="fi-ro">이 석 제</div></td>
+      <td style="height:10mm;"><div class="fi-ro" id="ag_hi_rep"></div></td>
       <td style="height:10mm; font-size:8.5pt; vertical-align:middle;">
-        주 민 번 호 :&nbsp;<span style="display:inline-flex; align-items:flex-end; min-width:30mm; border-bottom:1px solid #ccc; font-size:9pt;">720106 – 1******</span>
+        주 민 번 호 :&nbsp;<span id="ag_hi_rrn" style="display:inline-flex; align-items:flex-end; min-width:30mm; border-bottom:1px solid #ccc; font-size:9pt;"></span>
       </td>
     </tr>
 
@@ -553,34 +581,31 @@ div.fi-ro { display: flex; align-items: flex-end; min-height: 3mm; overflow: vis
 
     <tr><td colspan="5" class="spacer"></td></tr>
 
-    <!-- 업무대행기관 (고정값) -->
+    <!-- 업무대행기관 (사이드바 '업무대행기관 정보'에서 값 관리) -->
     <tr>
       <td rowspan="4" class="sec-lbl" style="height:42mm;">업무<br>대행<br>기관</td>
       <td class="lbl" style="height:9mm;">사업장관리번호</td>
-      <td style="height:9mm;"><div class="fi-ro">129-81-68431-0</div></td>
+      <td style="height:9mm;"><div class="fi-ro" id="ag_pf_mgmt"></div></td>
       <td class="lbl">사업장 명칭</td>
-      <td><div class="fi-ro">대한세무법인</div></td>
+      <td><div class="fi-ro" id="ag_pf_name"></div></td>
     </tr>
     <tr>
       <td class="lbl" style="height:14mm;">소&nbsp;&nbsp;재&nbsp;&nbsp;지</td>
       <td colspan="3" style="height:14mm; overflow:visible; vertical-align:middle;">
-        <div class="fi-ro" style="border-bottom:none !important; flex-direction:column; align-items:flex-start; line-height:1.6;">
-          <span>경기도 성남시 분당구 성남대로 912, 515호</span>
-          <span>(야탑동, BYC빌딩)</span>
-        </div>
+        <div class="fi-ro" style="border-bottom:none !important;" id="ag_pf_addr"></div>
       </td>
     </tr>
     <tr>
       <td class="lbl" style="height:9mm;">사업자등록번호</td>
-      <td style="height:9mm;"><div class="fi-ro">129-81-68431</div></td>
+      <td style="height:9mm;"><div class="fi-ro" id="ag_pf_biz"></div></td>
       <td class="lbl">법인등록번호</td>
-      <td><div class="fi-ro">135671-0032224</div></td>
+      <td><div class="fi-ro" id="ag_pf_corp"></div></td>
     </tr>
     <tr>
       <td class="lbl" style="height:9mm;">사용자 성명</td>
-      <td style="height:9mm;"><div class="fi-ro">이 석 제</div></td>
+      <td style="height:9mm;"><div class="fi-ro" id="ag_pf_rep"></div></td>
       <td class="lbl">생년월일</td>
-      <td><div class="fi-ro">1972-01-06</div></td>
+      <td><div class="fi-ro" id="ag_pf_birth"></div></td>
     </tr>
 
     <tr><td colspan="5" class="spacer"></td></tr>
@@ -641,7 +666,7 @@ div.fi-ro { display: flex; align-items: flex-end; min-height: 3mm; overflow: vis
   </div>
 
   <div class="sign-row" style="justify-content:center; margin-top:3mm; font-size:11pt;">
-    신청인(업무대행기관&nbsp;사용자)&nbsp;:&nbsp;대한세무법인&nbsp;<span style="font-size:7.5pt; white-space:nowrap;">(서명 또는 인)</span>
+    신청인(업무대행기관&nbsp;사용자)&nbsp;:&nbsp;<span id="ag_pf_sign_name"></span>&nbsp;<span style="font-size:7.5pt; white-space:nowrap;">(서명 또는 인)</span>
     <span class="stamp-zones-row">
       <span class="stamp-zone hint" id="pf_sz_agency" onclick="toggleStamp('pf_sz_agency')" title="업무대행기관 도장">
         <canvas id="pf_sc_agency" width="100" height="100"></canvas>
@@ -798,15 +823,15 @@ div.fi-ro { display: flex; align-items: flex-end; min-height: 3mm; overflow: vis
     </div>
     <div style="display:flex; align-items:baseline; margin-top:1mm;">
       <span style="white-space:nowrap; font-size:10pt;">보험사무대행기관&nbsp;&nbsp;&nbsp;&nbsp;명&nbsp;&nbsp;&nbsp;칭</span>
-      <span style="padding-left:4mm;">대한세무법인</span>
+      <span style="padding-left:4mm;" id="ag_lf_name"></span>
     </div>
     <div style="display:flex; align-items:baseline;">
       <span style="white-space:nowrap; font-size:10pt; min-width:22mm; padding-left:14mm;">소&nbsp;&nbsp;재&nbsp;&nbsp;지</span>
-      <span style="padding-left:4mm;">경기도 성남시 분당구 성남대로 912, 515호</span>
+      <span style="padding-left:4mm;" id="ag_lf_addr"></span>
     </div>
     <div class="sign-row" style="gap:0; font-size:10.5pt;">
       <span style="white-space:nowrap; font-size:10pt; min-width:36mm;">대&nbsp;&nbsp;표&nbsp;&nbsp;자</span>
-      <span style="padding-left:4mm; min-width:28mm;">이&nbsp;석&nbsp;제</span>
+      <span style="padding-left:4mm; min-width:28mm;" id="ag_lf_rep"></span>
       <span style="font-size:7.5pt; white-space:nowrap;">(서명 또는 인)</span>
       <span class="stamp-zones-row">
         <span class="stamp-zone hint" id="lf_sz_agency" onclick="toggleStamp('lf_sz_agency')" title="대표자 도장">
@@ -836,6 +861,126 @@ function fmtMgmt(src) {
   else if (v.length > 5) v = v.slice(0,3)+'-'+v.slice(3,5)+'-'+v.slice(5);
   else if (v.length > 3) v = v.slice(0,3)+'-'+v.slice(3);
   src.value = v;
+}
+
+// ===== 업무대행기관 정보 (사이드바에서 관리, localStorage에 별도 저장되어 계속 유지됨) =====
+const AGENCY_DEFAULTS = {
+  ag_name: '대한세무법인',
+  ag_biz: '129-81-68431',
+  ag_corp: '135671-0032224',
+  ag_rep: '이 석 제',
+  ag_rep_rrn: '720106-1234567',
+  ag_rep_birth: '1972-01-06',
+  ag_addr: '경기도 성남시 분당구 성남대로 912, 515호 (야탑동, BYC빌딩)',
+  ag_phone: '031-783-8877'
+};
+function maskRrn(v) {
+  const d = (v||'').replace(/\D/g,'');
+  if (d.length < 7) return v||'';
+  return d.slice(0,6)+'-'+d[6]+'******';
+}
+function fmtAgencyBiz(src) {
+  let v = src.value.replace(/\D/g,'');
+  if (v.length>3) v=v.slice(0,3)+'-'+v.slice(3);
+  if (v.length>6) v=v.slice(0,6)+'-'+v.slice(6,11);
+  src.value = v;
+  onAgencyChange();
+}
+function fmtAgencyCorp(src) {
+  let v = src.value.replace(/\D/g,'');
+  if (v.length>6) v=v.slice(0,6)+'-'+v.slice(6,13);
+  src.value = v;
+  onAgencyChange();
+}
+function fmtAgencyRrn(src) {
+  let v = src.value.replace(/\D/g,'');
+  if (v.length>6) v=v.slice(0,6)+'-'+v.slice(6,13);
+  src.value = v;
+  onAgencyChange();
+}
+function fmtAgencyBirth(src) {
+  let v = src.value.replace(/\D/g,'');
+  if (v.length>4) v=v.slice(0,4)+'-'+v.slice(4);
+  if (v.length>7) v=v.slice(0,7)+'-'+v.slice(7,9);
+  src.value = v;
+  onAgencyChange();
+}
+function applyAgencyInfo() {
+  const name = document.getElementById('ag_name').value.trim();
+  const biz = document.getElementById('ag_biz').value.trim();
+  const corp = document.getElementById('ag_corp').value.trim();
+  const rep = document.getElementById('ag_rep').value.trim();
+  const repRrn = document.getElementById('ag_rep_rrn').value.trim();
+  const birth = document.getElementById('ag_rep_birth').value.trim();
+  const addr = document.getElementById('ag_addr').value.trim();
+  const phone = document.getElementById('ag_phone').value.trim();
+  const mgmt = biz ? biz+'-0' : '';
+
+  // 홈택스
+  setVal('hf_f10', name);
+  setVal('hf_f11', biz);
+  setVal('hf_f13', phone);
+  // 건강보험 EDI
+  setVal('ag_hi_mgmt', mgmt);
+  setVal('ag_hi_name', name);
+  setVal('ag_hi_addr', addr + (phone ? '  (전화번호 : '+phone+' )' : ''));
+  setVal('ag_hi_rep', rep);
+  setVal('ag_hi_rrn', maskRrn(repRrn));
+  // 국민연금 EDI
+  setVal('ag_pf_mgmt', mgmt);
+  setVal('ag_pf_name', name);
+  setVal('ag_pf_addr', addr);
+  setVal('ag_pf_biz', biz);
+  setVal('ag_pf_corp', corp);
+  setVal('ag_pf_rep', rep);
+  setVal('ag_pf_birth', birth);
+  setVal('ag_pf_sign_name', name);
+  // 보험사무대행
+  setVal('ag_lf_name', name);
+  setVal('ag_lf_addr', addr);
+  setVal('ag_lf_rep', rep);
+}
+function saveAgencyLocal() {
+  try {
+    const d = {};
+    ['ag_name','ag_biz','ag_corp','ag_rep','ag_rep_rrn','ag_rep_birth','ag_addr','ag_phone'].forEach(id=>{
+      const el = document.getElementById(id); if (el) d[id] = el.value;
+    });
+    localStorage.setItem('agency_info_v1', JSON.stringify(d));
+  } catch(e){}
+}
+function loadAgencyLocal() {
+  let saved = null;
+  try { const raw = localStorage.getItem('agency_info_v1'); if (raw) saved = JSON.parse(raw); } catch(e){}
+  const d = saved || AGENCY_DEFAULTS;
+  ['ag_name','ag_biz','ag_corp','ag_rep','ag_rep_rrn','ag_rep_birth','ag_addr','ag_phone'].forEach(id=>{
+    const el = document.getElementById(id); if (el) el.value = d[id] || '';
+  });
+  applyAgencyInfo();
+  let collapsed = false;
+  try { collapsed = localStorage.getItem('agency_panel_collapsed') === '1'; } catch(e){}
+  setAgencyPanelCollapsed(collapsed);
+}
+function setAgencyPanelCollapsed(collapsed) {
+  document.getElementById('agency-panel-body').style.display = collapsed ? 'none' : '';
+  document.getElementById('agency-panel-chevron').style.transform = collapsed ? 'rotate(-90deg)' : 'rotate(0deg)';
+}
+function toggleAgencyPanel() {
+  const collapsed = document.getElementById('agency-panel-body').style.display === 'none';
+  setAgencyPanelCollapsed(!collapsed);
+  try { localStorage.setItem('agency_panel_collapsed', collapsed ? '0' : '1'); } catch(e){}
+}
+function onAgencyChange() {
+  applyAgencyInfo();
+  drawAgencyStamps();
+  saveAgencyLocal();
+}
+function resetAgencyInfo() {
+  if (!confirm('업무대행기관 정보를 기본값으로 되돌리시겠습니까?')) return;
+  ['ag_name','ag_biz','ag_corp','ag_rep','ag_rep_rrn','ag_rep_birth','ag_addr','ag_phone'].forEach(id=>{
+    const el = document.getElementById(id); if (el) el.value = AGENCY_DEFAULTS[id];
+  });
+  onAgencyChange();
 }
 
 // ===== 탭 전환 =====
@@ -1135,18 +1280,20 @@ function autoStampAll() {
   });
 }
 function drawAgencyStamps() {
-  // 국민연금: 대한세무법인 법인 도장
+  const agencyName=document.getElementById('ag_name')?.value.trim()||'';
+  const agencyRep=document.getElementById('ag_rep')?.value.trim().replace(/\s/g,'')||'';
+  // 국민연금: 업무대행기관 법인 도장
   const pAg=document.getElementById('pf_sc_agency');
-  if(pAg){ drawCorpStampOnCanvas(pAg,'대한세무법인'); document.getElementById('pf_sz_agency').classList.add('has-stamp'); pAg.style.opacity='1'; }
-  // 보험사무대행: 이석제 개인 도장
+  if(pAg){ drawCorpStampOnCanvas(pAg,agencyName); document.getElementById('pf_sz_agency').classList.add('has-stamp'); pAg.style.opacity='1'; }
+  // 보험사무대행: 업무대행기관 대표자 개인 도장
   const lAg=document.getElementById('lf_sc_agency');
-  if(lAg){ drawPersonalStampOnCanvas(lAg,'이석제'); document.getElementById('lf_sz_agency').classList.add('has-stamp'); lAg.style.opacity='1'; }
+  if(lAg){ drawPersonalStampOnCanvas(lAg,agencyRep); document.getElementById('lf_sz_agency').classList.add('has-stamp'); lAg.style.opacity='1'; }
 }
 
 // 도장 토글 (클릭)
 function getStampName(zoneId) {
-  if(zoneId==='pf_sz_agency') return '대한세무법인';
-  if(zoneId==='lf_sz_agency') return '이석제';
+  if(zoneId==='pf_sz_agency') return document.getElementById('ag_name')?.value.trim()||'';
+  if(zoneId==='lf_sz_agency') return document.getElementById('ag_rep')?.value.trim().replace(/\s/g,'')||'';
   if(zoneId==='hf_sz_agree2') return document.getElementById('h_del1')?.value.trim()||'';
   if(zoneId.endsWith('_corp')) return document.getElementById('c_name')?.value.trim()||'';
   return document.getElementById('c_rep')?.value.trim()||'';
@@ -1490,6 +1637,7 @@ window.addEventListener('load', ()=>{
   hf_syncType();
   hf_updateChkInds();
   lf_updateChecks();
+  loadAgencyLocal();
   drawAgencyStamps();
   // 초기 도장 opacity 0
   ['hf_sc_sign','hf_sc_del','hf_sc_agree','hf_sc_agree2',
@@ -1522,9 +1670,10 @@ window.addEventListener('load', ()=>{
   right: 16px;
   z-index: 9999;
   font-family: 'Nunito', sans-serif;
-  font-size: 10px;
+  font-size: 8.5pt;
   font-weight: 700;
-  color: rgba(168, 152, 140, 0.4);
+  color: #948c80;
+  opacity: 0.5;
   letter-spacing: 0.5px;
   user-select: none;
   pointer-events: none;

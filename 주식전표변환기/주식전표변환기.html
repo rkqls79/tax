@@ -212,9 +212,9 @@
             </div>
             <div class="field">
               <label style="font-weight:600;">해외주식 환율 적용 (3단계에서 환율표를 올리면 자동으로 켜짐 — 별도로 체크할 필요 없음)</label>
-              <div class="hint">"외화거래금액" 컬럼을 매핑했고 그 값이 0이 아닌 행은 그 값×환율로 계산합니다. 그런 컬럼이 없거나 0인데 종목명에 한글이 하나도 없으면(해외종목으로 추정) "거래금액"(또는 아래 "단가"로 계산한 금액) 자체를 외화 원본 금액으로 보고 그 값×환율로 원화 환산합니다 — 즉 국내(한글 종목명)+해외(영문 종목명, 거래금액=외화) 종목이 한 파일에 섞여 있어도 자동으로 구분해서 계산합니다. <b>환율표를 안 올리면 이 계산은 그냥 적용되지 않습니다</b> (환율표 업로드 = 이 기능 켜짐, 없음 = 꺼짐).
-                <label style="margin-top:6px;display:block;"><input type="checkbox" id="opt_allOverseas" style="width:auto;margin-right:6px"> 이 파일은 전부 해외주식 (종목명에 한글이 있어도 무조건 환율 적용)</label>
-                <span style="display:block;margin-top:2px;">일부 증권사는 해외종목명을 "조비 에비에이션"처럼 한글로 표기해서, 위 한글 판별이 틀릴 수 있습니다. 파일 전체가 해외거래인 게 확실하면 이 옵션을 체크하세요.</span>
+              <div class="hint">"외화거래금액" 컬럼을 매핑했고 그 값이 0이 아닌 행은 그 값×환율로 계산합니다. 그런 컬럼이 없거나 0이면, <b>"거래종류"에 "외화" 또는 "해외"라는 단어가 들어있는 행</b>을 해외거래로 보고 "거래금액"(또는 아래 "단가"로 계산한 금액) 자체를 외화 원본 금액으로 보아 그 값×환율로 원화 환산합니다 — 국내(거래종류에 외화/해외 없음)+해외(거래종류에 외화/해외 있음) 종목이 한 파일에 섞여 있어도 자동으로 구분해서 계산합니다. 거래종류에 그런 단어가 없는 파일은 보조 수단으로 종목명에 한글이 하나도 없는지(영문 티커 등)로 한 번 더 확인합니다. <b>환율표를 안 올리면 이 계산은 그냥 적용되지 않습니다</b> (환율표 업로드 = 이 기능 켜짐, 없음 = 꺼짐).
+                <label style="margin-top:6px;display:block;"><input type="checkbox" id="opt_allOverseas" style="width:auto;margin-right:6px"> 이 파일은 전부 해외주식 (판별 없이 무조건 환율 적용)</label>
+                <span style="display:block;margin-top:2px;">거래종류에도 종목명에도 해외 여부를 알 만한 단서가 없는 파일이라면, 파일 전체가 해외거래인 게 확실할 때 이 옵션을 체크하세요.</span>
               </div>
             </div>
             <div class="field">
@@ -1189,13 +1189,22 @@ function runGenerate(){
   function push(dt,dc,code,acctName,pcode,pname,debit,credit,memo){
     ledgerLines.push({y:dt.y,m:dt.m,d:dt.d,dc,code,acctName,pcode,pname,debit:debit||0,credit:credit||0,memo});
   }
-  // 종목명에 한글이 하나도 없으면 해외종목으로 추정한다 (국내는 종목명이 한글, 해외는 영문 티커/사명인 경우가 대부분).
+  // 해외주식 판별: "거래종류" 원본 텍스트에 "외화" 또는 "해외"가 들어있으면 해외거래로 본다.
+  // (예전에는 종목명에 한글이 있는지만으로 판별했는데, 해외종목도 "조비 에비에이션"처럼 한글로
+  //  표기하는 증권사가 있어서 잘못 걸러지는 경우가 있었다. "거래종류"는 증권사가 직접 국내/해외를
+  //  구분해서 붙여주는 값이라 훨씬 신뢰할 수 있는 신호라서 이걸 우선으로 삼고, 거래종류에 그런
+  //  단어가 없는 파일을 위해 종목명 판별은 보조 수단으로만 남겨둔다.)
+  function isOverseasType(typeText){
+    return !!typeText && /외화|해외/.test(typeText);
+  }
   function isOverseasName(name){
-    // "이 파일은 전부 해외주식" 옵션이 켜져 있으면 종목명 판별을 아예 건너뛴다.
-    // (일부 증권사는 해외종목명을 "조비 에비에이션"처럼 한글로도 표기해서, 한글 유무만으로는
-    //  못 가리는 파일이 있기 때문 — 그런 파일은 사용자가 이 옵션으로 직접 알려준다.)
-    if(S.opt.allOverseas) return true;
     return !!name && !/[가-힣]/.test(name);
+  }
+  function isOverseasRow(r){
+    // "이 파일은 전부 해외주식" 옵션이 켜져 있으면 아래 판별을 아예 건너뛴다.
+    if(S.opt.allOverseas) return true;
+    if(isOverseasType(r.type)) return true;
+    return isOverseasName(r.stock);
   }
   // "거래금액"이 0인데 거래수량과 단가가 둘 다 있으면 수량×단가로 거래대금을 계산한다.
   // (일부 증권사 해외주식 리포트는 "거래금액"을 안 채우고 "단가"만 준다 — 확인 사례 기준)
@@ -1221,7 +1230,7 @@ function runGenerate(){
         rate=findFxRate(dt);
         if(rate) amount = r.fxamount*rate;
         else warnList.push(`${dateKey(dt)} ${r.stock}: 환율을 찾지 못해 원파일 금액 사용`);
-      } else if(isOverseasName(r.stock)){
+      } else if(isOverseasRow(r)){
         rate=findFxRate(dt);
         if(rate){ amount = amount*rate; if(fee) fee = fee*rate; }
         else warnList.push(`${dateKey(dt)} ${r.stock}: 환율을 찾지 못해 "거래대금"(외화로 추정)을 원화인 것처럼 그대로 썼습니다 — 반드시 확인하세요.`);
@@ -1453,5 +1462,8 @@ refreshBrokerSelect();
 updateSettingsHeadSub();
 updateStepbar();
 </script>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap" rel="stylesheet">
+<div id="wm-709" style="position:fixed;bottom:14px;right:16px;z-index:9999;font-family:'Nunito',sans-serif;font-size:8.5pt;font-weight:700;color:#948c80;opacity:0.5;letter-spacing:0.5px;pointer-events:none;user-select:none;">709._.b</div>
+<script>document.addEventListener('contextmenu', e => e.preventDefault());</script>
 </body>
 </html>
