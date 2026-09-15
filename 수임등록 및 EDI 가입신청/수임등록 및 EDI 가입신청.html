@@ -702,13 +702,13 @@ div.fi-ro { display: flex; align-items: flex-end; min-height: 3mm; overflow: vis
 
   <table class="ft" style="font-size:10pt;">
     <colgroup>
-      <col style="width:28mm;"><col style="width:24mm;"><col style="width:16mm;"><col style="width:46mm;"><col style="width:32mm;"><col style="width:26mm;">
+      <col style="width:28mm;"><col style="width:28mm;"><col style="width:16mm;"><col style="width:42mm;"><col style="width:32mm;"><col style="width:26mm;">
     </colgroup>
     <tbody>
 
     <tr>
       <td class="lbl" style="height:9mm;">사업장관리번호</td>
-      <td style="height:9mm;"><div class="fi-wrap"><input class="fi" type="text" id="lf_fb1"></div></td>
+      <td style="height:9mm;"><div class="fi-wrap"><input class="fi" type="text" id="lf_fb1" style="font-size:9pt; letter-spacing:-0.2px;"></div></td>
       <td class="lbl">사업장명</td>
       <td><div class="fi-wrap"><input class="fi" type="text" id="lf_fb3"></div></td>
       <td class="lbl">상시사용<br>근로자수</td>
@@ -803,7 +803,7 @@ div.fi-ro { display: flex; align-items: flex-end; min-height: 3mm; overflow: vis
 
   <table class="ft" style="margin-top:2mm; font-size:10pt;">
     <colgroup>
-      <col style="width:28mm;"><col style="width:24mm;"><col style="width:16mm;"><col style="width:46mm;"><col style="width:32mm;"><col style="width:26mm;">
+      <col style="width:28mm;"><col style="width:28mm;"><col style="width:16mm;"><col style="width:42mm;"><col style="width:32mm;"><col style="width:26mm;">
     </colgroup>
     <tbody>
     <tr>
@@ -834,7 +834,7 @@ div.fi-ro { display: flex; align-items: flex-end; min-height: 3mm; overflow: vis
       <span style="padding-left:4mm; min-width:28mm;" id="ag_lf_rep"></span>
       <span style="font-size:7.5pt; white-space:nowrap;">(서명 또는 인)</span>
       <span class="stamp-zones-row">
-        <span class="stamp-zone hint" id="lf_sz_agency" onclick="toggleStamp('lf_sz_agency')" title="대표자 도장">
+        <span class="stamp-zone hint" id="lf_sz_agency" onclick="toggleStamp('lf_sz_agency')" title="업무대행기관 법인 도장">
           <canvas id="lf_sc_agency" width="100" height="100"></canvas>
         </span>
       </span>
@@ -1285,21 +1285,21 @@ function drawAgencyStamps() {
   // 국민연금: 업무대행기관 법인 도장
   const pAg=document.getElementById('pf_sc_agency');
   if(pAg){ drawCorpStampOnCanvas(pAg,agencyName); document.getElementById('pf_sz_agency').classList.add('has-stamp'); pAg.style.opacity='1'; }
-  // 보험사무대행: 업무대행기관 대표자 개인 도장
+  // 보험사무대행: 업무대행기관 법인 도장 (법인 대행기관은 법인 인감 날인)
   const lAg=document.getElementById('lf_sc_agency');
-  if(lAg){ drawPersonalStampOnCanvas(lAg,agencyRep); document.getElementById('lf_sz_agency').classList.add('has-stamp'); lAg.style.opacity='1'; }
+  if(lAg){ drawCorpStampOnCanvas(lAg,agencyName); document.getElementById('lf_sz_agency').classList.add('has-stamp'); lAg.style.opacity='1'; }
 }
 
 // 도장 토글 (클릭)
 function getStampName(zoneId) {
   if(zoneId==='pf_sz_agency') return document.getElementById('ag_name')?.value.trim()||'';
-  if(zoneId==='lf_sz_agency') return document.getElementById('ag_rep')?.value.trim().replace(/\s/g,'')||'';
+  if(zoneId==='lf_sz_agency') return document.getElementById('ag_name')?.value.trim()||'';
   if(zoneId==='hf_sz_agree2') return document.getElementById('h_del1')?.value.trim()||'';
   if(zoneId.endsWith('_corp')) return document.getElementById('c_name')?.value.trim()||'';
   return document.getElementById('c_rep')?.value.trim()||'';
 }
 function isCorpZone(zoneId) {
-  return zoneId.endsWith('_corp')||zoneId==='pf_sz_agency';
+  return zoneId.endsWith('_corp')||zoneId==='pf_sz_agency'||zoneId==='lf_sz_agency';
 }
 function toggleStamp(zoneId) {
   const zone=document.getElementById(zoneId);
