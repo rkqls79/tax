@@ -1351,7 +1351,10 @@ async function addAttachmentToPdf(pdf, dataUrl, pageW, pageH) {
         try {
           const cvs = document.createElement('canvas');
           cvs.width = img.naturalWidth; cvs.height = img.naturalHeight;
-          cvs.getContext('2d').drawImage(img, 0, 0);
+          const ictx = cvs.getContext('2d');
+          // JPEG는 투명도가 없어 투명 PNG를 그대로 넣으면 빈 영역이 검게 나옴
+          ictx.fillStyle = '#ffffff'; ictx.fillRect(0, 0, cvs.width, cvs.height);
+          ictx.drawImage(img, 0, 0);
           const jpeg = cvs.toDataURL('image/jpeg', 0.92);
           pdf.addPage();
           let dw = pageW, dh = (img.naturalHeight / img.naturalWidth) * pageW;
