@@ -1480,7 +1480,7 @@ async function savePDF(tabIdx) {
     const sheetW = sheet.offsetWidth;
     const sheetH = sheet.scrollHeight;
     const canvas=await html2canvas(sheet,{
-      scale:2,useCORS:true,logging:false,allowTaint:true,
+      scale:2,useCORS:true,logging:false,allowTaint:true,backgroundColor:'#ffffff',
       width:sheetW,height:sheetH,windowWidth:sheetW
     });
     sheet.style.zoom = origZoom;
@@ -1491,15 +1491,15 @@ async function savePDF(tabIdx) {
     const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
     const pageW=pdf.internal.pageSize.getWidth(), pageH=pdf.internal.pageSize.getHeight();
     const imgW=pageW, imgH=(canvas.height/canvas.width)*imgW;
-    const imgData=canvas.toDataURL('image/png');
+    const imgData=canvas.toDataURL('image/jpeg',0.92);
     if(imgH<=pageH){
       // 한 페이지에 딱 맞거나 작은 경우
-      pdf.addImage(imgData,'PNG',0,0,imgW,imgH);
+      pdf.addImage(imgData,'JPEG',0,0,imgW,imgH);
     } else {
       // 세로가 넘치면 A4 높이 기준으로 비율 축소해서 한 장에 맞춤
       const scale=pageH/imgH;
       const fitW=imgW*scale;
-      pdf.addImage(imgData,'PNG',(pageW-fitW)/2,0,fitW,pageH);
+      pdf.addImage(imgData,'JPEG',(pageW-fitW)/2,0,fitW,pageH);
     }
     // 홈택스: 첨부 신분증을 추가 페이지로 병합 (이미지 + PDF 모두 지원)
     if (tabIdx === 0) {
