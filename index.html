@@ -58,23 +58,53 @@
   }
   .sub { color: var(--text-sub); font-size: 13.5px; margin: 0; line-height: 1.6; }
 
-  .tool-columns {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px 20px;
-    align-items: start;
+  .sections {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
   }
-  @media (max-width: 680px) {
-    .tool-columns { grid-template-columns: 1fr; }
+
+  .section-title {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin: 0 0 12px 4px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-sub);
+    letter-spacing: 0.01em;
+    opacity: 0;
+    animation: fadeUp 0.45s ease forwards;
+  }
+  .section-title .count {
+    font-size: 11.5px;
+    font-weight: 500;
+    padding: 1px 7px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
   }
 
   ul.tool-list {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px 12px;
+  }
+  ul.tool-list.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  ul.tool-list.cols-3 .desc {
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  @media (max-width: 760px) {
+    ul.tool-list.cols-3 { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 680px) {
+    ul.tool-list { grid-template-columns: 1fr; }
   }
 
   ul.tool-list li {
@@ -86,6 +116,10 @@
   ul.tool-list li:nth-child(3) { animation-delay: 0.12s; }
   ul.tool-list li:nth-child(4) { animation-delay: 0.16s; }
   ul.tool-list li:nth-child(5) { animation-delay: 0.20s; }
+  ul.tool-list li:nth-child(6) { animation-delay: 0.24s; }
+  ul.tool-list li:nth-child(7) { animation-delay: 0.28s; }
+  ul.tool-list li:nth-child(8) { animation-delay: 0.32s; }
+  ul.tool-list li:nth-child(9) { animation-delay: 0.36s; }
 
   ul.tool-list a {
     display: flex;
@@ -134,9 +168,12 @@
   li.c8 .icon { background: #f6e3d6; }
   li.c9 .icon { background: #e3ede6; }
   li.c10 .icon { background: #e6f1ea; }
+  li.c11 .icon { background: #fde9d9; }
+  li.c12 .icon { background: #e4eef8; }
   @media (prefers-color-scheme: dark) {
     li.c1 .icon, li.c2 .icon, li.c3 .icon, li.c4 .icon, li.c5 .icon,
-    li.c6 .icon, li.c7 .icon, li.c8 .icon, li.c9 .icon, li.c10 .icon { background: var(--accent-soft); }
+    li.c6 .icon, li.c7 .icon, li.c8 .icon, li.c9 .icon, li.c10 .icon,
+    li.c11 .icon, li.c12 .icon { background: var(--accent-soft); }
   }
 
   .info { flex: 1; min-width: 0; }
@@ -174,7 +211,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    header, ul.tool-list li { animation: none; opacity: 1; }
+    header, .section-title, ul.tool-list li { animation: none; opacity: 1; }
     ul.tool-list a, .icon, .arrow { transition: none; }
   }
 </style>
@@ -183,11 +220,23 @@
   <div class="wrap">
     <header>
       <h1>세무 도구 모음</h1>
-      <p class="sub">반복 업무를 줄여주는 세무 도구 모음입니다</p>
+      <p class="sub">반복 업무를 줄여주는 세무 도구와 실무 기준 자료 모음입니다</p>
     </header>
 
-    <div class="tool-columns">
-    <ul class="tool-list">
+    <div class="sections">
+    <section>
+      <h2 class="section-title">실무 도움 모음 <span class="count">3</span></h2>
+      <ul class="tool-list cols-3">
+      <li class="c11">
+        <a href="부가세 신고 실무 도우미/부가세 신고 실무 도우미.html">
+          <span class="icon">🧾</span>
+          <span class="info">
+            <div class="name">부가세 신고 실무 도우미</div>
+            <div class="desc">부가가치세 신고 기한·공제 여부·검토 포인트를 확인합니다</div>
+          </span>
+          <span class="arrow">→</span>
+        </a>
+      </li>
       <li class="c10">
         <a href="급여 노무 실무 도우미/급여 노무 실무 도우미.html">
           <span class="icon">💰</span>
@@ -198,6 +247,21 @@
           <span class="arrow">→</span>
         </a>
       </li>
+      <li class="c12">
+        <a href="장부정리 실무 기준표/장부정리 실무 기준표.html">
+          <span class="icon">🗂️</span>
+          <span class="info">
+            <div class="name">장부정리 실무 기준표</div>
+            <div class="desc">계정과목 분류와 장부정리 기준을 한눈에 확인합니다</div>
+          </span>
+          <span class="arrow">→</span>
+        </a>
+      </li>
+      </ul>
+    </section>
+    <section>
+      <h2 class="section-title">세무 도구 모음 <span class="count">9</span></h2>
+      <ul class="tool-list">
       <li class="c1">
         <a href="결산 분개 생성기/결산 분개 생성기.html">
           <span class="icon">📊</span>
@@ -238,8 +302,6 @@
           <span class="arrow">→</span>
         </a>
       </li>
-    </ul>
-    <ul class="tool-list">
       <li class="c9">
         <a href="수임등록 및 EDI 가입신청/수임등록 및 EDI 가입신청.html">
           <span class="icon">📝</span>
@@ -290,7 +352,8 @@
           <span class="arrow">→</span>
         </a>
       </li>
-    </ul>
+      </ul>
+    </section>
     </div>
 
   </div>

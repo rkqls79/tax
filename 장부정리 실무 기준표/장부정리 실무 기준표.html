@@ -1,0 +1,1758 @@
+<title>장부정리 실무 기준표</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* 부가세 신고 실무 도우미와 같은 디자인 체계: 종이색 바탕, 세이지(공제)·로즈(불공제)·황토(조건부), 검정 탭, 카드형 섹션 */
+*{box-sizing:border-box}
+:root{
+  --bg:#faf8f5; --card:#ffffff; --border:#efeae2; --line:#f1ece5; --text:#332f29; --sub:#766d62; --faint:#8f8578;
+  --accent:#7a8fa6; --sage:#7d9b8a; --rose:#a87878;
+  --sage-bg:#f1f6f3; --rose-bg:#f9f1f1; --sage-tag:#e2efe7;
+  --green:#3d6653; --red:#7a4040; --amber-bg:#f7f0e0; --amber-border:#ecdcb8; --amber-ink:#7a5600; --amber-line:#d9c38f;
+  --soft:#f8f5f0; --zebra:#fcfbf9; --link:#4f6780; --link-line:#cdd9e2; --ph:#b3aa9f;
+  --shadow:0 2px 8px rgba(60,56,49,.06);
+  color-scheme:light;
+}
+body{margin:0;font-family:'Noto Sans KR','Malgun Gothic','맑은 고딕',-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.55}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:24px;padding-block:28px 80px}
+@media (max-width:640px){.wrap{padding-inline:16px;padding-block:18px 60px}}
+.hidden{display:none!important}
+.hint{font-size:12.5px;color:var(--sub)}
+
+header.app-header{margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--border);display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
+header.app-header h1{font-size:19px;font-weight:600;letter-spacing:-.3px;margin:0 0 4px}
+header.app-header p{margin:0;color:var(--sub);font-size:12.5px}
+.rate-chip{display:inline-block;font-size:12px;background:var(--sage-bg);color:var(--green);border:1px solid var(--sage-tag);border-radius:20px;padding:3px 10px;font-weight:600}
+
+.tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.tabs button{border:1px solid var(--border);background:var(--card);color:var(--sub);padding:9px 20px;border-radius:8px;font:inherit;font-weight:600;cursor:pointer;transition:.15s}
+.tabs button:hover{background:var(--soft);color:var(--text)}
+.tabs button.on{background:var(--text);border-color:var(--text);color:var(--card)}
+@media (max-width:640px){.tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}.tabs button{padding:8px 13px;flex:none}}
+button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+section.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:14px;box-shadow:var(--shadow)}
+section.card h2{font-size:14px;font-weight:600;margin:0}
+.slip-title{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;border-bottom:1px solid var(--border);margin-bottom:12px;padding-bottom:10px}
+.grp-t{font-size:12.5px;font-weight:600;color:var(--text);margin:16px 0 8px;display:flex;align-items:center;gap:6px}
+.grp-t::before{content:"";width:4px;height:13px;border-radius:2px;background:var(--sage)}
+.grp-t.w::before{background:var(--amber-line)}
+
+/* 검색 */
+.sbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:2px 10px}
+.f{display:flex;flex-direction:column;gap:4px;min-width:0}
+.f > label{font-size:12.5px;color:var(--sub);font-weight:600}
+input,select,textarea{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font:inherit;font-size:13px;color:var(--text);background:var(--card)}
+.f input:not([type=checkbox]),.f select{height:38px;padding-top:0;padding-bottom:0}
+.f.key input{border-color:var(--sage);background:var(--sage-bg);font-size:15px;height:44px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(122,143,166,.16)}
+input::placeholder,textarea::placeholder{color:var(--ph)}
+.ctl{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-top:10px}
+.seg{display:inline-flex;border:1px solid var(--border);border-radius:7px;overflow:hidden;background:var(--card)}
+.seg button{border:none;background:var(--card);color:var(--sub);font:inherit;font-size:12.5px;font-weight:600;padding:7px 16px;cursor:pointer}
+.seg button + button{border-left:1px solid var(--border)}
+.seg button.on{background:var(--sage);color:var(--card)}
+.quick{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.quick button{border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:16px;padding:4px 12px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer}
+.quick button:hover{border-color:var(--sage)}
+.quick button.on{background:var(--sage-bg);border-color:var(--sage);color:var(--green)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;font-size:12px;color:var(--sub);margin:12px 0 8px}
+.count{font-size:12.5px;color:var(--sub);margin-left:auto}
+
+/* 판정 배지 */
+.v{display:inline-block;min-width:62px;text-align:center;font-size:12px;font-weight:600;border-radius:6px;padding:1px 8px;border:1.5px solid;flex:none;white-space:nowrap}
+.v.Y{color:var(--green);background:var(--sage-bg);border-color:var(--sage)}
+.v.N{color:var(--red);background:var(--rose-bg);border-color:var(--rose)}
+.v.C{color:var(--amber-ink);background:var(--amber-bg);border-color:var(--amber-line)}
+.v.X{color:var(--sub);background:var(--soft);border-color:var(--border)}
+.v.S{color:var(--link);background:var(--card);border-color:var(--link-line)}
+.v.Z{color:var(--faint);background:var(--card);border-color:var(--border);border-style:dashed}
+.tag{display:inline-block;font-size:11.5px;font-weight:600;border-radius:5px;padding:0 7px;border:1px solid var(--border);color:var(--sub);background:var(--soft);white-space:nowrap;line-height:1.6;vertical-align:1px;margin-left:4px}
+
+/* 결과 목록 (판정 목록 jd) */
+.jd-main{flex:1;min-width:0;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:2px 16px;align-items:baseline}
+.jd-t{font-weight:600}
+.jd-t small{font-size:11.5px;color:var(--faint);font-weight:600;margin-right:6px}
+.jd-a{font-weight:600;color:var(--green)}
+.jd-a code{font-family:inherit;font-size:12px;color:var(--sub);font-weight:600;background:var(--soft);border:1px solid var(--border);border-radius:4px;padding:0 5px;margin-left:6px;font-variant-numeric:tabular-nums}
+.jd-p{grid-column:1/-1;margin:1px 0 0;color:var(--sub);font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.jd-body{padding:0 14px 12px 88px}
+.jd-body p{margin:0 0 6px;font-size:12.5px;max-width:76ch}
+.rules{margin:6px 0 0;padding-left:18px;font-size:12.5px;color:var(--sub);line-height:1.8}
+.rowact{display:flex;gap:6px;margin-top:8px}
+@media (max-width:640px){
+  .jd-main{grid-template-columns:minmax(0,1fr)}
+  .jd-body{padding-left:14px}
+}
+.jd-g{grid-column:1/-1;margin:0;font-size:11.5px;font-weight:600;color:var(--sage)}
+.toc{margin-bottom:12px;gap:14px}
+#tab-taxref > div[id^="sec-"]{scroll-margin-top:90px}
+/* ── 가독성 보강 ── */
+.jd-main{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);align-items:center}
+.jd-t{font-weight:600;line-height:1.45}
+.jd-a{font-size:12.5px;text-align:right}
+.jd-p{display:none;-webkit-line-clamp:2;-webkit-box-orient:vertical;white-space:normal}
+body.show-detail .jd-p{display:-webkit-box}
+.kd{display:inline-block;width:8px;height:8px;border-radius:50%;margin-left:6px;vertical-align:2px}
+.kd.law{background:var(--green)} .kd.std{background:var(--accent)} .kd.prc{background:var(--amber-line)}
+.kd-legend{display:inline-flex;gap:10px;align-items:center;margin-left:4px}
+.kd-legend span{display:inline-flex;align-items:center;gap:4px}
+.kd-legend .kd{margin:0}
+.detail-btn{margin-left:auto;border:1px solid var(--border);background:var(--card);border-radius:16px;padding:3px 12px;font:inherit;font-size:12px;font-weight:600;color:var(--sub);cursor:pointer}
+.detail-btn.on{background:var(--sage-bg);border-color:var(--sage);color:var(--green)}
+li.cat-head{position:sticky;top:0;z-index:1;display:flex;align-items:baseline;gap:8px;padding:7px 14px;background:var(--soft)!important;border-bottom:1px solid var(--border);font-size:12.5px;font-weight:600;color:var(--text)}
+li.cat-head span{font-weight:600;color:var(--faint);font-size:12px}
+.jd-body{padding:4px 18px 14px 88px;display:grid;gap:10px}
+.jd-sec{display:grid;grid-template-columns:44px minmax(0,1fr);gap:8px;align-items:start}
+.jd-sec > b{font-size:11.5px;color:var(--faint);font-weight:600;padding-top:2px}
+.jd-sec ul{margin:0;padding-left:16px;font-size:12.5px;line-height:1.7}
+.jd-sec ul li{margin:1px 0}
+.jd-sec p{margin:0;font-size:12.5px;line-height:1.7}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{display:inline-block;font-size:12px;font-weight:600;border-radius:6px;padding:1px 8px;border:1px solid var(--border);background:var(--soft);color:var(--text);line-height:1.7}
+.chip.law{border-color:var(--sage-tag);background:var(--sage-bg);color:var(--green)}
+.chip.std{border-color:var(--link-line);background:var(--card);color:var(--link)}
+.jd-kw{font-size:12px;color:var(--faint)}
+.num{font-weight:600;color:var(--text)}
+mark{background:#fbe9a6;color:inherit;border-radius:3px;padding:0 1px}
+@media (max-width:640px){
+  .v{min-width:62px;font-size:11px;padding:1px 4px;margin-top:2px}
+  .jd-main{grid-template-columns:minmax(0,1fr);gap:1px}
+  .jd-a{text-align:left;font-size:12.5px}
+  .jd-body{padding:2px 12px 12px}
+  .jd-sec{grid-template-columns:minmax(0,1fr);gap:2px}
+}
+
+/* ── 배치 개편: 분류 사이드바·한 줄 도구막대·거래명→계정 ── */
+body{font-size:14px}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0 10px}
+.tb-gap{flex:1}
+.sel{width:auto;height:34px;padding:0 30px 0 10px;border:1px solid var(--border);border-radius:8px;background:var(--card);font:inherit;font-size:12.5px;font-weight:600;color:var(--text);cursor:pointer}
+.count{margin-left:2px;font-weight:600;color:var(--sub);font-size:12.5px}
+.jd-body{padding:2px 16px 14px 16px}
+@media (max-width:640px){
+  .jd-body{padding:2px 12px 12px}
+}
+#tab-taxref div[id^="sec-"]:not(.sec-active){display:none}
+#tab-taxref section.card{padding:16px 18px}
+/* ── 시안 A: 엑셀형 표 ── */
+.xl-wrap{border:1px solid var(--border);border-radius:10px;background:var(--card)}
+table.xl{width:100%;min-width:0;border-collapse:separate;border-spacing:0;table-layout:fixed;font-size:13px}
+.xl thead th{position:sticky;top:var(--sbar-h,66px);z-index:2;background:var(--soft);color:var(--sub);font-size:12px;font-weight:600;padding:8px 10px;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap}
+.xl thead th:first-child{border-top-left-radius:10px}.xl thead th:last-child{border-top-right-radius:10px}
+.xl th.c-tx{width:40%}.xl th.c-ac{width:22%}.xl th.c-code{width:9%}.xl th.c-vat{width:14%}.xl th.c-kind{width:15%}
+.xl td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:middle;background:none;font-weight:400;width:auto}
+.xl td:first-child{font-weight:600;background:none;width:auto}
+.xl tr.r{cursor:pointer}
+.xl tr.r:hover td{background:var(--soft)}
+.xl tr.r.open td{background:var(--sage-bg)}
+.xl tr.r:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.xl .src{font-size:11px;color:var(--faint);font-weight:600;margin-right:6px}
+.xl .c-ac{color:var(--green);font-weight:600}
+.xl td.c-code{color:var(--sub);font-variant-numeric:tabular-nums;font-size:12.5px}
+.xl td.c-vat .v{min-width:0;font-size:11.5px;padding:1px 8px}
+.kl{display:inline-block;font-size:11.5px;font-weight:600;border-radius:5px;padding:0 7px;line-height:1.7;border:1px solid}
+.kl.law{color:var(--green);background:var(--sage-bg);border-color:var(--sage-tag)}
+.kl.std{color:var(--link);background:var(--card);border-color:var(--link-line)}
+.kl.prc{color:var(--amber-ink);background:var(--amber-bg);border-color:var(--amber-border)}
+.xl .jd-g{font-size:11.5px;font-weight:600;color:var(--sage);margin-bottom:1px}
+.xl .jd-p{display:none;margin-top:3px;font-size:12.5px;font-weight:400;color:var(--sub);-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+body.show-detail .xl .jd-p{display:-webkit-box}
+.xl tr.r.open .jd-p{display:none!important}
+.xl tr.d td{padding:0;background:var(--zebra);border-bottom:1px solid var(--border)}
+.xl tr.d .jd-body{padding:10px 16px 14px}
+.xl tr.cat-head td{background:var(--soft);font-size:12.5px;font-weight:600;color:var(--text);padding:6px 10px;border-bottom:1px solid var(--border)}
+.xl tr.cat-head td span{margin-left:8px;font-weight:600;color:var(--faint);font-size:12px}
+.xl td.c-rule{font-size:12.5px;font-weight:400}
+.xl td.empty{text-align:center;padding:22px;color:var(--sub);font-weight:400}
+.hidden-row{display:none}
+#tab-taxref table{font-size:13px}
+#tab-taxref thead th{position:sticky;top:var(--sbar-h,66px);z-index:1}
+#tab-taxref tbody tr:nth-child(even) td:not(:first-child){background:var(--zebra)}
+#tab-taxref tbody tr:hover td{background:var(--soft)}
+@media (max-width:640px){
+  .xl .c-code,.xl .c-kind{display:none}
+  .xl th.c-tx{width:50%}.xl th.c-ac{width:30%}.xl th.c-vat{width:20%}
+  .xl td{padding:8px 8px}
+  table.xl{font-size:12.5px}
+}
+.xl tr.cat-head code{font-family:inherit;font-size:11.5px;font-weight:600;color:var(--sub);background:var(--card);border:1px solid var(--border);border-radius:4px;padding:0 5px;margin-left:6px}
+.cat-chips{margin:0 0 12px;gap:6px}
+.cat-chips button span{margin-left:5px;font-weight:600;color:var(--faint);font-size:11.5px}
+.cat-chips button.on span{color:var(--green)}
+details.notice-box{margin-top:22px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 16px}
+details.notice-box > summary{cursor:pointer;font-size:12.5px;font-weight:600;color:var(--sub);list-style:none}
+details.notice-box > summary::-webkit-details-marker{display:none}
+details.notice-box > summary::before{content:"▸ ";color:var(--amber-line)}
+details.notice-box[open] > summary::before{content:"▾ "}
+details.notice-box[open] > summary{margin-bottom:10px}
+.cat-grid{display:grid;grid-template-columns:76px minmax(0,1fr);gap:7px 10px;align-items:center;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin:0 0 12px}
+.cat-g{font-size:12px;font-weight:600;color:var(--sub);white-space:nowrap}
+.cat-row{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.cat-row button{border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:14px;padding:3px 10px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;line-height:1.5}
+.cat-row button span{margin-left:4px;font-weight:600;color:var(--faint);font-size:11.5px;font-variant-numeric:tabular-nums}
+.cat-row button:hover{border-color:var(--sage)}
+.cat-row button.on{background:var(--sage-bg);border-color:var(--sage);color:var(--green);font-weight:600}
+.cat-row button.on span{color:var(--green)}
+.cat-row .cat-all{margin-left:auto;border-style:dashed;color:var(--sub)}
+@media (max-width:640px){.cat-grid{grid-template-columns:minmax(0,1fr);gap:3px}.cat-g{margin-top:5px}.cat-row .cat-all{margin-left:0}}
+.cat2{display:flex;flex-direction:column;gap:8px;margin:0 0 12px}
+.grp-seg{flex-wrap:wrap}
+.grp-seg button{padding:7px 16px;font-size:12.5px}
+.grp-seg button span{margin-left:6px;font-size:11.5px;font-weight:600;opacity:.75}
+.cat2 .cat-row{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px 10px}
+.sbar .tabs{margin:10px 0 0}
+.toolbar{gap:6px 8px}
+.tb-l{font-size:12px;font-weight:600;color:var(--faint);margin-left:6px}
+.tb-l:first-child{margin-left:0}
+.tb-seg button{padding:6px 12px;font-size:12.5px}
+.toolbar .count{font-size:12.5px;font-weight:600;color:var(--text);background:var(--soft);border:1px solid var(--border);border-radius:14px;padding:2px 11px;margin-left:4px}
+#daily-acct{max-width:240px}
+.active-f{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:-4px 0 12px}
+.active-f:empty{display:none}
+.af-l{font-size:12px;font-weight:600;color:var(--amber-ink)}
+.active-f button{border:1px solid var(--amber-border);background:var(--amber-bg);color:var(--amber-ink);border-radius:14px;padding:2px 10px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer}
+.active-f button b{font-weight:600;margin-left:2px}
+.active-f .af-all{background:var(--card);color:var(--sub);border-color:var(--border)}
+.xl tr.cat-head code{margin:0 2px 0 6px}
+.sbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.sbar .f.key{flex:0 1 330px}
+.sbar .f.key input{height:38px;font-size:13px}
+.sbar .tabs{margin:0;flex:1 1 auto}
+@media (max-width:900px){.sbar .f.key{flex:1 1 100%}}
+.star{border:0;background:none;color:var(--faint);font-size:14px;line-height:1;padding:0 5px 0 0;cursor:pointer;vertical-align:-1px;font-family:inherit}
+.star:hover{color:var(--amber-ink)}
+.star.on{color:#c8930a}
+.fav-btn{height:38px;border:1px solid var(--border);background:var(--card);color:var(--sub);padding:0 14px;border-radius:8px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.fav-btn span{font-weight:600;color:var(--faint);font-size:12.5px;margin-left:2px}
+.fav-btn:hover{background:var(--soft)}
+.fav-btn.on{background:var(--amber-bg);border-color:var(--amber-border);color:var(--amber-ink)}
+.fav-btn.on span{color:var(--amber-ink)}
+.sbar .f.key{position:relative}
+.recent{position:absolute;left:0;top:calc(100% + 4px);z-index:7;width:max(100%,320px);background:var(--card);border:1px solid var(--border);border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,.12);padding:8px 10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.recent[hidden]{display:none}
+.rc-l{font-size:12px;font-weight:600;color:var(--faint);margin-right:2px}
+.recent button{border:1px solid var(--border);background:var(--soft);color:var(--text);border-radius:14px;padding:2px 10px;font:inherit;font-size:12.5px;cursor:pointer}
+.recent .rc-x{background:none;color:var(--faint);border-color:transparent;margin-left:auto}
+.tx-basis{margin-top:4px;font-size:12px;color:var(--sub)}
+@keyframes rowflash{0%,45%{background:var(--amber-bg)}100%{background:transparent}}
+#tab-taxref tr.flash td{animation:rowflash 2.6s ease-out}
+.flow-box > summary{font-size:13px!important;color:var(--text)!important}
+.flow-box[open] > summary{margin-bottom:10px}
+.flow-box section.card{box-shadow:none;margin-bottom:4px}
+/* 세무 기준표 표머리 고정: 넓은 화면은 페이지 기준, 좁은 화면(가로 스크롤)은 고정 안 함 */
+@media (min-width:901px){#tab-taxref .tbl-wrap{overflow:visible}}
+@media (max-width:900px){#tab-taxref thead th{position:static}}
+/* 즐겨찾기 아이콘 */
+.star{border:0;background:none;padding:0 6px 0 0;cursor:pointer;color:var(--faint);opacity:0;line-height:1;vertical-align:-1px}
+.star svg{display:block}
+.star path{fill:none;stroke:currentColor;stroke-width:1.3;stroke-linejoin:round}
+tr.r:hover .star,.star:focus-visible{opacity:1}
+.star:hover{color:var(--sub)}
+.star.on{opacity:1;color:var(--sage)}
+.star.on path{fill:currentColor}
+@media (hover:none){.star{opacity:.45}}
+.fav-btn{display:inline-flex;align-items:center;gap:6px}
+.fav-btn path{fill:none;stroke:currentColor;stroke-width:1.3;stroke-linejoin:round}
+.fav-btn.on{background:var(--sage-bg);border-color:var(--sage);color:var(--green)}
+.fav-btn.on path{fill:currentColor}
+.fav-btn.on span{color:var(--green)}
+/* 표 아래 안내 줄 */
+.legend{display:flex;flex-wrap:wrap;align-items:center;gap:5px 6px;margin:0 2px 8px;font-size:11.5px;color:var(--faint)}
+.legend .v{min-width:0;font-size:11px;padding:0 6px;line-height:1.6}
+.legend .kl{font-size:11px;padding:0 5px;margin-left:4px}
+.legend .kl:first-of-type{margin-left:0}
+.lg-k{color:var(--sub);margin-right:2px}
+.lg-sep{width:1px;height:12px;background:var(--border);margin:0 8px}
+/* ── 세무 기준표 보기 개선 ── */
+#tax-chips{display:flex;flex-wrap:wrap;gap:8px 18px}
+.tx-grp{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.tx-gl{font-size:12px;font-weight:600;color:var(--faint);margin-right:2px}
+#tab-taxref table{table-layout:fixed}
+#tab-taxref th{text-align:center}
+#tab-taxref td{vertical-align:middle;line-height:1.65}
+#tab-taxref th:first-child,#tab-taxref td:first-child{width:22%}
+#tab-taxref th:last-child,#tab-taxref td.law{width:19%}
+#tab-taxref td.law{font-size:12.5px;color:var(--sub)}
+#tab-taxref .num{color:var(--green);background:var(--sage-bg);border-radius:3px;padding:0 3px}
+#tab-taxref table.wide-law th:last-child,#tab-taxref table.wide-law td.law{width:42%}
+#tab-taxref .num.yr{background:none;color:inherit;padding:0}
+.term{border-radius:4px;padding:0 4px;font-weight:600;white-space:nowrap}
+.term.neg{color:var(--red);background:var(--rose-bg)}
+.term.pos{color:var(--green);background:var(--sage-tag)}
+.term.info{color:var(--link);background:#eef3f8}
+#tab-taxref .slip-title{flex-wrap:wrap;gap:4px 12px}
+#tab-taxref .slip-title h2{font-size:15px}
+#tab-taxref .slip-title .hint{font-size:12px}
+.tx-key{display:flex;flex-wrap:wrap;align-items:center;gap:5px 8px;margin:0 2px 10px;font-size:11.5px;color:var(--faint)}
+.tx-key .term{font-size:11px}
+#tab-taxref table.two-col th:first-child,#tab-taxref table.two-col td:first-child{width:38%}
+#tab-taxref table.two-col th:last-child,#tab-taxref table.two-col td.law{width:auto}
+#tab-taxref table.two-col td.law{font-size:12.5px}
+.tx-acct{margin-top:3px;font-size:12px;font-weight:400;color:var(--green)}
+.tx-key .tb-gap{flex:1}
+.tx-key .hint{font-size:12px}
+.tx-n{margin-left:8px;font-size:12px;font-weight:400;color:var(--faint);vertical-align:1px}
+/* 굵기 정리: 질문(거래명)은 보통, 답(계정과목)만 굵게, 펼친 설명은 보통 */
+.xl td:first-child{font-weight:400}
+.xl tr.d td,.xl tr.d td:first-child{font-weight:400}
+.xl tr.d .chip{font-weight:400}
+.xl tr.d .jd-sec > b{font-weight:600}
+.hd-r{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.fs-seg{display:inline-flex;align-items:center;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--card);font-size:12px}
+.fs-seg span{padding:0 8px;color:var(--faint)}
+.fs-seg button{border:0;border-left:1px solid var(--border);background:none;color:var(--sub);font:inherit;font-size:12px;padding:4px 10px;cursor:pointer}
+.fs-seg button:hover{background:var(--soft)}
+.fs-seg button.on{background:var(--sage);color:var(--card);font-weight:600}
+/* ── 읽기 편하게 (시안) ── */
+.xl td{padding-top:10px;padding-bottom:10px}
+.xl tr.r.alt td{background:#faf7f2}
+.xl tr.r:hover td{background:var(--soft)}
+.xl td.c-ac{font-size:13.5px}
+.xl td.c-code{color:var(--faint);font-size:12.5px}
+/* 부가세: 예외(불공제·조건부)만 배지, 나머지는 글자만 */
+.legend .v.Y,.xl td.c-vat .v.Y{background:none;border-color:transparent;color:var(--green);padding-left:0;padding-right:0}
+.legend .v.X,.xl td.c-vat .v.X{background:none;border-color:transparent;color:var(--faint);padding-left:0;padding-right:0}
+/* 근거: 테두리 없이 색 점 + 글자 */
+.xl td.c-kind .kl{border:0;background:none;padding:0;font-weight:400;color:var(--sub)}
+.xl td.c-kind .kl::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:1px;background:var(--sage)}
+.xl td.c-kind .kl.std::before{background:var(--link)}
+.xl td.c-kind .kl.prc::before{background:var(--amber-line)}
+/* 분류 머리줄: 스크롤해도 지금 어느 분류인지 보이게 */
+.xl tr.cat-head td{position:sticky;top:calc(var(--sbar-h,66px) + var(--th-h,34px));z-index:1;border-top:1px solid var(--border)}
+.chip.lk{text-decoration:none;cursor:pointer}
+.chip.lk i{font-style:normal;font-size:10px;margin-left:4px;opacity:.6}
+.chip.lk:hover{border-color:var(--sage);text-decoration:underline}
+a.lawlk{color:inherit;text-decoration:none;border-bottom:1px dotted var(--sage)}
+a.lawlk:hover{color:var(--green);border-bottom-style:solid}
+.ent-seg button.on{background:var(--link);color:var(--card)}
+/* 인쇄: 지금 보고 있는 표만 깔끔하게 */
+@media print{
+  body{background:#fff}
+  .wrap{zoom:1!important;max-width:none;padding:0}
+  .sbar,.toolbar,.cat2,.active-f,.legend,.tx-key,#tax-chips,.fs-seg,.star,.detail-btn,details.notice-box,.recent{display:none!important}
+  .xl thead th,#tab-taxref thead th,.xl tr.cat-head td{position:static!important}
+  .xl-wrap,.tbl-wrap,section.card{box-shadow:none;border-color:#ccc;overflow:visible!important}
+  .xl tr.r,.xl tr.cat-head,#tab-taxref tr{break-inside:avoid}
+  .xl tr.r.alt td{background:#f6f6f6!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .v,.kl,.term,.num{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  a.lawlk,.chip.lk{border:0;text-decoration:none}
+  .chip.lk i{display:none}
+}
+.chk-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 16px;margin:0 0 14px}
+.chk-box > summary{cursor:pointer;font-weight:600;font-size:14px;list-style:none}
+.chk-box > summary::-webkit-details-marker{display:none}
+.chk-box > summary span{margin-left:6px;font-weight:400;font-size:12px;color:var(--faint)}
+.chk-note{margin:6px 0 10px;font-size:12px;color:var(--faint)}
+.chk-g{margin:0 0 10px}
+.chk-g > b{display:block;font-size:12px;color:var(--sub);font-weight:600;margin:0 0 4px}
+.chk-i{display:grid;grid-template-columns:20px minmax(0,1fr) auto;gap:4px 8px;align-items:center;padding:5px 6px;border-radius:6px;font-size:13px}
+.chk-i:hover{background:var(--soft)}
+.chk-i input{margin:0;accent-color:var(--sage)}
+.chk-t{cursor:pointer}
+.chk-t:hover{color:var(--green);text-decoration:underline}
+.chk-i.done .chk-t{color:var(--faint);text-decoration:line-through}
+.chk-law{font-size:11.5px;color:var(--sub);text-align:right}
+.chk-prc{color:var(--amber-ink)}
+.chk-clear{border:1px solid var(--border);background:var(--card);border-radius:6px;font:inherit;font-size:12px;color:var(--sub);padding:3px 10px;cursor:pointer}
+@media (max-width:640px){.chk-i{grid-template-columns:20px minmax(0,1fr)}.chk-law{grid-column:2;text-align:left}}
+@media print{.chk-box{display:none!important}}
+.ev{display:inline-block;font-size:11px;font-weight:600;border-radius:5px;padding:0 6px;margin-right:4px;border:1px solid}
+.ev-req{color:var(--green);background:var(--sage-bg);border-color:var(--sage-tag)}
+.ev-ent{color:var(--red);background:var(--rose-bg);border-color:var(--rose)}
+.ev-wh{color:var(--link);background:#eef3f8;border-color:var(--link-line)}
+.ev-no{color:var(--sub);background:var(--soft);border-color:var(--border)}
+.jd-sec .chips{margin-top:4px}
+.empty{padding:22px;text-align:center;color:var(--sub);background:var(--card);border:1px dashed var(--border);border-radius:10px;font-size:12.5px}
+a.ln{color:var(--link);text-decoration:none;border-bottom:1px dotted var(--link-line);cursor:pointer}
+a.ln:hover{border-bottom-style:solid}
+
+/* 판단 순서 */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr));gap:10px}
+.sum{border:1px solid var(--border);border-radius:10px;padding:10px 14px;background:var(--soft);min-width:0}
+.sum-h{display:flex;gap:6px;align-items:baseline;font-weight:600}
+.sum-h span{color:var(--sage);font-weight:600;font-size:15px}
+.sum ul{margin:6px 0 0;padding-left:18px;font-size:12.5px;color:var(--sub)}
+.sum ul b{color:var(--text)}
+
+/* 표 */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:10px}
+table{border-collapse:collapse;width:100%;min-width:620px;font-size:12.5px;font-variant-numeric:tabular-nums}
+th{background:var(--soft);color:var(--sub);font-weight:600;font-size:12px;padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:9px 12px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top;word-break:keep-all;overflow-wrap:anywhere}
+tr:last-child td{border-bottom:none}
+td:first-child{font-weight:600;background:var(--zebra);width:26%}
+td.law{color:var(--sub);font-size:12.5px;width:26%}
+
+.notes{margin:0;padding:0;list-style:none}
+.notes li{font-size:12.5px;padding:8px 11px;border-radius:8px;margin-bottom:6px;border:1px solid;line-height:1.6}
+.notes li.warn{color:var(--amber-ink);background:var(--amber-bg);border-color:var(--amber-border)}
+.notes li.info{color:var(--text);background:var(--soft);border-color:var(--border)}
+.notes li.ok{color:var(--green);background:var(--sage-bg);border-color:var(--sage-tag)}
+
+/* 입력 */
+.fgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px 14px;margin-bottom:12px}
+@media (max-width:900px){.fgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.fgrid{grid-template-columns:minmax(0,1fr)}}
+.f.span2{grid-column:span 2} .f.all{grid-column:1/-1}
+@media (max-width:520px){.f.span2{grid-column:auto}}
+.btn{font:inherit;font-size:12.5px;font-weight:600;padding:8px 18px;border-radius:7px;border:1px solid var(--text);background:var(--text);color:var(--card);cursor:pointer}
+.btn.ghost{background:var(--card);color:var(--text);border-color:var(--border)}
+.btn.ghost:hover{border-color:var(--sage)}
+.btn.danger{background:var(--card);color:var(--red);border-color:var(--rose)}
+.btn.sm{padding:3px 12px;font-size:12px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+
+<header class="app-header">
+  <div>
+    <h1>🗂️ 장부정리 실무 기준표</h1>
+    <p>카드·통장 정리 · 결산 · 세무조정 · 외감 처리 · 숫자 1~4로 탭 이동 · / 키로 전체 검색</p>
+  </div>
+  <div class="hd-r"><div class="fs-seg" id="fsSeg" role="group" aria-label="글씨 크기"><span>글씨</span><button type="button" data-z="0.9">작게</button><button type="button" data-z="1">보통</button><button type="button" data-z="1.1">크게</button><button type="button" data-z="1.2">더 크게</button></div>
+  <span class="rate-chip">법령 확인 2026.10.6.</span></div>
+</header>
+
+<div class="sbar">
+  <div class="f key"><div class="recent" id="recent" hidden></div><input id="q" type="search" placeholder="거래·계정·코드 검색 (예: 주유, 복리후생비, 811)" autocomplete="off" aria-label="전체 검색"></div>
+  <button type="button" id="favBtn" class="fav-btn" aria-pressed="false"><svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z"/></svg>즐겨찾기 <span id="favN">0</span></button>
+  <div class="tabs" id="mainTabs">
+  <button data-tab="daily" class="on">🔎 일상 거래</button>
+  <button data-tab="close">📅 결산 정리</button>
+  <button data-tab="audit">🏛️ 외감·회계기준</button>
+  <button data-tab="taxref">📋 세무 기준표</button>
+</div>
+</div>
+
+
+<div id="tab-results" class="hidden">
+  <div class="slip-title"><h2 id="res-title">검색 결과</h2><span class="hint">Esc로 검색 지우기 · 탭을 누르면 원래 화면으로</span></div>
+  <div class="toolbar"><div class="quick" id="res-grp" role="group" aria-label="결과 위치"></div><span class="tb-gap"></span><button type="button" class="detail-btn" aria-pressed="false">자세히 보기</button></div>
+  <div class="legend"><span class="lg-k">부가세</span><span class="v Y">공제</span><span class="v N">불공제</span><span class="v C">조건부</span><span class="v X">해당없음</span><span class="v S">매출 과세</span><span class="lg-sep"></span><span class="lg-k">근거</span><span class="kl law">법령</span>법령·예규 <span class="kl std">기준</span>회계기준·KASB <span class="kl prc">관행</span>회계 관행<span class="lg-sep"></span><span>행을 누르면 처리 방법과 근거 조문이 열립니다</span></div><div class="xl-wrap"><table class="xl"><thead><tr><th class="c-tx">거래 · 위치</th><th class="c-ac">계정과목</th><th class="c-code">코드</th><th class="c-vat">부가세</th><th class="c-kind">근거</th></tr></thead><tbody id="list-results"></tbody></table></div>
+</div>
+
+<div id="tab-daily">
+  <div class="toolbar">
+        <span class="tb-l">출처</span><div class="seg tb-seg" id="daily-src" role="group" aria-label="출처"></div>
+        <span class="tb-l">사업자</span><div class="seg tb-seg ent-seg" id="daily-ent" role="group" aria-label="사업자 구분"></div>
+        <span class="tb-l">근거</span><div class="seg tb-seg" id="daily-kind" role="group" aria-label="근거 유형"></div>
+        <span class="tb-l">묶어 보기</span><div class="seg tb-seg" id="daily-view" role="group" aria-label="묶어 보기"></div>
+        <select id="daily-acct" class="sel" aria-label="계정 선택"></select>
+        <span class="count" id="daily-count"></span><span class="tb-gap"></span><button type="button" class="detail-btn" aria-pressed="false">자세히 보기</button>
+      </div>
+  <div class="cat2" id="daily-chips" role="group" aria-label="분류"></div>
+  <div class="active-f" id="daily-active" aria-live="polite"></div>
+      <div class="legend"><span class="lg-k">부가세</span><span class="v Y">공제</span><span class="v N">불공제</span><span class="v C">조건부</span><span class="v X">해당없음</span><span class="v S">매출 과세</span><span class="lg-sep"></span><span class="lg-k">근거</span><span class="kl law">법령</span>법령·예규 <span class="kl std">기준</span>회계기준·KASB <span class="kl prc">관행</span>회계 관행<span class="lg-sep"></span><span>행을 누르면 처리 방법과 근거 조문이 열립니다</span></div><div class="xl-wrap"><table class="xl"><thead><tr><th class="c-tx">거래</th><th class="c-ac">계정과목</th><th class="c-code">코드</th><th class="c-vat">부가세</th><th class="c-kind">근거</th></tr></thead><tbody id="list-daily"></tbody></table></div>
+</div>
+
+<div id="tab-close" class="hidden">
+  <details class="chk-box" id="chkBox">
+    <summary>✅ 결산 전 점검표 <span id="chkN"></span></summary>
+    <p class="chk-note">체크한 내용은 이 브라우저에만 저장됩니다. 항목 이름을 누르면 관련 기준을 검색합니다. 근거가 없는 항목은 회계 관행입니다.</p>
+    <div id="chkList"></div>
+    <button type="button" class="chk-clear" id="chkClear">체크 모두 지우기</button>
+  </details>
+  <div class="toolbar">
+    <span class="tb-l">사업자</span><div class="seg tb-seg ent-seg" id="close-ent" role="group" aria-label="사업자 구분"></div>
+        <span class="tb-l">근거</span><div class="seg tb-seg" id="close-kind" role="group" aria-label="근거 유형"></div>
+    <span class="tb-l">묶어 보기</span><div class="seg tb-seg" id="close-view" role="group" aria-label="묶어 보기"></div>
+    <select id="close-acct" class="sel" aria-label="계정 선택"></select>
+    <span class="count" id="close-count"></span><span class="tb-gap"></span><button type="button" class="detail-btn" aria-pressed="false">자세히 보기</button>
+  </div>
+  <div class="legend"><span class="lg-k">부가세</span><span class="v Y">공제</span><span class="v N">불공제</span><span class="v C">조건부</span><span class="v X">해당없음</span><span class="v S">매출 과세</span><span class="lg-sep"></span><span class="lg-k">근거</span><span class="kl law">법령</span>법령·예규 <span class="kl std">기준</span>회계기준·KASB <span class="kl prc">관행</span>회계 관행<span class="lg-sep"></span><span>행을 누르면 처리 방법과 근거 조문이 열립니다</span></div><div class="xl-wrap"><table class="xl"><thead><tr><th class="c-tx">거래</th><th class="c-ac">계정과목</th><th class="c-code">코드</th><th class="c-vat">부가세</th><th class="c-kind">근거</th></tr></thead><tbody id="list-close"></tbody></table></div>
+</div>
+
+<div id="tab-audit" class="hidden">
+  <div class="toolbar">
+    <span class="tb-l">근거</span><div class="seg tb-seg" id="audit-kind" role="group" aria-label="근거 유형"></div>
+    <span class="tb-l">묶어 보기</span><div class="seg tb-seg" id="audit-view" role="group" aria-label="묶어 보기"></div>
+    <select id="audit-acct" class="sel" aria-label="계정 선택"></select>
+    <span class="count" id="audit-count"></span><span class="tb-gap"></span><button type="button" class="detail-btn" aria-pressed="false">자세히 보기</button>
+  </div>
+  <div class="legend"><span class="lg-k">부가세</span><span class="v Y">공제</span><span class="v N">불공제</span><span class="v C">조건부</span><span class="v X">해당없음</span><span class="v S">매출 과세</span><span class="lg-sep"></span><span class="lg-k">근거</span><span class="kl law">법령</span>법령·예규 <span class="kl std">기준</span>회계기준·KASB <span class="kl prc">관행</span>회계 관행<span class="lg-sep"></span><span>행을 누르면 처리 방법과 근거 조문이 열립니다</span></div><div class="xl-wrap"><table class="xl"><thead><tr><th class="c-tx">거래</th><th class="c-ac">계정과목</th><th class="c-code">코드</th><th class="c-vat">부가세</th><th class="c-kind">근거</th></tr></thead><tbody id="list-audit"></tbody></table></div>
+</div>
+
+<div id="tab-taxref" class="hidden">
+  <div>
+    <div>
+      <div class="quick cat-chips" id="tax-chips" role="group" aria-label="표 선택"></div>
+            <div class="tx-key">색 표시 <span class="term neg">손금불산입·불공제</span>세금 부담이 늘어나는 처리 <span class="term pos">손금·공제·비과세</span>인정되는 처리 <span class="term info">원천징수·면세·영세율</span>구분<span class="num">금액·비율</span>한도·세율 숫자<span class="tb-gap"></span><span class="hint">근거 조문은 2026.10.6. 원문 확인</span></div>
+
+  <div id="sec-vat">
+  <section class="card">
+    <div class="slip-title"><h2>카드·현금영수증 매입세액 불공제 체크리스트</h2><span class="hint">부가가치세법 [시행 2026.1.2.] · 같은 법 시행령 [시행 2026.4.1.]</span></div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>불공제 사유</th><th>자주 나오는 거래</th><th>근거</th></tr></thead>
+      <tbody>
+        <tr><td>사업과 직접 관련 없는 지출</td><td>대표 가족 사용, 개인 쇼핑</td><td class="law">부가가치세법 §39①4호, 시행령 §77</td></tr>
+        <tr><td>개별소비세 과세 승용차의 구입·임차·유지</td><td>8인승 이하 승용차 주유·수리·렌트 (운수업 등 영업용 제외)</td><td class="law">부가가치세법 §39①5호, 시행령 §78</td></tr>
+        <tr><td>기업업무추진비 및 유사 비용</td><td>거래처 식사, 거래처 선물</td><td class="law">부가가치세법 §39①6호, 시행령 §79</td></tr>
+        <tr><td>면세사업 관련 매입</td><td>겸영사업자의 면세 매출 관련분 (공통분은 안분)</td><td class="law">부가가치세법 §39①7호, §40</td></tr>
+        <tr><td>카드 공제 대상이 아닌 공급자 업종</td><td>목욕·이발·미용, 여객운송(택시·고속버스·KTX·항공, 전세버스 제외), 입장권 발행 사업 등</td><td class="law">부가가치세법 §46③, 시행령 §88⑤1~6호</td></tr>
+        <tr><td>영수증 발급 기간의 간이과세자 가맹점</td><td>소규모 식당·가게 결제 (카드내역 조회 시 간이 표시)</td><td class="law">부가가치세법 §46③3호</td></tr>
+        <tr><td>세금계산서 미수취·필요적 기재사항 누락</td><td>세금계산서를 받지 않았거나 필요적 기재사항이 빠지거나 사실과 다른 경우</td><td class="law">부가가치세법 §39①2호</td></tr>
+        <tr><td>매입처별 세금계산서합계표 미제출·오류</td><td>미제출 또는 등록번호·공급가액 누락·오류분</td><td class="law">부가가치세법 §39①1호</td></tr>
+        <tr><td>사업자등록 전 매입</td><td>등록 신청 전 매입세액. 공급시기 과세기간 종료 후 20일 이내 신청하면 그 과세기간 기산일까지 역산한 기간분은 공제</td><td class="law">부가가치세법 §39①8호</td></tr>
+        <tr><td>공제 요건</td><td>신용카드매출전표등 수령명세서 제출, 증빙 보관</td><td class="law">부가가치세법 §46③1호·2호</td></tr>
+      </tbody>
+    </table></div>
+    <div class="grp-t w">자주 놓치는 것</div>
+    <ul class="notes">
+      <li class="warn">불공제 매입세액은 부가세대급금으로 떼지 말고 공급대가 전액을 해당 비용·자산 계정에 넣습니다.</li>
+      <li class="info">해외 결제(구글·메타·어도비 등 국외사업자)는 부가세가 없어 공제 대상이 아닙니다. 국내 법인이 세금계산서를 발급한 경우만 공제합니다.</li>
+    </ul>
+  </section>
+  </div>
+  <div id="sec-vat2">
+  <section class="card">
+    <div class="slip-title"><h2>부가세 면세·영세율·과세표준</h2><span class="hint">부가가치세법 [시행 2026.1.2.] · 같은 법 시행령 [시행 2026.4.1.]</span></div>
+    <div class="grp-t">면세 (주요 항목)</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>항목</th><th>기준</th><th>근거</th></tr></thead>
+      <tbody>
+        <tr><td>가공되지 않은 식료품 · 국산 비식용 농·축·수·임산물</td><td>면세 (김치·두부 등 단순가공 포함)</td><td class="law">§26①1호 · 시행령 §34</td></tr>
+        <tr><td>수돗물 · 연탄·무연탄</td><td>면세</td><td class="law">§26①2·3호</td></tr>
+        <tr><td>의료보건 용역</td><td>면세 (미용 목적 성형 등 요양급여 제외 진료는 과세)</td><td class="law">§26①5호 · 시행령 §35</td></tr>
+        <tr><td>교육 용역</td><td>면세 (대통령령 범위)</td><td class="law">§26①6호 · 시행령 §36</td></tr>
+        <tr><td>여객운송 용역</td><td>면세. 항공기·고속버스·전세버스·택시·특수자동차·특종선박·고속철도, 관광·유흥 목적 운송은 과세</td><td class="law">§26①7호</td></tr>
+        <tr><td>도서·신문·잡지·관보·뉴스통신</td><td>면세 (광고는 과세)</td><td class="law">§26①8호</td></tr>
+        <tr><td>우표·인지·증지·복권·공중전화</td><td>면세 (수집용 우표 제외)</td><td class="law">§26①9호</td></tr>
+        <tr><td>금융·보험 용역</td><td>면세. 은행업무, 보험업, 여신전문금융업(카드), 신용보증기금·기술보증기금 보증 등</td><td class="law">§26①11호 · 시행령 §40①</td></tr>
+        <tr><td>주택과 부수 토지의 임대 · 토지 공급</td><td>면세</td><td class="law">§26①12·14호</td></tr>
+        <tr><td>국가·지자체가 공급하는 재화·용역</td><td>면세. 부동산임대업(도로점용료 등), 도소매·음식·숙박업, 고속철도, 미용 진료 등은 과세</td><td class="law">§26①19호 · 시행령 §46</td></tr>
+      </tbody>
+    </table></div>
+    <div class="grp-t">영세율·과세표준</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>항목</th><th>기준</th><th>근거</th></tr></thead>
+      <tbody>
+        <tr><td>외국항행용역 (선박·항공기 국제 운송)</td><td>영세율</td><td class="law">§23①②</td></tr>
+        <tr><td>공급가액에 포함하지 않는 금액</td><td>에누리, 환입, 도달 전 파손·멸실, 공급과 직접 관련 없는 국고보조금·공공보조금, 연체이자, 조기결제 할인</td><td class="law">§29⑤</td></tr>
+        <tr><td>과세표준에서 공제하지 않는 금액</td><td>공급받는 자에게 지급하는 장려금 등, 대손금액</td><td class="law">§29⑥</td></tr>
+        <tr><td>부동산 임대 보증금</td><td>간주임대료를 공급가액에 포함</td><td class="law">§29⑩1호</td></tr>
+        <tr><td>사용인에게 무상 제공 (개인적 공급 예외)</td><td>작업복·작업모·작업화, 직장 연예·문화 재화, 경조사·설날·추석·창립기념일·생일 재화는 각 1인당 연 10만원까지 공급 아님</td><td class="law">§10④ · 시행령 §19의2</td></tr>
+        <tr><td>사업을 위한 증여 (공급 아님)</td><td>대가 없이 다른 사업자에게 주는 견본품, 특별재난지역 공급 물품 등</td><td class="law">§10⑤ · 시행령 §20</td></tr>
+      </tbody>
+    </table></div>
+    <div class="grp-t w">납부·환급</div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>항목</th><th>기준</th><th>근거</th></tr></thead>
+      <tbody>
+        <tr><td>납부세액</td><td>매출세액(대손세액 차감) − 매입세액. 매입세액이 크면 환급세액</td><td class="law">§37②</td></tr>
+        <tr><td>환급 기한</td><td>확정신고기한 후 30일 이내, 조기환급 대상(영세율, 사업설비 신설 등)은 15일 이내</td><td class="law">§59①②</td></tr>
+        <tr><td>공급자의 대손세액공제</td><td>공급받은 사업자는 대손 확정 과세기간에 매입세액에서 차감</td><td class="law">§45①③</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+  </div>
+  <div id="sec-dues">
+  <section class="card">
+    <div class="slip-title"><h2>세금과공과 한눈에 보기</h2><span class="hint">손금(필요경비) · 손금불산입 · 자산 취득원가로 나눔 · 행별 상세는 거래 검색에서 "세금과공과" 분류</span></div>
+    <div class="grp-t">손금 — 세금과공과로 비용 처리</div>
+    <div class="tbl-wrap"><table class="two-col" data-rule="세금과공과 (손금)">
+      <thead><tr><th>항목</th><th>근거·비고</th></tr></thead>
+      <tbody>
+        <tr><td>재산세·종합부동산세·지역자원시설세 (사업용)</td><td class="law">법인세법 시행령 §19 10호 · 업무무관 부동산분은 법인세법 §27 1호 검토</td></tr>
+        <tr><td>자동차세<div class="tx-acct">처리 · 세금과공과 (업무용승용차 관련비용 포함)</div></td><td class="law">시행령 §19 10호 · 법인세법 §27의2</td></tr>
+        <tr><td>주민세 사업소분·종업원분</td><td class="law">시행령 §19 10호</td></tr>
+        <tr><td>등록면허세 (면허분, 임원변경·본점이전 등기분)</td><td class="law">시행령 §19 10호</td></tr>
+        <tr><td>인지세 (일반 계약서) · 정부수입인지 · 증지대 (일반 등기)</td><td class="law">부동산 취득 관련분은 아래 자산 원가</td></tr>
+        <tr><td>교통유발부담금 · 환경개선부담금 · 폐기물부담금 · 점용료</td><td class="law">시행령 §19 10호 · 의무 아닌 공과금·위반 제재 공과금은 법인세법 §21 4·5호로 손금불산입</td></tr>
+        <tr><td>협회비·조합비 (법인 또는 주무관청 등록 단체) · 상공회의소 회비</td><td class="law">시행령 §19 11호 (법인 또는 주무관청 등록 단체만)</td></tr>
+        <tr><td>국민연금 회사부담분<div class="tx-acct">처리 · 세금과공과 (또는 복리후생비)</div></td><td class="law">—</td></tr>
+        <tr><td>개인사업자 본인 건강보험료 (지역·직장, 장기요양 포함)<div class="tx-acct">처리 · 세금과공과 (필요경비)</div></td><td class="law">소득세법 시행령 §55①11의2·11의3호</td></tr>
+        <tr><td>간주임대료 부가세 (임대인 부담분)</td><td class="law">—</td></tr>
+      </tbody>
+    </table></div>
+    <div class="grp-t w">손금불산입 — 세금과공과로 처리한 뒤 세무조정에서 손금불산입 (개인은 필요경비 불산입)</div>
+    <div class="tbl-wrap"><table class="two-col" data-rule="세금과공과 후 손금불산입">
+      <thead><tr><th>항목</th><th>근거·비고</th></tr></thead>
+      <tbody>
+        <tr><td>법인세·법인지방소득세<div class="tx-acct">처리 · 법인세등 (중간예납·원천징수분은 선납세금)</div></td><td class="law">법인세법 §21 1호</td></tr>
+        <tr><td>종합소득세·개인지방소득세 (개인사업자)<div class="tx-acct">처리 · 인출금</div></td><td class="law">소득세법 §33①1호</td></tr>
+        <tr><td>각종 가산세 · 의무 불이행 세액</td><td class="law">법인세법 §21 1호 · 소득세법 §33①4호 (원천징수 등 징수의무 불이행분)</td></tr>
+        <tr><td>벌금·과료·과태료·범칙금 · 강제징수비</td><td class="law">법인세법 §21 3호 · 소득세법 §33①2·3호</td></tr>
+        <tr><td>과징금·이행강제금 등 법령 위반 공과금</td><td class="law">법인세법 §21 5호 · 소득세법 §33①12호</td></tr>
+        <tr><td>법령상 의무가 아닌 공과금<div class="tx-acct">처리 · 손금불산입</div></td><td class="law">법인세법 §21 4호 · 소득세법 §33①12호</td></tr>
+        <tr><td>4대보험 연체금 등 의무 불이행으로 부과되는 공과금</td><td class="law">법인세법 §21 5호 · 소득세법 §33①12호</td></tr>
+        <tr><td>주민세 개인분 · 대표 본인 국민연금 (개인사업자)<div class="tx-acct">처리 · 인출금</div></td><td class="law">가사 관련 · 국민연금은 연금보험료공제 대상</td></tr>
+      </tbody>
+    </table></div>
+    <div class="grp-t">자산 취득원가 — 비용으로 떨어내지 않고 해당 자산 계정에 포함</div>
+    <div class="tbl-wrap"><table class="two-col" data-rule="자산 취득원가에 포함">
+      <thead><tr><th>항목</th><th>근거·비고</th></tr></thead>
+      <tbody>
+        <tr><td>취득세 · 농어촌특별세 · 지방교육세 (취득분)<div class="tx-acct">계정 · 토지·건물·차량운반구 등</div></td><td class="law">—</td></tr>
+        <tr><td>부동산 소유권이전 등기 증지대 · 법무사 수수료 · 중개수수료<div class="tx-acct">계정 · 토지·건물</div></td><td class="law">임차 중개수수료는 지급수수료</td></tr>
+        <tr><td>국민주택채권 등 의무 매입 채권 즉시 매도 할인손실<div class="tx-acct">계정 · 토지·건물·차량운반구</div></td><td class="law">—</td></tr>
+        <tr><td>개발부담금 · 광역교통시설부담금 · 학교용지부담금<div class="tx-acct">계정 · 토지·건물</div></td><td class="law">—</td></tr>
+        <tr><td>상하수도 원인자부담금 · 한전 시설부담금<div class="tx-acct">계정 · 건물·시설장치</div></td><td class="law">—</td></tr>
+        <tr><td>관세 (수입)<div class="tx-acct">계정 · 상품·원재료</div></td><td class="law">수입부가세는 부가세대급금</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+  </div>
+  <div id="sec-tax">
+  <section class="card">
+    <div class="slip-title"><h2>법인세·소득세에서 같이 봐야 할 기준</h2><span class="hint">법인세법 [시행 2026.7.1.] · 같은 법 시행령 [시행 2026.10.1.] · 소득세법 [시행 2026.7.1.]</span></div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>항목</th><th>기준</th><th>근거</th></tr></thead>
+      <tbody>
+        <tr><td>기업업무추진비 적격증빙</td><td>1회 3만원 초과(경조금은 20만원 초과)는 신용카드·현금영수증·(세금)계산서 등이 없으면 손금불산입. 법인은 법인 명의 카드여야 함</td><td class="law">법인세법 §25②, 시행령 §41①·⑥<br>소득세법 §35</td></tr>
+        <tr><td>기업업무추진비 한도</td><td>기본한도 + 수입금액별 한도 초과분은 손금불산입</td><td class="law">법인세법 §25④</td></tr>
+        <tr><td>일반 비용 적격증빙</td><td>건당 3만원(부가세 포함) 초과 거래는 적격증빙 수취 대상. 미수취 시 가산세 2% (기업업무추진비로 손금불산입된 금액은 제외)</td><td class="law">법인세법 §116②, 시행령 §158②1호, §75의5<br>소득세법 §160의2, §81의6</td></tr>
+        <tr><td>업무용승용차 관련비용</td><td>감가상각비·임차료·유류비 등. 업무사용금액 외 손금불산입, 감가상각비(상당액) 연 800만원 초과분 이월</td><td class="law">법인세법 §27의2<br>소득세법 §33의2 (복식부기의무자)</td></tr>
+        <tr><td>소액자산 즉시상각</td><td>거래단위 100만원 이하 감가상각자산은 사용연도에 손비 계상 시 손금. 공구·가구·전기기구·간판, 전화기·PC(주변기기 포함)는 금액과 관계없이 손비 계상 가능</td><td class="law">법인세법 시행령 §31④·⑥</td></tr>
+        <tr><td>벌금·과태료·가산세</td><td>세금과공과로 처리하되 손금불산입(필요경비 불산입)</td><td class="law">법인세법 §21 1호·3호<br>소득세법 §33①1~4호</td></tr>
+        <tr><td>복리후생비 범위</td><td>직장체육·문화·회식비, 사용자 부담 건강보험·고용보험료, 직장어린이집, 사회통념상 경조사비 등</td><td class="law">법인세법 시행령 §45①</td></tr>
+        <tr><td>기업업무추진비 추가 한도</td><td>2028.12.31. 이전 문화비 지출분, 전통시장·온누리·지역사랑상품권 지출분은 각각 한도액의 20% 범위에서 추가 손금산입</td><td class="law">조세특례제한법 §136③⑥</td></tr>
+        <tr><td>기부금</td><td>특례·일반 기부금은 한도 내 손금, 사업과 직접 관계없는 무상 지출</td><td class="law">법인세법 §24</td></tr>
+        <tr><td>사업용계좌 (개인 복식부기의무자)</td><td>금융회사를 통한 대금 결제, 인건비·임차료 지급에 사업용계좌 사용, 해당 과세기간 개시일부터 6개월 이내 신고</td><td class="law">소득세법 §160의5①③</td></tr>
+        <tr><td>가사 관련 경비 (개인)</td><td>필요경비 불산입</td><td class="law">소득세법 §33①5호</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+  </div>
+  <div id="sec-adj">
+  <section class="card">
+    <div class="slip-title"><h2>결산 세무조정 한도·기준</h2><span class="hint">법인세법 [시행 2026.7.1.] · 같은 법 시행령 [시행 2026.10.1.]</span></div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>항목</th><th>기준</th><th>근거</th></tr></thead>
+      <tbody>
+        <tr><td>감가상각비</td><td>결산 계상액 중 상각범위액 초과분 손금불산입</td><td class="law">§23①</td></tr>
+        <tr><td>자본적 지출 · 소액 수선비</td><td>내용연수 연장·가치 증가 수선비는 자본적 지출. 개별자산별 600만원 미만, 장부가액 5% 미만, 3년 미만 주기 수선은 손비 계상 시 비용</td><td class="law">시행령 §31②③</td></tr>
+        <tr><td>소액자산 즉시상각</td><td>거래단위 100만원 이하, 공구·가구·전기기구·간판, 전화기·PC 등은 손비 계상 시 손금</td><td class="law">시행령 §31④~⑥</td></tr>
+        <tr><td>퇴직급여충당금</td><td>당해 한도 총급여 5%, 누적 한도 비율은 2016년 이후 0%. 퇴직금은 충당금에서 먼저 지급한 것으로 봄</td><td class="law">§33①② · 시행령 §60①②</td></tr>
+        <tr><td>퇴직연금 부담금</td><td>확정기여형 전액. 그 외는 퇴직급여 추계액 등 − 퇴직급여충당금 한도</td><td class="law">시행령 §44의2②~④</td></tr>
+        <tr><td>대손충당금</td><td>채권잔액의 1%와 채권잔액 × 대손실적률 중 큰 금액. 대손금과 먼저 상계, 남은 금액은 다음 연도 익금</td><td class="law">§34①③ · 시행령 §61②</td></tr>
+        <tr><td>대손금 요건 (예)</td><td>소멸시효 완성, 부도 후 6개월 경과 어음·수표·중소기업 외상매출금, 중소기업 회수기일 2년 경과 외상매출금, 회수기일 6개월 경과 30만원 이하 채권 등</td><td class="law">시행령 §19의2①</td></tr>
+        <tr><td>가지급금 인정이자</td><td>시가는 가중평균차입이자율(사유가 있거나 선택 시 당좌대출이자율). 부당행위계산이면 차액 익금산입</td><td class="law">시행령 §89③⑤</td></tr>
+        <tr><td>업무무관 가지급금 지급이자</td><td>특수관계인에게 업무와 관련 없이 준 가지급금 상당 차입금 이자 손금불산입. 같은 사람의 가지급금·가수금은 상계</td><td class="law">§28①4호나목 · 시행령 §53①③</td></tr>
+        <tr><td>임원 상여 · 이익처분 상여</td><td>이익처분 상여와 급여지급기준 초과 임원 상여 손금불산입</td><td class="law">시행령 §43①②</td></tr>
+        <tr><td>임원 퇴직금</td><td>정관(위임 규정 포함) 금액, 없으면 퇴직 전 1년 총급여 × 1/10 × 근속연수 초과분 손금불산입</td><td class="law">시행령 §44④⑤</td></tr>
+        <tr><td>자산 평가손익</td><td>원칙적으로 평가 전 장부가액 유지. 파손·부패 재고, 재해 파손 유형자산, 부도 발행법인 주식 등은 감액 가능</td><td class="law">§42①③</td></tr>
+        <tr><td>재고자산 · 외화자산 평가방법</td><td>신고한 방법으로 평가하고 계속 적용</td><td class="law">시행령 §74① · §76②③</td></tr>
+        <tr><td>손익 귀속시기</td><td>익금·손금이 확정된 날이 속하는 사업연도</td><td class="law">§40①</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+  </div>
+  <div id="sec-car">
+  <section class="card">
+    <div class="slip-title"><h2>업무용승용차</h2><span class="hint">법인세법 · 같은 법 시행령 · 소득세법 · 부가가치세법</span></div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>항목</th><th>기준</th><th>근거</th></tr></thead>
+      <tbody>
+        <tr><td>감가상각 방법</td><td>정액법, 내용연수 5년으로 계산한 금액을 손금산입</td><td class="law">법인세법 시행령 §50의2③</td></tr>
+        <tr><td>관련비용 범위</td><td>감가상각비, 임차료, 유류비, 보험료, 수선비, 자동차세, 통행료, 금융리스부채 이자 등</td><td class="law">시행령 §50의2②</td></tr>
+        <tr><td>업무사용 외 금액</td><td>업무사용금액 외 관련비용 손금불산입</td><td class="law">법인세법 §27의2②</td></tr>
+        <tr><td>감가상각비(상당액) 한도</td><td>차량별 연 800만원 초과분 이월 (부동산임대 주업 법인 등 400만원)</td><td class="law">§27의2③⑤</td></tr>
+        <tr><td>처분손실 한도</td><td>차량별 연 800만원 초과분 이월</td><td class="law">§27의2④</td></tr>
+        <tr><td>운행기록 미작성</td><td>관련비용 1,500만원 이하면 전액, 초과면 1,500만원/관련비용 비율만 업무사용</td><td class="law">시행령 §50의2⑤~⑦</td></tr>
+        <tr><td>전용 번호판 미부착</td><td>업무사용금액 0원</td><td class="law">시행령 §50의2④</td></tr>
+        <tr><td>개인사업자</td><td>복식부기의무자에게 같은 취지의 특례 적용</td><td class="law">소득세법 §33의2</td></tr>
+        <tr><td>부가세</td><td>개별소비세 과세 승용차의 구입·임차·유지 매입세액 불공제</td><td class="law">부가가치세법 §39①5호</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+  </div>
+  <div id="sec-wht">
+  <section class="card">
+    <div class="slip-title"><h2>원천징수 세율·납부</h2><span class="hint">소득세법 [시행 2026.7.1.]</span></div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>항목</th><th>기준</th><th>근거</th></tr></thead>
+      <tbody>
+        <tr><td>이자소득</td><td>14% (비영업대금 이익 25%)</td><td class="law">§129①1호</td></tr>
+        <tr><td>배당소득</td><td>14% (출자공동사업자 배당 25%)</td><td class="law">§129①2호</td></tr>
+        <tr><td>원천징수대상 사업소득 (프리랜서 등)</td><td>3% (지방소득세 별도)</td><td class="law">§129①3호</td></tr>
+        <tr><td>근로소득</td><td>기본세율(간이세액표), 일용근로자 6%</td><td class="law">§129①4호 · ③</td></tr>
+        <tr><td>기타소득</td><td>20% (일부 15%·30%)</td><td class="law">§129①6호</td></tr>
+        <tr><td>퇴직소득</td><td>기본세율</td><td class="law">§129①7호</td></tr>
+        <tr><td>봉사료 (대통령령 범위)</td><td>5%</td><td class="law">§129①8호</td></tr>
+        <tr><td>원천징수세액 납부</td><td>징수일이 속하는 달의 다음 달 10일. 대통령령으로 정하는 소규모 원천징수의무자는 반기 마지막 달의 다음 달 10일</td><td class="law">§128①②</td></tr>
+        <tr><td>근로소득 연말정산</td><td>다음 해 2월분 급여 지급 때, 퇴직자는 퇴직하는 달 급여 지급 때 정산. 초과 징수분은 환급</td><td class="law">§137①②</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+  </div>
+  <div id="sec-nontax">
+  <section class="card">
+    <div class="slip-title"><h2>비과세 근로소득 (자주 쓰는 항목)</h2><span class="hint">소득세법 [시행 2026.7.1.] · 같은 법 시행령 [시행 2026.10.1.]</span></div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>항목</th><th>기준</th><th>근거</th></tr></thead>
+      <tbody>
+        <tr><td>식사대</td><td>식사를 제공받지 않는 근로자 월 20만원 이하. 사내급식 등 현물 식사도 비과세</td><td class="law">§12 3호 러목</td></tr>
+        <tr><td>자가운전보조금 · 여비</td><td>본인 소유·명의 임차 차량을 직접 운전해 업무에 쓰고 지급기준에 따라 받는 금액 월 20만원 이내. 여비·일숙직료는 실비변상 정도</td><td class="law">시행령 §12 3호</td></tr>
+        <tr><td>출산지원금</td><td>자녀 출생일 이후 2년 이내 최대 두 차례 받는 급여 전액 (사용자와 특수관계인 제외)</td><td class="law">§12 3호 머목 1) · 시행령 §17의2</td></tr>
+        <tr><td>보육수당</td><td>6세 이하 자녀 1명당 월 20만원 이내</td><td class="law">§12 3호 머목 2)</td></tr>
+        <tr><td>직무발명보상금</td><td>연 700만원 이하</td><td class="law">§12 3호 어목 · 시행령 §17의3①</td></tr>
+        <tr><td>작업복 등 피복</td><td>병원·시험실·금융회사·공장·광산 근무자 등이 받는 작업복·직장 전용 피복</td><td class="law">시행령 §12 8호</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+  </div>
+  <div id="sec-ins">
+  <section class="card">
+    <div class="slip-title"><h2>4대보험 부담 비율</h2><span class="hint">국민건강보험법 · 국민연금법 · 고용보험 및 산업재해보상보험의 보험료징수 등에 관한 법률</span></div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>항목</th><th>기준</th><th>근거</th></tr></thead>
+      <tbody>
+        <tr><td>건강보험 (직장가입자 보수월액보험료)</td><td>근로자·사업주 각 50%</td><td class="law">국민건강보험법 §76①</td></tr>
+        <tr><td>국민연금 (사업장가입자)</td><td>근로자 기여금·사용자 부담금 각 기준소득월액의 1천분의 65 (지역가입자 등 1천분의 130)</td><td class="law">국민연금법 §88③④</td></tr>
+        <tr><td>고용보험</td><td>실업급여 보험료는 근로자·사업주 각 2분의 1, 고용안정·직업능력개발사업 보험료는 사업주 부담</td><td class="law">보험료징수법 §13②④</td></tr>
+        <tr><td>산재보험</td><td>사업주 전액 부담</td><td class="law">보험료징수법 §13⑤</td></tr>
+        <tr><td>개인사업자 본인 건강보험료</td><td>직장·지역가입자로 부담하는 본인 보험료(장기요양 포함)는 필요경비</td><td class="law">소득세법 시행령 §55①11의2·11의3호</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+  </div>
+    </div>
+  </div>
+</div>
+
+<details class="notice-box flow-box" id="flow-box">
+  <summary>🧭 애매한 거래 판단 순서 — 검색에 없는 거래일 때</summary>
+  <section class="card">
+    <div class="slip-title"><h2>애매한 거래 판단 순서</h2><span class="hint">검색에 없는 거래는 이 순서대로 거르면 대부분 정리됩니다</span></div>
+    <div class="steps">
+      <div class="sum"><div class="sum-h"><span>1</span>사업 관련 지출인가</div><ul><li>아니면 법인은 <b>가지급금</b>, 개인은 <b>인출금</b></li><li>가사·사적 사용분은 비용으로 넣지 않음</li></ul></div>
+      <div class="sum"><div class="sum-h"><span>2</span>누구를 위한 지출인가</div><ul><li>임직원 → <b>복리후생비</b></li><li>특정 거래처 → <b>기업업무추진비</b></li><li>불특정 다수 → <b>광고선전비</b></li><li>내부 업무회의 → <b>회의비</b></li></ul></div>
+      <div class="sum"><div class="sum-h"><span>3</span>자산인가 비용인가</div><ul><li>1년 넘게 쓰고 거래단위 100만원 초과 → <b>비품·차량운반구</b> 등 자산</li><li>100만원 이하·PC·전화기 등은 손비 계상 가능</li></ul></div>
+      <div class="sum"><div class="sum-h"><span>4</span>원가인가 판관비인가</div><ul><li>제조·공사·용역 현장 비용은 같은 이름의 <b>원가 계정(500·600번대)</b></li><li>본사·영업용은 판관비(800번대)</li></ul></div>
+      <div class="sum"><div class="sum-h"><span>5</span>부가세 공제되는가</div><ul><li><a class="ln" data-go="taxref">세무 기준표</a> 탭의 매입세액 불공제 표 확인</li><li>불공제분은 부가세 포함 금액 전체를 비용·자산으로</li></ul></div>
+    </div>
+  </section>
+</details>
+
+<details class="notice-box">
+  <summary>사용 시 유의사항</summary>
+  <ul class="notes">
+    <li class="info">계정 코드는 더존 Smart A·위하고 기본 계정체계 기준 참고값입니다. 회사별 계정 설정이나 프로그램(세무사랑 등)에 따라 다를 수 있습니다.</li>
+    <li class="info">계정과목명은 일반기업회계기준의 계정 체계를 따릅니다. 판단 근거는 법령 조문만 적었고, 표의 법령 근거는 국가법령정보센터(law.go.kr) 현행 원문으로 2026.10.6.에 확인했습니다.</li>
+    <li class="warn">근거 칸에는 원문으로 확인한 법령 조문과 국세청 예규(문서번호·해석일자)만 적었습니다. 예규는 해석 당시 조문 번호를 쓰므로 현행 조문과 대조해 보세요. 회계기준 문단과 KASB 질의회신은 한국회계기준원 회계기준열람서비스(db.kasb.or.kr) 현행 목차·본문·질의회신으로 2026.10.6.에 확인했습니다. 근거가 없는 항목은 "회계 관행"으로 표시했고, 검색 화면의 근거 유형 버튼으로 나눠 볼 수 있습니다.</li>
+    <li class="warn">본 답변은 참고용이며, 실제 업무 적용 전 반드시 담당 세무사의 최종 검토를 거쳐야 합니다.</li>
+  </ul>
+</details>
+
+</div>
+
+<script>
+const CATS=["식비·복리", "접대·선물", "교통·출장", "차량", "세금과공과", "통신·수도광열", "임차·관리·수선", "소모품·자산", "수수료·광고·판매", "보험·교육·연구", "매입·원가", "인건비·원천", "통장·금융", "자산·투자", "결산·정리", "외감·회계기준", "업종별", "사적·기타"];
+const VAT={Y:"공제",N:"불공제",C:"조건부",X:"해당없음",S:"매출 과세",Z:"판단 보류"};
+// [출처, 분류, 거래, 키워드, 계정과목, 코드, 부가세(Y 공제/N 불공제/C 조건부/X 해당없음/S 매출 과세/"" 판단 보류), 메모, 근거]
+const R=[
+// ── 식비·복리
+["카드", "식비·복리", "직원 식대·야근 식사·회식", "식당 회식 점심 저녁 야근 배달의민족 배민 요기요 쿠팡이츠 직원식대", "복리후생비", "811", "Y", "임직원만 참석한 식사. 일반과세자 가맹점이면 공제.", "법인세법 시행령 §45① · 소득세법 §33①5호 · 부가가치세법 §38①1호"],
+["카드", "식비·복리", "직원용 커피·간식·생수", "스타벅스 카페 커피 편의점 GS25 CU 세븐일레븐 이마트24 간식 생수 다과", "복리후생비", "811", "C", "직원용이면 복리후생비. 외부 손님 응대용이면 회의비나 기업업무추진비. 편의점이 영수증 발급 기간의 간이과세자면 불공제.", "부가가치세법 §46③3호"],
+["카드", "식비·복리", "내부 업무회의 다과·도시락", "회의 다과 도시락 케이터링 미팅", "회의비", "827", "Y", "사내 회의 때 통상적인 다과·식사. 거래처를 대접한 성격이면 기업업무추진비로 분류.", "부가가치세법 §38①1호"],
+["공통", "식비·복리", "직원 경조사비 (축의·조의)", "직원 결혼 축의금 조의금 부의금 경조사 화환 근조", "복리후생비", "811", "X", "사회통념상 타당한 범위. 청첩장·부고 등 지급 근거 보관.", "법인세법 시행령 §45①"],
+["카드", "식비·복리", "직원 명절·생일 선물", "명절선물 생일 선물세트 상품권 직원선물 창립기념", "복리후생비", "811", "C", "임직원에게 주는 경조사·설날·추석·창립기념일·생일 선물은 각 목별 1인당 연 10만원까지 재화의 공급으로 보지 않고, 초과분은 공급으로 봄. 구입 매입세액은 사업 관련이면 공제.", "부가가치세법 §10④ · 시행령 §19의2 3호 · §38①1호 · 법인세법 시행령 §45①"],
+["카드", "식비·복리", "직원 건강검진·체육·동호회", "건강검진 체육 헬스 동호회 야유회", "복리후생비", "811", "C", "직장체육·문화비는 복리후생비. 건강검진 등 의료보건 용역은 면세. 특정 임원만 대상이면 급여성 검토.", "법인세법 시행령 §45① · 부가가치세법 §26①5호"],
+["카드", "식비·복리", "사내행사·워크숍·체육대회", "워크숍 펜션 리조트 행사대행 체육대회 송년회 시무식 단합", "복리후생비", "811", "Y", "임직원 대상 행사 경비. 숙박·대관·식사는 일반과세자면 공제. 거래처가 함께하면 해당분은 기업업무추진비로 나눔.", "법인세법 시행령 §45① · 부가가치세법 §38①1호"],
+["공통", "식비·복리", "직원 숙소·기숙사 임차", "기숙사 직원숙소 원룸 사택 월세 숙소", "복리후생비", "811", "X", "직원용 주택 임차료. 주택 임대 용역은 면세.", "부가가치세법 §26①12호"],
+["공통", "식비·복리", "통근 전세버스", "통근버스 전세버스 셔틀 출퇴근버스", "복리후생비", "811", "Y", "전세버스 운송은 여객운송 중 카드 매입세액 공제 제외 업종에서 빠지므로 공제 가능.", "부가가치세법 §46③ · 시행령 §88⑤2호"],
+["카드", "식비·복리", "유니폼·작업복·안전용품", "유니폼 작업복 안전화 안전모 장갑 방진복 근무복", "복리후생비", "811", "Y", "업무용으로 지급하는 피복·안전용품.", "부가가치세법 §38①1호"],
+["카드", "식비·복리", "사무실 상비약 (일반의약품)", "약국 상비약 소화제 진통제 밴드 파스 구급함", "복리후생비", "811", "C", "의약품 구입은 면세 열거 항목이 아니라 과세(공제), 진료 등 의료보건 용역은 면세. 대표·가족 개인 구입분은 비용 제외.", "부가가치세법 §26①5호 · §38①1호"],
+["공통", "식비·복리", "구내식당·위탁급식", "구내식당 위탁급식 단체급식 식권 식자재 아워홈 CJ프레시웨이 삼성웰스토리", "복리후생비", "811", "C", "위탁급식 용역은 과세라 공제. 직접 사는 가공되지 않은 농·축·수산물은 면세.", "법인세법 시행령 §45① · 부가가치세법 §26①1호 · §38①1호"],
+["공통", "식비·복리", "직장어린이집·보육 지원", "어린이집 보육 직장어린이집 보육료", "복리후생비", "811", "X", "직장어린이집 운영비는 복리후생비.", "법인세법 시행령 §45①"],
+["공통", "식비·복리", "직원 포상금·시상품", "포상 시상 우수사원 장기근속 상품 표창", "복리후생비", "811", "C", "현금 포상은 근로소득(상여). 물품 포상은 사업자가 사용인에게 무상으로 주는 재화라 공급의제 대상이며, 시행령 §19의2 각 호에 해당하는 경우만 제외.", "부가가치세법 §10④ · 시행령 §19의2"],
+["카드", "식비·복리", "직원 생일 케이크·제과", "파리바게뜨 뚜레쥬르 케이크 제과점 베이커리 빵", "복리후생비", "811", "Y", "직원 생일·축하용. 거래처 방문 선물이면 기업업무추진비.", "법인세법 시행령 §45① · 부가가치세법 §38①1호"],
+["카드", "식비·복리", "사무실 커피 원두·캡슐·생수 배달", "원두 캡슐 네스프레소 커피머신 생수배달 아이시스 삼다수 정기배송", "복리후생비", "811", "Y", "직원 공용 음료.", "부가가치세법 §38①1호"],
+["카드", "식비·복리", "직원 독감 예방접종", "예방접종 독감 백신 접종", "복리후생비", "811", "X", "의료보건 용역은 면세.", "법인세법 시행령 §45① · 부가가치세법 §26①5호"],
+["카드", "식비·복리", "직원 운동·헬스 지원", "헬스 필라테스 요가 피트니스 체육관 운동지원", "복리후생비", "811", "C", "전 직원 대상 직장체육은 복리후생비. 대표 개인 운동은 비용 아님.", "법인세법 시행령 §45① · 부가가치세법 §38①1호"],
+["카드", "식비·복리", "유니폼·작업복 세탁", "세탁소 세탁 크린토피아 빨래방 코인세탁", "복리후생비", "811", "Y", "업무용 피복 세탁. 개인 의류 세탁은 비용 아님.", "부가가치세법 §38①1호"],
+["통장", "식비·복리", "사내근로복지기금 출연", "사내근로복지기금 근로복지기금 공동근로복지기금 기금출연", "복리후생비 (기금출연금)", "811", "X", "해당 법인이 설립한 사내근로복지기금, 공동근로복지기금 등에 출연하는 금품은 손비.", "법인세법 시행령 §19 22호"],
+["통장", "식비·복리", "우리사주조합 출연·운영비", "우리사주 우리사주조합 자사주출연 조합운영비", "복리후생비", "811", "X", "우리사주조합에 출연하는 자사주 장부가액·금품은 손비이고, 우리사주조합 운영비는 복리후생비.", "법인세법 시행령 §19 16호 · §45①3호"],
+// ── 접대·선물
+["카드", "접대·선물", "거래처 식사·술자리", "거래처 접대 식사 술 주점 노래방 손님 고객식사", "기업업무추진비", "813", "N", "부가세 불공제(공급가액+부가세 전액 비용). 1회 3만원 초과는 법인 명의 카드 등 적격증빙 필수. 참석자·목적 메모 남기기. 한도 초과분 손금불산입.", "부가가치세법 §39①6호 · 법인세법 §25②④ · 시행령 §41①⑥"],
+["카드", "접대·선물", "거래처 선물·명절선물", "거래처 선물 명절 선물세트 과일바구니 한우 정육", "기업업무추진비", "813", "N", "부가세 불공제. 불특정 다수에게 주는 판촉물이면 광고선전비.", "부가가치세법 §39①6호 · 시행령 §79"],
+["공통", "접대·선물", "거래처 경조사비·화환", "거래처 축의금 조의금 화환 근조화환 개업 축하화분", "기업업무추진비", "813", "X", "1회 20만원 초과 경조금은 적격증빙 없으면 손금불산입. 청첩장·부고 보관.", "법인세법 §25② · 시행령 §41①"],
+["카드", "접대·선물", "거래처 골프 (그린피·카트비)", "골프 그린피 카트비 컨트리클럽 CC 골프장 스크린골프", "기업업무추진비", "813", "N", "거래처 접대 골프는 기업업무추진비, 부가세 불공제. 사적 골프는 비용 아님.", "부가가치세법 §39①6호 · 법인세법 §25②"],
+["카드", "접대·선물", "상품권 구입 (거래처 증정용)", "상품권 백화점상품권 문화상품권 신세계 롯데 컬쳐랜드 해피머니", "기업업무추진비", "813", "X", "상품권은 부가가치세 과세대상이 아님. 카드로 사야 적격증빙. 수령인·용도 명단 보관. 직원용이면 복리후생비(근로소득 검토).", "서면인터넷방문상담3팀-1441 (2005.09.02) · 법인세법 §25② · 시행령 §41①"],
+["카드", "접대·선물", "카카오 선물하기·기프티콘", "카카오톡선물하기 선물하기 기프티콘 기프트카드 모바일쿠폰 깊콘", "기업업무추진비", "813", "N", "거래처용이면 기업업무추진비(불공제). 직원용이면 복리후생비. 수령인 기록.", "부가가치세법 §39①6호"],
+["카드", "접대·선물", "꽃집 (개업·승진 축하화분)", "꽃집 화분 꽃다발 난 축하화분 플라워", "기업업무추진비", "813", "X", "우리나라에서 생산된 화초·수목은 면세. 거래처용은 기업업무추진비, 직원 경조용은 복리후생비, 사무실 장식용은 소모품비.", "부가가치세법 §26①1호 · 부가46015-334 (1998.02.25)"],
+["카드", "접대·선물", "고객 사은품 (불특정 다수)", "사은품 증정품 경품 이벤트 고객증정 판촉", "광고선전비", "833", "Y", "불특정 다수에게 광고선전 목적으로 주는 물품은 광고선전비. 특정인에게 준 것은 아래 항목 기준 확인.", "법인세법 시행령 §19 18호 · 부가가치세법 §38①1호"],
+["카드", "접대·선물", "특정 고객 기증품", "고객선물 VIP 우수고객 기증 특정고객", "광고선전비", "833", "C", "특정인에게 광고선전 목적으로 기증한 물품은 개당 3만원 이하 물품 제외하고 1인당 연 5만원 한도로 광고선전비 인정. 넘으면 기업업무추진비 검토.", "법인세법 시행령 §19 18호 · 부가가치세법 §38①1호 · 부가가치세법 §39①6호"],
+["공통", "접대·선물", "개인카드로 거래처 접대 (법인)", "개인카드 대표카드 직원카드 법인 접대 정산", "기업업무추진비", "813", "N", "법인의 기업업무추진비는 법인 명의 신용카드 사용분만 적격증빙으로 인정. 임직원 개인카드 결제분은 3만원 초과 시 손금불산입.", "법인세법 §25② · 시행령 §41⑥ · 부가가치세법 §39①6호"],
+["공통", "접대·선물", "행사 협찬·후원금", "협찬 후원 스폰서 행사후원 대회후원", "광고선전비", "833", "C", "광고 효과(로고 노출 등) 대가면 광고선전비(세금계산서 시 공제), 특정 거래처 관계 유지면 기업업무추진비, 대가 없는 공익 후원이면 기부금.", "법인세법 §24 · §25 · 부가가치세법 §38①1호"],
+["카드", "접대·선물", "해외 거래처 접대", "해외접대 해외 거래처 바이어 현지식사", "기업업무추진비", "813", "X", "해외 지출은 국내 부가세 없음.", "법인세법 §25② · 시행령 §41①"],
+["카드", "접대·선물", "거래처와 카페 미팅", "카페 스타벅스 커피 미팅 거래처미팅 상담", "기업업무추진비", "813", "C", "내부 회의면 회의비. 참석자 메모 남기기.", "부가가치세법 §39①6호 · 법인세법 §25②"],
+["카드", "접대·선물", "담배·주류 소매 구매", "담배 편의점담배 주류 와인샵 위스키 보틀샵", "내용별 계정", "—", "C", "거래처 선물이면 기업업무추진비(불공제), 개인 기호품이면 비용 아님.", "부가가치세법 §39①4호·6호"],
+["카드", "접대·선물", "장례식장·예식장 현장 결제", "장례식장 예식장 웨딩홀 조문 식장", "기업업무추진비", "813", "C", "거래처 경조 관련이면 기업업무추진비, 직원 경조면 복리후생비. 경조금(현금)은 별도 항목 참고.", "법인세법 시행령 §41① · 부가가치세법 §39①6호"],
+["카드", "접대·선물", "문화 기업업무추진비 (공연·전시 티켓 등)", "문화접대비 공연티켓 전시회입장권 뮤지컬 음반 도서선물 거래처문화", "기업업무추진비 (문화)", "813", "N", "2028.12.31. 이전에 대통령령으로 정하는 문화비로 지출한 기업업무추진비는 일반 한도와 별도로 한도액의 20% 범위에서 추가 손금산입. 부가세는 기업업무추진비라 불공제.", "조세특례제한법 §136③ · 부가가치세법 §39①6호"],
+["카드", "접대·선물", "전통시장·온누리·지역사랑상품권 기업업무추진비", "전통시장 온누리상품권 지역사랑상품권 시장 거래처선물", "기업업무추진비 (전통시장)", "813", "N", "2028.12.31. 이전에 전통시장에서 신용카드등으로 지출하거나 온누리·지역사랑상품권으로 지출한 기업업무추진비는 소비성서비스업 등 제외 요건을 갖추면 한도액의 20% 범위에서 추가 손금산입.", "조세특례제한법 §136⑥ · 부가가치세법 §39①6호"],
+// ── 교통·출장
+["카드", "교통·출장", "택시", "택시 카카오T 카카오택시 우티 UT 티머니 개인택시", "여비교통비", "812", "N", "택시 운송은 면세 여객운송에서 제외되는 과세 용역이지만 카드 매입세액 공제 제외 업종.", "부가가치세법 §46③ · 시행령 §88⑤2호 · 부가가치세법 §26①7호가목"],
+["카드", "교통·출장", "KTX·고속버스·항공권", "KTX 코레일 SRT 고속버스 시외버스 항공 대한항공 아시아나 제주항공 비행기", "여비교통비", "812", "N", "항공·고속버스·고속철도 운송은 과세 용역이지만 카드 매입세액 공제 제외 업종(전세버스는 공제 가능).", "부가가치세법 §46③ · 시행령 §88⑤2호 · 부가가치세법 §26①7호가목"],
+["카드", "교통·출장", "출장 숙박", "호텔 모텔 숙박 야놀자 여기어때 에어비앤비 출장", "여비교통비", "812", "Y", "일반과세자 숙박업이면 공제. 출장 목적·일정 기록. 해외 숙박은 국내 부가세 없음.", "부가가치세법 §38①1호"],
+["카드", "교통·출장", "대중교통·교통카드 충전", "지하철 버스 교통카드 티머니 캐시비 충전", "여비교통비", "812", "X", "지하철·시내버스 등 일반 여객운송 용역은 면세라 부가세 없음.", "부가가치세법 §26①7호"],
+["카드", "교통·출장", "해외출장 (항공·숙박·현지경비)", "해외출장 출장 해외 현지 달러 엔화 유로 출장비", "여비교통비", "812", "X", "업무 관련 해외시찰·훈련비는 손비. 해외 결제분은 국내 부가세 없음. 출장 품의·일정표·보고서 보관.", "법인세법 시행령 §19 14호"],
+["카드", "교통·출장", "비자·여권·출입국 수수료", "비자 여권 ESTA 출입국 대사관 영사관", "여비교통비", "812", "X", "업무 출장용 비자 수수료. 관청 수수료라 부가세 없음. 개인 여권 발급은 비용 아님.", "법인세법 시행령 §19 14호"],
+["통장", "교통·출장", "출장 일비·여비 정액 지급", "출장비 일비 여비 출장수당 실비", "여비교통비", "812", "X", "여비 중 실비변상 정도의 금액은 비과세 근로소득이라 여비교통비로 처리. 실비를 넘는 정액 지급분은 급여(근로소득).", "소득세법 시행령 §12 3호"],
+["카드", "교통·출장", "단기 렌터카 (출장)", "렌터카 렌트 쏘카 그린카 제주렌트 카셰어링", "여비교통비", "812", "C", "개별소비세 과세 승용차를 빌리면 불공제. 9인승 이상 승합·화물차 임차는 공제. 법인은 업무용승용차 관련비용 해당 여부 확인.", "부가가치세법 §39①5호 · 법인세법 §27의2"],
+["카드", "교통·출장", "대리운전", "대리운전 카카오대리 대리기사 탁송", "여비교통비", "812", "C", "개별소비세 과세 승용차(법인 소유·종업원 소유 불문)의 유지를 위한 대리운전 용역 매입세액은 불공제. 그 외 차량이면 공제.", "부가가치세법 §39①5호 · 부가가치세과-870 (2009.06.25)"],
+["카드", "교통·출장", "전세버스 (단체 이동)", "전세버스 관광버스 단체버스 대절", "여비교통비", "812", "Y", "전세버스 운송은 카드 공제 제외 업종에서 빠지므로 공제 가능.", "시행령 §88⑤2호"],
+["카드", "교통·출장", "공유킥보드·공유자전거", "킥보드 따릉이 공유자전거 씽씽 지쿠", "여비교통비", "812", "Y", "소액 업무 이동. 카드 매입세액 공제 제외 업종(시행령 §88⑤)에 해당하지 않음.", "부가가치세법 §38①1호 · §46③"],
+["카드", "교통·출장", "여행사 출장 패키지·항공 발권 대행", "여행사 하나투어 모두투어 인터파크투어 트립닷컴 익스피디아 발권수수료", "여비교통비", "812", "C", "항공 운임은 카드 매입세액 공제 제외 업종.", "시행령 §88⑤2호"],
+["카드", "교통·출장", "해외 카드 이용수수료·DCC", "해외이용수수료 원화결제 DCC 해외결제수수료 브랜드수수료", "지급수수료", "831", "X", "여신전문금융업 용역은 면세.", "부가가치세법 §26①11호 · 시행령 §40①9호"],
+["카드", "교통·출장", "공항 라운지·면세점", "라운지 면세점 공항 기내면세 듀티프리", "가지급금 (법인)·인출금 (개인)", "134", "N", "개인 소비는 비용 아님. 거래처 선물을 면세점에서 샀다면 기업업무추진비.", "부가가치세법 §39①4호"],
+["통장", "교통·출장", "직원 개인차량 업무 사용 (실비 정산)", "개인차량 자차 업무운행 유류비정산 주유비정산 출장자차 마일리지정산", "여비교통비", "812", "X", "회사 차량이 아닌 직원 개인 차량으로 업무 이동하고 영수증 실비로 정산하면 여비교통비. 회사 지급기준에 따라 정액으로 주면 자가운전보조금(제수당, 본인 차량을 직접 운전해 업무에 쓰면 월 20만원 이내 비과세). 차량유지비는 회사 소유·임차 차량에 사용.", "소득세법 시행령 §12 3호"],
+// ── 차량
+["카드", "차량", "주유 (승용차)", "주유 SK에너지 GS칼텍스 S-OIL 현대오일뱅크 알뜰주유소 휘발유 경유 충전소 LPG", "차량유지비", "822", "C", "회사 소유·리스·렌트 차량 기준. 회사 차량 없이 이동하는 비용은 여비교통비. 개별소비세 과세 승용차(8인승 이하 일반 승용)는 불공제. 화물차·1,000cc 이하 경차·9인승 이상 승합은 공제. 업무용승용차 관련비용 명세서 대상.", "부가가치세법 §39①5호 · 시행령 §78 · 법인세법 §27의2 · 소득세법 §33의2"],
+["카드", "차량", "화물차·승합차 주유", "화물차 트럭 포터 봉고 승합 스타렉스 카니발9인승 경유 주유", "차량유지비", "822", "Y", "회사 소유·리스·렌트 차량 기준. 회사 차량 없이 이동하는 비용은 여비교통비. 개별소비세 과세 승용차가 아니면 공제. 차량등록증(차종·승차정원) 보관.", "부가가치세법 §39①5호 · 시행령 §78"],
+["카드", "차량", "전기차 충전", "전기차충전 충전소 환경부충전 테슬라 슈퍼차저 차지비 에버온", "차량유지비", "822", "C", "공제 여부는 주유와 같은 기준(차종).", "부가가치세법 §39①5호"],
+["카드", "차량", "차량 수리·세차·타이어·엔진오일", "정비 수리 카센터 세차 타이어 엔진오일 블루핸즈 오토큐 스피드메이트", "차량유지비", "822", "C", "회사 소유·리스·렌트 차량 기준. 회사 차량 없이 이동하는 비용은 여비교통비. 공제 여부는 차종 기준. 큰 수리로 내용연수가 늘면 자본적 지출 검토.", "부가가치세법 §39①5호"],
+["카드", "차량", "주차비·통행료", "주차 파킹 하이패스 통행료 고속도로 톨게이트", "차량유지비", "822", "C", "회사 소유·리스·렌트 차량이면 차량유지비, 회사 차량 없이 출장 중 낸 주차비·통행료는 여비교통비. 업무용 차량 관련이면 차량유지비. 승용차 관련은 불공제. 통행료 영수증의 부가세 구분 기재 여부 확인.", "부가가치세법 §39①5호"],
+["카드", "차량", "자동차 정기검사", "자동차검사 정기검사 종합검사 교통안전공단", "차량유지비", "822", "C", "공제 여부는 차종 기준(개별소비세 과세 승용차는 불공제).", "부가가치세법 §39①5호"],
+["공통", "차량", "자동차 리스료·장기렌트료", "리스 렌트 장기렌트 롯데렌터카 SK렌터카 현대캐피탈 오토리스", "지급임차료", "819", "C", "승용차는 불공제. 운용리스·렌트료는 업무용승용차 관련비용(감가상각비 상당액 한도) 대상.", "부가가치세법 §39①5호 · 법인세법 §27의2"],
+["공통", "차량", "자동차보험", "자동차보험 다이렉트 DB손해보험 현대해상 삼성화재 KB손해보험", "보험료", "821", "X", "보험 용역은 면세. 업무용승용차면 관련비용에 포함.", "법인세법 §27의2 · 부가가치세법 §26①11호"],
+["공통", "차량", "차량 구입 (본체)", "차량구입 신차 중고차 자동차구매 현대자동차 기아 제네시스 테슬라", "차량운반구", "208", "C", "승용차는 매입세액 불공제, 화물차·경차·9인승 이상은 공제. 승용차는 업무용승용차 감가상각(연 800만원 한도) 대상.", "부가가치세법 §39①5호 · 법인세법 §27의2 · 소득세법 §33의2"],
+["공통", "차량", "차량 취득부대비용 (탁송·번호판·등록대행)", "탁송료 번호판 등록대행 차량등록 공채 인지", "차량운반구", "208", "C", "차량 취득원가에 포함. 탁송료 등 용역의 공제 여부는 본체와 같은 차종 기준. 취득세·공채할인은 세금과공과 분류 참고.", "부가가치세법 §39①5호"],
+["카드", "차량", "블랙박스·썬팅·차량용품", "블랙박스 썬팅 하이패스단말기 내비게이션 차량용품 매트", "차량유지비", "822", "C", "소액이면 차량유지비(또는 소모품비), 고액 부착물은 차량운반구에 가산. 공제 여부는 차종 기준.", "부가가치세법 §39①5호"],
+["통장", "차량", "차량 매각", "차량매각 중고차판매 차량처분 매매상사", "차량운반구", "208", "S", "사업용 차량 양도는 재화의 공급이라 매출 부가세 대상(세금계산서 발행). 장부가액과의 차이는 유형자산처분이익(914)·손실(970). 업무용승용차 처분손실은 차량별 연 800만원 초과분을 이월해 손금 산입.", "부가가치세법 §4 · §9① · 법인세법 §27의2④"],
+["통장", "차량", "교통사고 보험금 수령·자차 수리", "보험금 자차 사고 보험처리 대물", "차량유지비", "822", "X", "보험금 수령은 재화·용역 공급의 대가가 아니라 부가세 과세대상 아님. 수리비 매입세액은 차종 기준(승용차 불공제). 받은 보험금은 보험금수익(잡이익).", "부가가치세법 §4 · §39①5호"],
+["공통", "차량", "업무용승용차 운행기록부", "운행기록부 운행일지 업무사용비율 주행거리 1500만원", "(증빙 관리)", "—", "X", "업무사용비율은 운행기록 등의 총 주행거리 중 업무용 거리 비율. 운행기록을 작성·비치하지 않으면 관련비용 1,500만원 이하는 전액, 초과하면 1,500만원/관련비용 비율만 업무사용으로 봄.", "법인세법 시행령 §50의2⑤~⑦"],
+["공통", "차량", "법인 업무용승용차 전용번호판", "연두색번호판 법인전용번호판 업무용번호판 법인차번호판", "(증빙 관리)", "—", "X", "해당 업무용승용차에 재정경제부령으로 정하는 자동차등록번호판을 부착하지 않으면 업무사용금액을 0원으로 봄.", "법인세법 시행령 §50의2④"],
+// ── 세금과공과
+["공통", "세금과공과", "재산세 (사업용 자산)", "재산세 건물분 토지분 위택스 지방세", "세금과공과", "817", "X", "사업용 건물·토지분은 손금(필요경비). 대표 개인 주택분은 인출금·가지급금.", "법인세법 시행령 §19 10호"],
+["공통", "세금과공과", "종합부동산세", "종부세 종합부동산세 홈택스", "세금과공과", "817", "X", "사업용 부동산분은 세금과공과.", "법인세법 시행령 §19 10호"],
+["공통", "세금과공과", "자동차세", "자동차세 연납 위택스", "세금과공과", "817", "X", "손금. 업무용승용차 관련비용에 포함.", "법인세법 시행령 §19 10호 · 법인세법 §27의2"],
+["공통", "세금과공과", "주민세 사업소분", "주민세 사업소분 재산분 균등분", "세금과공과", "817", "X", "사업장 단위로 부과되는 주민세. 손금.", "법인세법 시행령 §19 10호"],
+["통장", "세금과공과", "주민세 종업원분", "주민세 종업원분 급여총액", "세금과공과", "817", "X", "사업주 부담 지방세. 손금.", "법인세법 시행령 §19 10호"],
+["공통", "세금과공과", "주민세 개인분 (대표 개인)", "주민세 개인분 균등분 세대주", "인출금", "338", "X", "대표 개인에게 부과되는 세금이라 개인사업자는 인출금, 법인이 대신 내면 가지급금.", "소득세법 §33①5호"],
+["공통", "세금과공과", "등록면허세 (면허분)", "등록면허세 면허세 영업허가 면허 정기분", "세금과공과", "817", "X", "인허가 면허 보유에 따른 정기분. 손금.", "법인세법 시행령 §19 10호"],
+["공통", "세금과공과", "등록면허세 (법인등기 등록분)", "법인등기 설립등기 증자 임원변경 본점이전 등록면허세 지방교육세", "세금과공과", "817", "X", "임원변경·본점이전 등 등기분은 세금과공과.", "법인세법 시행령 §19 10호"],
+["공통", "세금과공과", "취득세·농특세·지방교육세", "취득세 농어촌특별세 농특세 지방교육세 부동산취득 차량취득", "해당 자산 (토지·건물·차량운반구)", "—", "X", "취득세·등록세 등 유형자산 취득과 직접 관련된 제세공과금은 취득원가에 포함.", "일반기업회계기준 문단 10.8⑺"],
+["공통", "세금과공과", "인지세 (계약서·증서)", "인지세 전자수입인지 계약서 인지 대출약정", "세금과공과", "817", "X", "일반 계약서 인지세는 세금과공과.", "법인세법 시행령 §19 10호"],
+["공통", "세금과공과", "정부수입인지·관공서 수수료", "정부수입인지 수입인지 민원수수료 관공서 인허가수수료", "세금과공과", "817", "X", "관공서 민원·인허가 수수료. 국가·지자체가 공급하는 용역은 면세(대통령령 범위).", "부가가치세법 §26①19호"],
+["공통", "세금과공과", "증지대 (법원 등기증지·지자체 수입증지)", "증지 수입증지 등기신청수수료 법원 대법원 인터넷등기소", "세금과공과", "817", "X", "증지는 면세. 법인등기 등 일반 등기 증지는 세금과공과, 부동산 취득 등기 증지는 자산 취득원가.", "부가가치세법 §26①9호"],
+["카드", "세금과공과", "등기부등본·인감·증명서 발급", "등기부등본 등본 인감증명 법인인감 사업자등록증명 납세증명 정부24 인터넷등기소 열람", "지급수수료", "831", "X", "관공서·법원 발급 수수료. 국가·지자체가 공급하는 용역은 면세(대통령령 범위).", "부가가치세법 §26①19호"],
+["통장", "세금과공과", "국민주택채권 매입·즉시 매도 할인손실", "국민주택채권 채권할인 공채 채권매입 도시철도채권 지역개발채권", "해당 자산 (토지·건물·차량운반구)", "—", "X", "유형자산 취득과 관련해 불가피하게 매입한 국·공채의 매입금액과 현재가치의 차액은 해당 자산의 취득원가에 포함.", "일반기업회계기준 문단 10.8⑸"],
+["공통", "세금과공과", "교통유발부담금", "교통유발부담금 교통유발", "세금과공과", "817", "X", "법령에 따라 부과되는 부담금.", "법인세법 시행령 §19 10호"],
+["공통", "세금과공과", "환경개선부담금", "환경개선부담금 환경부담금", "세금과공과", "817", "X", "법령에 따라 부과되는 부담금.", "법인세법 시행령 §19 10호"],
+["공통", "세금과공과", "폐기물부담금·EPR 재활용 분담금", "폐기물부담금 EPR 생산자책임재활용 재활용분담금 공제조합 순환자원유통지원센터", "세금과공과", "817", "C", "폐기물부담금은 법률에 따라 부과되는 부담금으로 재화·용역 공급의 대가가 아님. 공제조합이 세금계산서를 발급한 분담금은 사업 관련 매입세액으로 공제.", "부가가치세법 §4 · §38①1호 · 법인세법 시행령 §19 10호"],
+["공통", "세금과공과", "도로·하천 점용료", "도로점용료 하천점용료 점용료 점용허가 공유수면", "세금과공과", "817", "Y", "지자체가 도로·하천 등 장소 사용 대가로 받는 점용료는 과세(국가·지자체의 부동산임대업은 면세 제외). 세금계산서 수취분 공제.", "부가가치세법 §38①1호 · 시행령 §46 3호 · 부가가치세과-1471 (2009.10.12)"],
+["공통", "세금과공과", "개발·광역교통·학교용지부담금", "개발부담금 광역교통시설부담금 학교용지부담금 기반시설부담금", "토지·건물 (취득원가)", "—", "X", "개발사업에 따라 부과되는 부담금.", ""],
+["공통", "세금과공과", "상하수도 원인자부담금·한전 시설부담금", "원인자부담금 상수도 하수도 시설부담금 한전 전기 인입 수전", "시설장치·건물 (자산)", "—", "C", "지자체가 법률에 따라 원인자에게 부담시키는 원인자부담금은 세금계산서 발급 대상이 아님. 공급자가 세금계산서를 발급한 시설부담금은 매입세액 공제. 신·증설 시 내는 부담금은 자산 가산.", "서면-2015-부가-0392 (2015.12.28) · 부가가치세법 §38①1호"],
+["통장", "세금과공과", "협회비·조합비 (법정·등록 단체)", "협회비 조합비 회비 연회비 공제회 세무사회 건설협회 중소기업중앙회", "세금과공과", "817", "X", "영업자가 조직한 법인 또는 주무관청 등록 조합·협회에 낸 회비는 손금.", "법인세법 시행령 §19 11호"],
+["통장", "세금과공과", "임의단체 회비", "친목회 동호회비 임의단체 모임회비 상인회", "기부금 또는 손금불산입 검토", "—", "X", "법인이 아니고 주무관청에 등록되지도 않은 단체에 낸 회비는 손비로 열거된 회비에 해당하지 않음.", "법인세법 시행령 §19 11호"],
+["통장", "세금과공과", "상공회의소 회비", "상공회의소 상의 회비 대한상의", "세금과공과", "817", "X", "영업자가 조직한 법인 또는 주무관청 등록 단체에 낸 회비는 손비.", "법인세법 시행령 §19 11호"],
+["통장", "세금과공과", "적십자회비", "적십자 적십자회비 대한적십자사 지로", "기부금", "953", "X", "기부금 구분에 따라 한도 계산.", "법인세법 §24"],
+["통장", "세금과공과", "법인세·법인지방소득세 납부", "법인세 지방소득세 법인지방소득세 확정신고 납부", "법인세등", "998", "X", "손금불산입. 결산 시 법인세비용으로 계상하고 선납세금과 상계.", "법인세법 §21 1호"],
+["통장", "세금과공과", "법인세 중간예납·원천징수세액", "중간예납 법인세 선납 원천징수 이자소득세", "선납세금", "136", "X", "결산 시 법인세 등(998)과 상계.", "법인세법 §21 1호"],
+["통장", "세금과공과", "종합소득세·개인지방소득세 (개인사업자)", "종합소득세 종소세 지방소득세 중간예납 개인", "인출금", "338", "X", "필요경비 불산입. 사업용 계좌에서 냈으면 인출금.", "소득세법 §33①1호"],
+["통장", "세금과공과", "부가세 납부·환급", "부가세 부가가치세 납부 환급 예정고지", "미지급세금", "261", "X", "신고 시 부가세예수금(255)·부가세대급금(135) 상계 후 남은 금액을 미지급세금(또는 미수금)으로 두고 납부·환급으로 정리.", "부가가치세법 §37② · §59①"],
+["공통", "세금과공과", "가산세 (각종 세법)", "가산세 신고불성실 납부지연 지연 가산", "세금과공과", "817", "X", "세금과공과로 처리하되 손금불산입(필요경비 불산입).", "법인세법 §21 1호 · 소득세법 §33①1~4호"],
+["공통", "세금과공과", "벌금·과료·과태료·범칙금", "과태료 벌금 범칙금 주정차위반 속도위반 과징금 이행강제금", "세금과공과", "817", "X", "손금불산입(필요경비 불산입). 과징금·이행강제금은 법령 위반 공과금으로 §21 5호 해당 여부 확인.", "법인세법 §21 3호·5호 · 소득세법 §33①2호"],
+["통장", "세금과공과", "4대보험 연체금", "연체금 4대보험연체 건강보험연체 국민연금연체", "세금과공과", "817", "X", "법령에 따른 의무 불이행을 이유로 부과되는 공과금이면 손금불산입(필요경비 불산입).", "법인세법 §21 5호 · 소득세법 §33①12호"],
+["공통", "세금과공과", "관세 (수입)", "관세 수입 통관 세관 수입신고", "상품·원재료 (매입원가)", "146", "X", "재고자산 매입금액에 취득과정에서 정상적으로 발생한 부대원가(운임·하역료·보험료 등)를 더해 매입원가로 함. 수입 관세도 취득 부대원가로 매입원가에 포함.", "일반기업회계기준 문단 7.6"],
+["공통", "세금과공과", "증권거래세 (주식 매도)", "증권거래세 거래세 주식매도 농특세", "단기매매증권처분손익", "—", "X", "주식 매도 때 낸 증권거래세는 판매비와관리비가 아니라 매도대가에서 직접 차감해 처분손익에 반영.", "KASB 질의회신 GKQA01-082 (일반기업회계기준 문단 2.49)"],
+["공통", "세금과공과", "지역자원시설세", "지역자원시설세 소방분 특정자원", "세금과공과", "817", "X", "재산세와 함께 고지되는 소방분 등. 손금.", "법인세법 시행령 §19 10호"],
+["공통", "세금과공과", "간주임대료 부가세 (임대인 부담분)", "간주임대료 보증금 부가세 임대인부담", "세금과공과", "817", "X", "임대인이 부담한 간주임대료 부가세는 세금과공과.", "부가가치세법 §29⑩1호"],
+["통장", "세금과공과", "세무조사 추징세액", "추징 세무조사 고지 경정 부과", "세목별 처리", "—", "X", "본세는 원래 세목대로(법인세는 손금불산입), 가산세는 손금불산입.", "법인세법 §21 1호"],
+["통장", "세금과공과", "개인사업자 본인 건강보험료", "지역가입자 건강보험 대표자 사업주 본인 건강보험 장기요양", "세금과공과", "817", "X", "사업자 본인의 지역·직장가입자 건강보험료(장기요양 포함)는 필요경비.", "소득세법 시행령 §55①11의2·11의3호"],
+["통장", "세금과공과", "개인사업자 본인 국민연금", "국민연금 지역가입 대표자 사업주 본인", "인출금", "338", "X", "사업자 본인 국민연금은 필요경비로 열거된 보험료(건강보험·노인장기요양·고용·산재 피보험자 부담분)에 없음.", "소득세법 시행령 §55①11의2~11의5호"],
+["카드", "세금과공과", "홈택스·위택스 카드납부 수수료", "카드납부수수료 납부대행수수료 홈택스 위택스 카드세금", "지급수수료", "831", "X", "세금 카드 납부 대행 수수료. 사업 관련 세금 납부분은 비용, 개인 세금분은 인출금.", "국세징수법 §12①3호·③"],
+// ── 통신·수도광열
+["공통", "통신·수도광열", "휴대폰·인터넷·전화요금", "SKT KT LG유플러스 휴대폰 핸드폰 인터넷 전화요금 통신비 알뜰폰", "통신비", "814", "Y", "사업자 명의 회선이면 세금계산서·카드로 공제. 대표 가족 회선은 비용 제외.", "부가가치세법 §38①1호"],
+["공통", "통신·수도광열", "우편요금", "우체국 우편 등기 우표 내용증명", "통신비", "814", "C", "우표는 면세. 택배는 운반비.", "부가가치세법 §26①9호"],
+["공통", "통신·수도광열", "전기요금", "한전 한국전력 전기요금 전력", "전력비", "816", "Y", "제조·공사 현장분은 원가 계정. 사업자 명의 세금계산서로 공제. 일부 계정체계는 수도광열비로 통합.", "부가가치세법 §38①1호"],
+["공통", "통신·수도광열", "수도·가스요금", "수도 상수도 가스 도시가스 난방", "수도광열비", "815", "C", "수돗물은 면세, 도시가스는 과세라 공제.", "부가가치세법 §26①2호 · §38①1호"],
+["카드", "통신·수도광열", "난방유·등유·LPG (사무실 난방)", "등유 난방유 보일러 LPG 프로판 가스배달", "수도광열비", "815", "Y", "차량 연료와 섞이지 않게 구분.", "부가가치세법 §38①1호"],
+["공통", "통신·수도광열", "서버·IDC·전용회선", "IDC 전용회선 코로케이션 서버호스팅 KINX", "통신비", "814", "Y", "국내 사업자 세금계산서분 공제. 해외 클라우드는 지급수수료 항목 참고.", "부가가치세법 §38①1호"],
+["카드", "통신·수도광열", "문자·알림톡 발송 서비스", "문자발송 SMS LMS 알림톡 비즈메시지 카카오비즈 솔라피 뿌리오", "통신비", "814", "Y", "고객 안내 발송. 광고 문자 위주면 광고선전비.", "부가가치세법 §38①1호"],
+["카드", "통신·수도광열", "팩스·인터넷전화 서비스", "인터넷팩스 엔팩스 모바일팩스 인터넷전화 070", "통신비", "814", "Y", "", "부가가치세법 §38①1호"],
+// ── 임차·관리·수선
+["공통", "임차·관리·수선", "사무실 월세", "월세 임대료 사무실 임차료 상가", "지급임차료", "819", "Y", "세금계산서 수취분 공제. 간이과세 임대인은 증빙 형태 확인.", "법인세법 시행령 §19 6호 · 부가가치세법 §38①1호"],
+["공통", "임차·관리·수선", "건물 관리비", "관리비 관리사무소 공용", "건물관리비", "837", "Y", "관리비 중 전기·수도분이 구분되면 각 계정으로 나누기도 함. 계정체계에 따라 지급임차료로 처리.", "부가가치세법 §38①1호"],
+["통장", "임차·관리·수선", "임차보증금 지급·반환", "보증금 임차보증금 계약금", "임차보증금", "232", "X", "비용 아님(자산). 반환받으면 같은 계정 감소.", "일반기업회계기준 문단 실2.38, 실2.41"],
+["공통", "임차·관리·수선", "정수기·복합기·비데 렌탈", "정수기 복합기 렌탈 코웨이 SK매직 비데 렌탈료 쿠쿠", "지급임차료", "819", "Y", "렌탈료는 지급임차료.", "법인세법 시행령 §19 6호 · 부가가치세법 §38①1호"],
+["공통", "임차·관리·수선", "공유오피스·비상주 사무실", "공유오피스 패스트파이브 위워크 스파크플러스 비상주 소호", "지급임차료", "819", "Y", "세금계산서 수취분 공제. 회의실 사용료 포함.", "법인세법 시행령 §19 6호 · 부가가치세법 §38①1호"],
+["공통", "임차·관리·수선", "창고 임차·물류 보관", "창고 물류창고 보관 풀필먼트 셀프스토리지", "지급임차료", "819", "Y", "공간 임차는 지급임차료, 보관 용역 대가는 보관료(832).", "법인세법 시행령 §19 6호 · 부가가치세법 §38①1호"],
+["카드", "임차·관리·수선", "주차장 월정기", "월주차 정기주차 주차정기권 월정액주차", "차량유지비", "822", "C", "업무용 차량 주차. 승용차 유지 관련이면 불공제, 화물차 등은 공제.", "부가가치세법 §39①5호"],
+["공통", "임차·관리·수선", "사무실 이사·이전", "이사 이삿짐 사무실이전 포장이사", "운반비", "824", "Y", "이전 비용. 원상복구·인테리어는 별도 항목.", "부가가치세법 §38①1호"],
+["공통", "임차·관리·수선", "보안·경비 (세콤·캡스)", "세콤 에스원 캡스 ADT 보안 경비 CCTV 출입통제", "지급수수료", "831", "Y", "월 용역료. 장비 구입분은 비품 검토.", "부가가치세법 §38①1호"],
+["공통", "임차·관리·수선", "청소·방역 용역", "청소 방역 소독 해충 세스코 미화 용역", "지급수수료", "831", "Y", "정기 용역은 지급수수료(또는 건물관리비).", "부가가치세법 §38①1호"],
+["공통", "임차·관리·수선", "폐기물·폐기 처리", "폐기물 산업폐기물 폐기처리 파쇄 문서파쇄 대형폐기물", "지급수수료", "831", "Y", "처리 용역 대가. 지자체 대형폐기물 스티커는 부가세 없음.", "부가가치세법 §38①1호"],
+["공통", "임차·관리·수선", "수선비 (원상회복·경미한 수리)", "수선 수리 보수 도색 누수 방수 교체 AS", "수선비", "820", "Y", "원상회복·능률유지 수준이면 수선비.", "법인세법 시행령 §19 4호 · 부가가치세법 §38①1호"],
+["공통", "임차·관리·수선", "PC·기계 고장 부품 교체 (같은 사양)", "부품교체 고장수리 파워교체 팬교체 소모부품 수리 AS", "수선비", "820", "Y", "조업 가능한 상태를 유지하려고 소모되거나 고장 난 부속품을 같은 사양으로 바꾸는 것은 수익적 지출(비용). 성능이 올라가면 자본적 지출 검토.", "법인세법 시행규칙 §17 3호·6호 · 일반기업회계기준 10.14 · 부가가치세법 §38①1호"],
+["공통", "임차·관리·수선", "인테리어 (임차 사무실·매장)", "인테리어 리모델링 시공 칸막이 바닥 조명 전기공사", "시설장치", "—", "Y", "자산(시설장치) 계상 후 감가상각. 임차 기간·원상복구 의무 확인.", "부가가치세법 §38①1호"],
+["공통", "임차·관리·수선", "원상복구 공사 (퇴거)", "원상복구 철거 퇴거 복구공사", "수선비", "820", "Y", "퇴거 시 원상복구비.", "부가가치세법 §38①1호"],
+["카드", "임차·관리·수선", "열쇠·도어락·유리 수리", "열쇠 도어락 디지털도어락 유리 창문 방충망", "수선비", "820", "Y", "", "법인세법 시행령 §19 4호 · 부가가치세법 §38①1호"],
+["카드", "임차·관리·수선", "에어컨 청소·필터 교체", "에어컨청소 필터 냉난방기 세척 실외기", "수선비", "820", "Y", "유지보수 성격.", "법인세법 시행령 §19 4호 · 부가가치세법 §38①1호"],
+["공통", "임차·관리·수선", "승강기·소방·전기 안전점검", "승강기 엘리베이터 유지보수 소방점검 전기안전공사 안전점검 가스점검", "지급수수료", "831", "Y", "법정 점검·유지보수 용역. 공공기관 수수료는 부가세 여부 확인.", "부가가치세법 §38①1호"],
+["카드", "임차·관리·수선", "회의실·스터디룸 시간 대여", "회의실대여 스페이스클라우드 스터디룸 세미나실 대관", "지급임차료", "819", "Y", "외부 회의 장소 대여. 거래처 접대 장소면 기업업무추진비 검토.", "법인세법 시행령 §19 6호 · 부가가치세법 §38①1호"],
+["공통", "임차·관리·수선", "자본적 지출 (개조·엘리베이터·냉난방 설치)", "자본적지출 개조 용도변경 엘리베이터 냉난방 피난시설 개량 증설", "건물·기계장치 등 (자산)", "—", "Y", "내용연수를 늘리거나 가치를 높이는 수선비는 자본적 지출로 자산 가산. 용도 변경 개조, 엘리베이터·냉난방장치 설치, 피난시설 설치, 재해 복구, 개량·확장·증설이 포함.", "법인세법 시행령 §31② · 부가가치세법 §38①1호"],
+["공통", "임차·관리·수선", "소액 수선비 즉시 비용 처리", "소액수선비 600만원 수선비비용 주기적수선", "수선비", "820", "Y", "개별자산별 수선비가 600만원 미만이거나, 직전 사업연도 말 장부가액의 5% 미만이거나, 3년 미만 주기의 주기적 수선이면 손비로 계상한 경우 자본적 지출로 보지 않음.", "법인세법 시행령 §31③ · 부가가치세법 §38①1호"],
+["공통", "임차·관리·수선", "관리비 중 전기·가스 대납분 (임차인)", "관리비 전기료 가스료 임대인대납 공공요금 관리비세금계산서", "전력비·수도광열비", "816", "Y", "임차인이 부담할 전기료·가스료 등 과세 재화에 대해 임대인이 자기 명의로 받은 세금계산서 공급가액 범위에서 임차인에게 세금계산서를 발급할 수 있어, 받은 세금계산서로 공제.", "서삼46015-10519 (2001.10.22) · 부가가치세법 §38①1호"],
+// ── 소모품·자산
+["카드", "소모품·자산", "사무용품·문구", "쿠팡 다이소 알파 오피스디포 문구 복사용지 A4 토너 잉크 사무용품", "사무용품비", "829", "Y", "", "부가가치세법 §38①1호"],
+["카드", "소모품·자산", "생활소모품·청소용품", "휴지 세제 청소 쓰레기봉투 위생용품 소모품", "소모품비", "830", "Y", "", "부가가치세법 §38①1호"],
+["카드", "소모품·자산", "100만원 이하 비품 (의자·모니터 등)", "의자 책상 모니터 키보드 마우스 프린터 선풍기 가전", "소모품비", "830", "Y", "거래단위 100만원 이하는 손비 계상 시 손금. 고유업무상 대량 보유·사업 개시·확장용 취득은 제외.", "법인세법 시행령 §31④·⑤ · 부가가치세법 §38①1호"],
+["카드", "소모품·자산", "100만원 초과 비품 · PC·노트북·휴대폰", "노트북 컴퓨터 PC 아이폰 갤럭시 휴대폰 맥북 서버 에어컨", "비품", "212", "Y", "원칙은 자산 계상 후 감가상각. 전화기·PC(주변기기 포함)·가구·전기기구 등은 금액과 관계없이 손비 계상 가능.", "법인세법 시행령 §31⑥ · 부가가치세법 §38①1호"],
+["카드", "소모품·자산", "공구·기구", "공구 전동공구 드릴 측정기 지그 금형", "공구와기구", "210", "Y", "공구는 금액과 관계없이 사용연도 손비 계상 가능.", "법인세법 시행령 §31⑥ · 부가가치세법 §38①1호"],
+["공통", "소모품·자산", "간판", "간판 사인 LED간판 채널간판 돌출간판", "소모품비", "830", "Y", "간판은 금액과 관계없이 손비 계상 가능.", "법인세법 시행령 §31⑥ · 부가가치세법 §38①1호"],
+["공통", "소모품·자산", "미술품 (사무실 장식)", "미술품 그림 액자 조각 작품 갤러리", "비품", "212", "C", "장식·환경미화 목적이고 거래단위 1천만원 이하면 손비 계상 가능. 예술창작품은 면세(대통령령 범위).", "법인세법 시행령 §19 17호 · 부가가치세법 §26①16호"],
+["공통", "소모품·자산", "소프트웨어·클라우드 구독", "MS365 마이크로소프트 어도비 Adobe 구글워크스페이스 AWS 노션 슬랙 줌 Zoom ChatGPT Claude 구독", "지급수수료", "831", "C", "해외 결제분은 부가세가 청구되지 않아 공제할 매입세액이 없음. 국내 사업자 세금계산서분은 공제.", "부가가치세법 §38①1호"],
+["공통", "소모품·자산", "소프트웨어 라이선스 (영구·고액)", "라이선스 ERP 더존 영구라이선스 패키지 CAD 오토캐드", "소프트웨어", "227", "C", "장기간 쓰는 고액 영구 라이선스는 무형자산(소프트웨어) 후 상각. 연 단위 구독은 지급수수료. 해외 결제분은 부가세가 청구되지 않아 공제할 매입세액이 없음.", "부가가치세법 §38①1호"],
+["공통", "소모품·자산", "도서·신문·잡지", "교보문고 예스24 알라딘 도서 책 신문 구독 잡지", "도서인쇄비", "826", "X", "도서·신문·잡지는 면세(광고 제외).", "부가가치세법 §26①8호"],
+["카드", "소모품·자산", "명함·인쇄·제본", "명함 인쇄 제본 출력 스티커 비즈하우스 레드프린팅", "도서인쇄비", "826", "Y", "현수막·전단 등 홍보물은 광고선전비로 분류해도 됨.", "부가가치세법 §38①1호"],
+["카드", "소모품·자산", "가전·전자제품 매장", "하이마트 삼성디지털프라자 LG베스트샵 전자랜드 가전 에어컨 냉장고 TV", "비품", "212", "Y", "전기기구는 금액과 관계없이 손비 계상 가능.", "법인세법 시행령 §31⑥ · 부가가치세법 §38①1호"],
+["카드", "소모품·자산", "가구점", "이케아 한샘 리바트 퍼시스 시디즈 가구 책상 의자 수납장", "비품", "212", "Y", "가구는 금액과 관계없이 손비 계상 가능.", "법인세법 시행령 §31⑥ · 부가가치세법 §38①1호"],
+["카드", "소모품·자산", "철물점·공구상가", "철물점 공구상가 나사 못 전선 공구 철물", "소모품비", "830", "Y", "소모성 자재. 시설 보수용이면 수선비, 공구는 공구와기구.", "부가가치세법 §38①1호"],
+["카드", "소모품·자산", "IT 소모품 (케이블·USB·충전기)", "케이블 USB 충전기 마우스패드 허브 젠더 SSD 외장하드", "소모품비", "830", "Y", "컴퓨터 주변기기는 금액과 관계없이 손비 계상 가능.", "법인세법 시행령 §31⑥ · 부가가치세법 §38①1호"],
+["카드", "소모품·자산", "POS·키오스크·카드단말기", "포스 POS 키오스크 카드단말기 영수증프린터 바코드", "비품", "212", "Y", "구입은 비품(전기기구 즉시상각 가능), 렌탈은 지급임차료.", "법인세법 시행령 §31⑥ · 부가가치세법 §38①1호"],
+["카드", "소모품·자산", "휴대폰 단말기 할부금 (통신요금 청구)", "단말기할부금 기기값 할부원금 휴대폰할부", "비품", "212", "Y", "통신요금 고지서의 단말기 할부원금은 통신비가 아니라 단말기 취득대가(전화기는 즉시상각 가능). 할부이자는 이자비용.", "법인세법 시행령 §31⑥ · 부가가치세법 §38①1호"],
+["카드", "소모품·자산", "사무실 화분·조경 관리", "화분 조경 식물관리 플랜테리어 화분렌탈", "소모품비", "830", "C", "국내산 화초·수목 구입은 면세. 정기 관리·렌탈 용역은 과세라 공제. 조경공사 대가에 포함된 화초·수목은 과세.", "부가가치세법 §26①1호 · §38①1호 · 부가46015-334 (1998.02.25)"],
+["공통", "소모품·자산", "장기 사용 소모성 비품 (100만원 이하 자산 계상)", "비품계상 소액비품 자산계상 소모품자산", "비품", "212", "Y", "100만원 이하라도 손비로 계상하지 않고 자산으로 올리면 감가상각으로 비용화.", "법인세법 시행령 §31④ · 부가가치세법 §38①1호"],
+["카드", "소모품·자산", "중고거래 개인 판매자 구매 (당근 등)", "당근마켓 중고나라 번개장터 중고구매 개인거래 직거래", "내용별 계정", "—", "X", "지출증명서류 수취 의무와 미수취 가산세(2%)는 시행령 §158①의 사업자로부터 공급받는 경우에 적용. 개인 간 중고거래는 거래 내용과 이체 기록을 보관.", "법인세법 §116② · §75의5 · 시행령 §158"],
+// ── 수수료·광고·판매
+["공통", "수수료·광고·판매", "세무·회계·법무 수수료", "기장료 세무사 회계사 법무사 변호사 노무사 수수료 자문료 조정료", "지급수수료", "831", "Y", "세금계산서 수취분 공제. 부동산 취득 관련 법무사 수수료는 자산 취득원가.", "부가가치세법 §38①1호"],
+["통장", "수수료·광고·판매", "은행 송금·이체수수료", "송금수수료 이체수수료 타행 수수료 은행 OTP 인증서 펌뱅킹", "지급수수료", "831", "X", "금융 용역은 면세(대통령령 범위).", "부가가치세법 §26①11호"],
+["통장", "수수료·광고·판매", "카드 매출 가맹점수수료", "카드사 가맹점수수료 정산 BC 신한카드 KB국민카드 삼성카드 매출입금", "지급수수료", "831", "X", "카드사 정산 입금액이 수수료 차감 후 금액이면 외상매출금(미수금) 총액 회수 + 수수료 비용으로 나눠 기록.", "일반기업회계기준 문단 2.57"],
+["공통", "수수료·광고·판매", "PG·오픈마켓·배달앱 수수료", "네이버페이 스마트스토어 쿠팡 판매수수료 배민 수수료 PG 토스페이먼츠 KG이니시스 NICE 11번가 G마켓", "지급수수료", "831", "Y", "세금계산서 수취분 공제.", "부가가치세법 §38①1호"],
+["공통", "수수료·광고·판매", "온라인 광고", "네이버광고 구글광고 Google Ads 메타 페이스북 인스타그램 카카오모먼트 키워드광고 당근광고", "광고선전비", "833", "C", "국내 사업자 세금계산서분 공제. 해외 결제분은 부가세가 청구되지 않아 공제할 매입세액이 없음.", "부가가치세법 §38①1호"],
+["카드", "수수료·광고·판매", "판촉물·홍보물", "판촉물 기념품 볼펜 달력 전단지 현수막 홍보 배너", "광고선전비", "833", "Y", "불특정 다수 배포 목적. 특정 거래처에 주면 기업업무추진비.", "법인세법 시행령 §19 18호 · 부가가치세법 §38①1호"],
+["공통", "수수료·광고·판매", "택배·퀵서비스·화물운송", "택배 CJ대한통운 로젠 한진 롯데택배 퀵 화물 용달 우체국택배", "운반비", "824", "Y", "판매 물품 발송은 운반비. 원재료·상품 매입 운임은 매입원가에 포함.", "부가가치세법 §38①1호"],
+["공통", "수수료·광고·판매", "체험단·인플루언서 마케팅", "체험단 인플루언서 블로거 유튜버 협찬 리뷰 레뷰 원고료", "광고선전비", "833", "C", "대행사·사업자 세금계산서분은 공제. 개인 인플루언서에게 직접 주는 대가는 사업소득 3.3%(계속·반복) 또는 기타소득 원천징수 검토.", "소득세법 §129①3호·6호 · 부가가치세법 §38①1호"],
+["통장", "수수료·광고·판매", "판매장려금 지급", "판매장려금 장려금 리베이트 판매수당 인센티브 대리점", "판매장려금", "—", "X", "사전약정 여부와 관계없이 지급하는 판매장려금은 손비.", "법인세법 시행령 §19 1의2호"],
+["공통", "수수료·광고·판매", "수출제비용", "수출 선적 포워딩 통관수수료 관세사 운송 항만 THC B/L", "수출제비용", "838", "C", "국내 관세사·포워더 수수료는 세금계산서로 공제.", "부가가치세법 §38①1호"],
+["공통", "수수료·광고·판매", "채용 광고·헤드헌팅", "사람인 잡코리아 원티드 채용 구인광고 헤드헌팅 알바몬 알바천국", "지급수수료", "831", "Y", "채용 광고·헤드헌팅 수수료.", "부가가치세법 §38①1호"],
+["공통", "수수료·광고·판매", "인증·시험 수수료 (ISO·KC 등)", "ISO 인증 KC 시험성적서 HACCP 인증수수료 심사 KTL KTR", "지급수수료", "831", "Y", "민간 인증기관 세금계산서분 공제. 정부기관 수수료는 부가세 없음.", "부가가치세법 §38①1호"],
+["공통", "수수료·광고·판매", "특허·상표 출원", "특허 상표 출원 변리사 특허청 디자인등록 실용신안", "지급수수료", "831", "C", "변리사 수수료는 공제. 특허청 관납료는 국가가 공급하는 용역으로 면세(대통령령 범위).", "부가가치세법 §26①19호 · §38①1호"],
+["공통", "수수료·광고·판매", "홈페이지 제작·리뉴얼", "홈페이지 웹사이트 제작 리뉴얼 쇼핑몰제작 카페24 아임웹 퍼블리싱", "광고선전비", "833", "Y", "국내 제작업체 세금계산서분 공제.", "부가가치세법 §38①1호"],
+["공통", "수수료·광고·판매", "도메인·웹호스팅", "도메인 호스팅 가비아 카페24 후이즈 GoDaddy 서버비", "지급수수료", "831", "C", "국내 업체 세금계산서분 공제. 해외 결제분은 부가세가 청구되지 않아 공제할 매입세액이 없음.", "부가가치세법 §38①1호"],
+["카드", "수수료·광고·판매", "배달앱 광고 (울트라콜·오픈리스트)", "울트라콜 오픈리스트 배민광고 쿠팡이츠광고 요기요광고 배달앱광고", "광고선전비", "833", "Y", "배달앱이 발행한 세금계산서로 공제. 중개수수료와 광고비를 나눠 기록.", "부가가치세법 §38①1호"],
+["카드", "수수료·광고·판매", "쿠팡·오픈마켓 광고", "쿠팡광고 스마트스토어광고 쇼핑검색광고 11번가광고 G마켓광고", "광고선전비", "833", "Y", "플랫폼 세금계산서 수취분 공제.", "부가가치세법 §38①1호"],
+["카드", "수수료·광고·판매", "박람회·전시회 참가비", "박람회 전시회 부스 코엑스 킨텍스 벡스코 참가비 전시", "광고선전비", "833", "Y", "부스비·장치비. 해외 전시회는 국내 부가세 없음.", "부가가치세법 §38①1호"],
+["공통", "수수료·광고·판매", "영상·사진 촬영·편집", "영상제작 촬영 사진촬영 스튜디오 편집 제품사진 프로필", "광고선전비", "833", "C", "홍보용 촬영은 광고선전비. 업체는 세금계산서로 공제, 개인 프리랜서는 3.3% 원천징수.", "소득세법 §129①3호 · 부가가치세법 §38①1호"],
+["공통", "수수료·광고·판매", "홍보대행·마케팅 대행", "홍보대행 마케팅대행 PR 광고대행사 바이럴", "광고선전비", "833", "Y", "대행 수수료 포함. 세금계산서 수취분 공제.", "부가가치세법 §38①1호"],
+["공통", "수수료·광고·판매", "번역·통역", "번역 통역 번역료 감수 현지화", "지급수수료", "831", "C", "업체는 세금계산서로 공제, 개인은 3.3%(계속) 또는 기타소득 원천징수.", "소득세법 §129①3호·6호 · 부가가치세법 §38①1호"],
+["공통", "수수료·광고·판매", "경영·IT 컨설팅", "컨설팅 자문 경영컨설팅 IT컨설팅 용역", "지급수수료", "831", "Y", "세금계산서 수취분 공제. 개인 자문은 원천징수 항목 참고.", "부가가치세법 §38①1호"],
+["공통", "수수료·광고·판매", "전자세금계산서·전자계약 서비스", "스마트빌 전자세금계산서 발행수수료 모두싸인 전자계약 이폼사인", "지급수수료", "831", "Y", "", "부가가치세법 §38①1호"],
+["공통", "수수료·광고·판매", "공동인증서·전자서명 발급", "공동인증서 범용인증서 사업자인증서 전자서명 한국정보인증 코스콤", "지급수수료", "831", "C", "인증기관이 세금계산서를 발급한 수수료는 사업 관련 매입세액으로 공제.", "부가가치세법 §38①1호"],
+["공통", "수수료·광고·판매", "공증·감정평가·신용평가 수수료", "공증 공증사무소 감정평가 감정료 기업신용평가 이크레더블 나이스평가", "지급수수료", "831", "Y", "자산 취득·평가 관련 감정료는 취득원가 여부 확인.", "부가가치세법 §38①1호"],
+["공통", "수수료·광고·판매", "소송비용 (인지·송달료·변호사보수)", "소송 인지대 송달료 변호사 착수금 성공보수 법원", "지급수수료", "831", "C", "변호사 보수는 세금계산서로 공제. 법원 인지는 면세. 대표 개인 소송이면 비용 아님.", "부가가치세법 §38①1호 · 부가가치세법 §26①9호"],
+["공통", "수수료·광고·판매", "채권추심·신용조사 수수료", "채권추심 추심 신용조사 신용정보 추심수수료", "지급수수료", "831", "Y", "", "부가가치세법 §38①1호"],
+["공통", "수수료·광고·판매", "VAN·카드단말 수수료", "VAN 밴수수료 KIS KICC 나이스정보통신 단말기수수료", "지급수수료", "831", "Y", "VAN사 세금계산서분 공제. 카드사 가맹점수수료와는 별도.", "부가가치세법 §38①1호"],
+["공통", "수수료·광고·판매", "프랜차이즈 가맹비·로열티 (가맹점)", "가맹비 가맹금 로열티 프랜차이즈 본사 교육비 인테리어분담", "지급수수료", "831", "C", "매달 내는 로열티는 지급수수료. 계약기간 전체에 대한 가맹비는 무형자산(가맹권) 후 상각 검토. 가맹보증금은 자산.", "부가가치세법 §38①1호"],
+["공통", "수수료·광고·판매", "앱스토어·플랫폼 결제", "애플 앱스토어 구글플레이 인앱결제 앱결제", "지급수수료", "831", "X", "국외사업자의 전자적 용역은 등록사업자의 과세·면세사업에 공급되는 경우 간편사업자등록·납부 특례 대상에서 제외. 업무용 앱만 비용.", "부가가치세법 §53의2①"],
+["공통", "수수료·광고·판매", "쿠팡 와우·네이버플러스 등 멤버십", "쿠팡와우 로켓와우 네이버플러스 멤버십 스마일클럽", "지급수수료", "831", "C", "사업용 구매 할인 목적이 분명하면 비용, 개인 혜택 위주면 사적 지출.", "부가가치세법 §39①4호"],
+["공통", "수수료·광고·판매", "급여 아웃소싱·노무 대행 수수료", "급여대행 급여아웃소싱 4대보험대행 노무대행 페이롤", "지급수수료", "831", "Y", "급여 계산·신고 대행 용역 수수료. 세금계산서 수취분 공제.", "부가가치세법 §38①1호"],
+// ── 보험·교육·연구
+["공통", "보험·교육·연구", "화재·배상책임·보증보험", "화재보험 배상책임 보증보험 서울보증 영업배상", "보험료", "821", "X", "보험 용역은 면세. 1년 이상 선납분은 선급비용으로 기간 배분.", "부가가치세법 §26①11호"],
+["공통", "보험·교육·연구", "PL·적재물·영업배상 보험", "PL보험 제조물책임 적재물보험 화물보험 영업배상 전문인배상", "보험료", "821", "X", "보험 용역은 면세. 선급분 기간 배분.", "부가가치세법 §26①11호"],
+["공통", "보험·교육·연구", "직원 단체보장성보험", "단체보험 단체상해 단체실손 직원보험", "보험료", "821", "X", "종업원을 피보험자로 한 단체순수보장성·단체환급부보장성 보험료는 필요경비.", "소득세법 시행령 §55①12호 · 부가가치세법 §26①11호"],
+["공통", "보험·교육·연구", "임원 보험 (CEO 정기·종신 등)", "CEO보험 경영인정기보험 종신보험 임원보험 저축성", "보험료", "821", "X", "보장성·만기환급 구조에 따라 비용·자산 구분이 다르고 수익자가 임원 개인이면 급여 처리 문제.", "부가가치세법 §26①11호"],
+["공통", "보험·교육·연구", "직원 교육·세미나·자격과정", "교육 세미나 강의 연수 자격증 인강 온라인강의 학원", "교육훈련비", "825", "C", "교육 용역은 면세(대통령령 범위), 그 밖의 과세 교육용역은 공제. 시행령 §88⑤6호 해당 용역은 카드 매입세액 공제 제외.", "부가가치세법 §26①6호 · 시행령 §88⑤6호"],
+["공통", "보험·교육·연구", "연구개발비 (연구소 재료·용역)", "연구개발 R&D 연구소 시제품 시험재료 연구용역 위탁연구", "경상연구개발비", "823", "Y", "경상 연구비는 비용, 자산성 요건을 갖춘 개발 단계 지출은 개발비(226). 국내 과세 매입은 공제.", "부가가치세법 §38①1호"],
+["통장", "보험·교육·연구", "교육비 환급 (고용보험 직업훈련)", "직업훈련 환급 HRD 사업주훈련 지원금", "잡이익", "930", "X", "사업주 훈련비 환급은 잡이익 또는 교육훈련비 차감.", "일반기업회계기준 문단 2.51"],
+// ── 매입·원가
+["공통", "매입·원가", "상품 매입", "상품 매입 도매 사입 공급처 납품 상품대", "상품", "146", "Y", "세금계산서 수취분 공제. 결산 때 매출원가로 대체.", "부가가치세법 §38①1호"],
+["공통", "매입·원가", "원재료 매입", "원재료 원자재 부자재 자재 재료비", "원재료", "153", "Y", "제조원가로 대체.", "부가가치세법 §38①1호"],
+["공통", "매입·원가", "면세 농축수산물 매입 (의제매입)", "농산물 수산물 축산물 정육 채소 쌀 계산서 면세 의제매입", "원재료", "153", "C", "가공되지 않은 농·축·수산물은 면세라 부가세 없음. 과세 재화를 만드는 데 쓰면 의제매입세액공제 대상.", "부가가치세법 §42 · 부가가치세법 §26①1호"],
+["공통", "매입·원가", "외주가공비", "외주가공 임가공 가공비 하청 OEM", "외주가공비", "—", "Y", "제조원가 계정. 세금계산서 수취분 공제.", "부가가치세법 §38①1호"],
+["공통", "매입·원가", "외주공사비 (하도급)", "외주공사 하도급 공사대금 전문건설 시공", "외주공사비", "—", "Y", "공사원가 계정. 세금계산서 수취분 공제.", "부가가치세법 §38①1호"],
+["공통", "매입·원가", "매입운임·하역비", "매입운임 입고운임 하역 운송비 물류비 입고", "상품·원재료 (매입원가)", "146", "Y", "취득 부대비용이라 매입원가에 포함. 판매 발송 운임은 운반비.", "법인세법 시행령 §19 1호 · 부가가치세법 §38①1호"],
+["통장", "매입·원가", "수입부가세 (세관 납부)", "수입부가세 세관 수입세금계산서 통관 관세청", "부가세대급금", "135", "Y", "세관장이 발급한 수입세금계산서로 공제. 관세는 원가.", "부가가치세법 §38①1호"],
+["공통", "매입·원가", "매입할인·매입환출", "매입할인 반품 환출 매입에누리 조기결제할인", "매입할인·매입환출", "—", "X", "상품·원재료 차감 계정. 수정세금계산서 수취.", "일반기업회계기준 문단 7.6"],
+["카드", "매입·원가", "견본품 (샘플)", "견본 샘플 시제품 시안 견본품", "견본비", "—", "Y", "견본 구입·제작비.", "부가가치세법 §38①1호"],
+["카드", "매입·원가", "포장재", "포장 박스 완충재 뽁뽁이 테이프 쇼핑백 포장재", "포장비", "828", "Y", "판매 포장용. 제품 원가에 포함되는 포장은 원재료.", "부가가치세법 §38①1호"],
+["공통", "매입·원가", "보관료 (외부 창고)", "보관료 물류센터 3PL 풀필먼트 창고료", "보관료", "832", "Y", "외부 보관 용역 대가.", "부가가치세법 §38①1호"],
+["공통", "매입·원가", "장비 임차 (생산·공사용)", "장비임차 중장비 굴삭기 크레인 지게차 렌탈 장비대", "지급임차료", "819", "Y", "생산·공사 현장분은 원가 계정의 지급임차료.", "법인세법 시행령 §19 6호 · 부가가치세법 §38①1호"],
+["공통", "매입·원가", "재고 폐기·감모", "재고폐기 폐기 감모 파손 유통기한 재고실사", "재고자산감모손실", "—", "X", "정상적으로 발생한 감모손실은 매출원가에 가산, 비정상적인 감모손실은 영업외비용. 폐기 사실 입증(폐기확인서·사진) 보관.", "일반기업회계기준 문단 7.20, 실2.49"],
+["카드", "매입·원가", "간이과세자에게 매입", "간이과세 간이사업자 영수증 소규모", "내용별 계정", "—", "C", "영수증 발급 기간의 간이과세자에게 받은 카드전표는 공제 불가. 세금계산서 발급 간이과세자는 세금계산서 수취 시 공제.", "부가가치세법 §46③3호"],
+["통장", "매입·원가", "원가 배부 (공통비 원가·판관비 안분)", "원가배부 공통비 안분 제조간접비 원가대체", "제조간접비 등 원가 계정", "—", "X", "공장·현장과 본사가 같이 쓴 전기·임차료 등은 면적·인원 등 기준으로 원가와 판관비에 나눔.", "일반기업회계기준 문단 7.7~7.8"],
+["공통", "매입·원가", "판매자 부담 쿠폰·할인 (오픈마켓)", "판매자쿠폰 할인쿠폰 즉시할인 판매자부담 프로모션할인", "매출에누리", "—", "X", "판매자가 부담한 쿠폰 할인은 매출에서 차감(매출에누리).", "일반기업회계기준 문단 2.46"],
+["공통", "매입·원가", "고객 부담 배송비 수입", "배송비수입 택배비받음 고객배송비 배송료수입", "상품매출", "401", "X", "고객에게 받은 배송비는 매출에 포함하고, 실제 택배비는 운반비로 기록.", "일반기업회계기준 문단 2.57"],
+["공통", "매입·원가", "적립금·포인트로 결제된 매출 (판매자 적립금)", "적립금결제 포인트결제 자사포인트 마일리지결제", "상품매출", "401", "X", "고객 이용실적에 따라 부여한 적립금은 앞으로 쓰일 것으로 추정되는 금액을 판매비와관리비와 충당부채로 계상하고, 고객이 적립금을 쓸 때 충당부채를 매출채권과 상계. 매 결산마다 사용실적·소멸분을 반영해 추정치 수정.", "KASB 질의회신 2005-053"],
+["공통", "매입·원가", "상품권 발행·판매 (회사가 판매)", "상품권판매 상품권발행 기프트카드판매 선불권", "선수금", "259", "X", "상품권 판매 시 선수금, 상품권으로 물건을 팔 때 매출로 대체.", "일반기업회계기준 문단 실16.16"],
+["공통", "매입·원가", "고객 포인트·마일리지 부여", "포인트적립 마일리지부여 적립금부여 멤버십포인트", "이연수익 (또는 충당부채)", "—", "X", "일반기업회계기준: 포인트 사용 때 유출될 가능성이 매우 높은 증분원가를 충당부채로 인식하고, 포인트 부여분을 매출로 보지 않음. K-IFRS: 대가 없이 준 포인트는 계약부채가 없고, 고객이 포인트로 할인받는 시점에 할인액을 수익에서 차감.", "KASB 질의회신 GKQA05-032 (일반기업회계기준 문단 14.2, 14.7) · KASB 질의회신 SSI-202312049 (K-IFRS 1115 문단 70)"],
+["통장", "매입·원가", "매입 장려금·리베이트 수령", "매입장려금 매입리베이트 판매장려금수령 볼륨인센티브", "매입할인 (매입원가 차감)", "—", "X", "매입과 관련된 할인·에누리 및 기타 유사한 항목은 매입원가에서 차감.", "일반기업회계기준 문단 7.6"],
+["공통", "매입·원가", "매입처 대손세액공제분 차감", "대손세액 매입세액차감 거래처대손 공급자대손세액공제", "부가세대급금 (감소)", "135", "C", "공급자가 대손세액공제를 받은 경우, 그 매입세액을 공제받았던 공급받은 사업자는 대손 확정일이 속하는 과세기간의 매입세액에서 해당 금액을 뺌.", "부가가치세법 §45③"],
+// ── 인건비·원천
+["통장", "인건비·원천", "직원 급여", "급여 월급 기본급 직원급여 이체", "직원급여", "802", "X", "원천징수·4대보험 공제분은 예수금(254).", "일반기업회계기준 문단 실2.47"],
+["통장", "인건비·원천", "임원 급여", "임원급여 대표이사 이사 감사 보수", "임원급여", "801", "X", "정관·주총 결의 한도 내 지급.", "일반기업회계기준 문단 실2.47"],
+["통장", "인건비·원천", "상여금", "상여 상여금 성과급 보너스 인센티브", "상여금", "803", "X", "", "일반기업회계기준 문단 실2.47"],
+["통장", "인건비·원천", "제수당", "수당 야근수당 연장근로 직책수당 자격수당 식대 자가운전보조금", "제수당", "804", "X", "", "일반기업회계기준 문단 실2.47"],
+["통장", "인건비·원천", "일용직 잡급 (원천 6%)", "일용 일당 일용직 알바 아르바이트 단기 잡급 인력사무소", "잡급", "805", "X", "일용근로자 근로소득은 6% 원천징수, 일용근로소득 지급명세서 제출.", "소득세법 §129①4호"],
+["통장", "인건비·원천", "프리랜서 사업소득 (3.3%)", "프리랜서 3.3 사업소득 외주 디자이너 개발자 강사 용역", "지급수수료", "831", "X", "원천징수대상 사업소득 3%(지방소득세 별도 0.3%).", "소득세법 §129①3호"],
+["통장", "인건비·원천", "강사료·자문료 기타소득 (8.8%)", "기타소득 8.8 강사료 강연료 자문료 심사료 원고료 일시", "지급수수료", "831", "X", "일시적 용역은 기타소득 20% 원천징수.", "소득세법 §129①6호"],
+["통장", "인건비·원천", "개인사업자 대표 본인 급여", "대표 급여 사장 월급 본인 인건비", "인출금", "338", "X", "개인사업자 대표는 근로자가 아니라 본인 급여는 필요경비가 아님.", "소득세법 §33①5호"],
+["통장", "인건비·원천", "가족 급여 (실제 근무)", "가족 배우자 자녀 부모 급여 친족", "직원급여", "802", "X", "실제 근무(출퇴근·업무 기록)와 적정 급여가 입증되면 비용. 근무 사실 없으면 가사경비.", "소득세법 §33①5호"],
+["통장", "인건비·원천", "퇴직금 지급", "퇴직금 퇴직 정산 퇴직소득", "퇴직급여", "806", "X", "충당부채 설정분은 퇴직급여충당부채(295) 감소. 퇴직 후 14일 이내 지급(합의로 연장 가능). 퇴직소득 원천징수.", "일반기업회계기준 문단 21.8~21.10 · 근로자퇴직급여 보장법 §9①"],
+["통장", "인건비·원천", "직원 대여금·급여 가불", "직원대여 가불 주택자금 생활안정자금 대여", "단기대여금", "114", "X", "급여에서 공제해 회수. 특수관계인에게 업무와 관련 없이 빌려준 자금은 지급이자 손금불산입 대상(재정경제부령으로 정하는 대여금은 제외).", "법인세법 §28①4호나목 · 시행령 §53①"],
+["통장", "인건비·원천", "연말정산 환급·추가납부", "연말정산 환급 추가징수 정산 차감징수", "예수금", "254", "X", "정산분은 예수금으로 처리 후 원천세 신고에 반영.", "소득세법 §137①②"],
+["공통", "인건비·원천", "인력파견·도급 용역", "인력파견 파견 도급 아웃소싱 용역업체 인력공급", "지급수수료", "831", "Y", "사업자에게 세금계산서 받는 용역비(공제).", "부가가치세법 §38①1호"],
+["통장", "인건비·원천", "개인에게 빌린 돈 이자 지급 (원천 25%)", "개인차입 이자 사채 지인 가족 차입이자 비영업대금", "이자비용", "951", "X", "비영업대금 이익은 25% 원천징수.", "소득세법 §129①1호나목"],
+["통장", "인건비·원천", "4대보험 출금 (건강·고용·장기요양)", "건강보험 국민건강보험공단 고용보험 장기요양 사회보험 4대보험", "복리후생비", "811", "X", "회사부담분은 복리후생비, 직원부담분은 예수금(254) 반제.", "법인세법 시행령 §45①"],
+["통장", "인건비·원천", "4대보험 출금 (국민연금)", "국민연금 연금공단", "세금과공과", "817", "X", "회사부담분은 사용자 부담 보험료, 직원부담분은 예수금.", "국민연금법 §88③"],
+["통장", "인건비·원천", "4대보험 출금 (산재보험)", "산재보험 근로복지공단 산업재해", "보험료", "821", "X", "전액 사업주 부담.", "고용보험 및 산업재해보상보험의 보험료징수 등에 관한 법률 §13⑤"],
+["통장", "인건비·원천", "퇴직연금 납입", "퇴직연금 DC DB IRP 퇴직적립", "퇴직급여", "806", "X", "확정기여형(DC)은 납부할 부담금을 퇴직급여로 인식. 확정급여형(DB) 적립금은 퇴직연금운용자산으로 표시하고 구성내역을 주석 공시.", "일반기업회계기준 문단 21.6, 21.11"],
+["통장", "인건비·원천", "원천세·지방소득세 납부", "원천세 원천징수 지방소득세 근로소득세 홈택스 위택스", "예수금", "254", "X", "급여 지급 시 떼어 둔 예수금 반제. 가산세는 세금과공과(손금불산입).", "법인세법 §21 1호"],
+["통장", "인건비·원천", "급여에서 공제하는 식대·기숙사비", "급여공제 식대공제 기숙사비공제 숙소비공제", "잡이익 (또는 해당 비용 차감)", "930", "X", "급여에서 떼어 회사가 받는 식대·기숙사비는 해당 복리후생비 차감 또는 잡이익으로 처리.", ""],
+["통장", "인건비·원천", "급여 과지급분 회수", "급여과지급 과다지급 급여환수 초과지급", "미수금", "120", "X", "잘못 더 준 급여는 미수금으로 두고 다음 달 급여에서 공제하거나 입금받아 상계.", "일반기업회계기준 문단 실2.27"],
+["통장", "인건비·원천", "퇴사자 4대보험·원천세 정산", "퇴사정산 퇴직정산 퇴사자보험 중도퇴사 연말정산", "예수금", "254", "X", "퇴사 시 정산한 보험료·세금 차액은 예수금으로 처리하고 마지막 급여에서 공제·환급.", "소득세법 §137①"],
+["통장", "인건비·원천", "비과세 식대 (월 20만원)", "식대 식사대 비과세식대 중식대 밥값 식비수당", "제수당 (식대)", "804", "X", "식사나 음식물을 제공받지 않는 근로자가 받는 월 20만원 이하 식사대는 비과세 근로소득. 사내급식 등으로 제공받는 식사도 비과세. 식사를 제공받으면서 식대도 받으면 식대는 과세.", "소득세법 §12 3호 러목"],
+["통장", "인건비·원천", "자가운전보조금 (월 20만원)", "자가운전보조금 차량유지비지원 개인차량 업무사용 유류지원", "제수당 (자가운전보조금)", "804", "X", "종업원 소유 또는 본인 명의 임차 차량을 직접 운전해 업무에 쓰고, 실제 여비 대신 회사 지급기준에 따라 받는 금액 중 월 20만원 이내는 실비변상적 급여로 비과세.", "소득세법 시행령 §12 3호"],
+["통장", "인건비·원천", "보육수당 (6세 이하 자녀 월 20만원)", "보육수당 육아수당 자녀수당 양육수당 어린이집", "제수당 (보육수당)", "804", "X", "근로자 또는 배우자의 6세 이하 자녀 보육과 관련해 받는 급여는 자녀 1명당 월 20만원 이내 비과세.", "소득세법 §12 3호 머목 2)"],
+["통장", "인건비·원천", "출산지원금", "출산지원금 출산축하금 출산장려금 출산수당", "복리후생비 (출산지원금)", "811", "X", "자녀 출생일 이후 2년 이내에 최대 두 차례 받는 출산 관련 급여는 전액 비과세(지배주주등 특수관계자 제외). 공통 지급기준에 따라 지급한 출산·양육 지원금은 법인 손비.", "소득세법 §12 3호 머목 1) · 시행령 §17의2 · 법인세법 시행령 §19 3의2호"],
+["통장", "인건비·원천", "직무발명보상금", "직무발명보상금 발명보상 특허보상 연구보상", "직무발명보상금", "—", "X", "발명진흥법에 따른 직무발명으로 받는 보상금은 연 700만원 이하 비과세. 지급한 사용자등과 대통령령으로 정하는 특수관계에 있는 자가 받는 보상금은 제외.", "소득세법 §12 3호 어목 · 시행령 §17의3①"],
+["통장", "인건비·원천", "임원 퇴직금 한도", "임원퇴직금 퇴직금한도 대표이사퇴직금 정관퇴직금 퇴직금규정", "퇴직급여", "806", "X", "정관(또는 정관에서 위임한 퇴직급여지급규정)에 정한 금액, 정관에 없으면 퇴직 전 1년 총급여의 10분의 1 × 근속연수를 넘는 임원 퇴직급여는 손금불산입.", "법인세법 시행령 §44④⑤"],
+["통장", "인건비·원천", "4대보험 근로자 부담분 공제 (예수금)", "4대보험공제 근로자부담 건강보험공제 국민연금공제 고용보험공제", "예수금", "254", "X", "건강보험 보수월액보험료는 근로자·사업주 각 50%, 국민연금은 각 기준소득월액의 1천분의 65, 고용보험 실업급여분은 각 2분의 1. 근로자 부담분은 급여에서 떼어 예수금으로 두고 납부.", "국민건강보험법 §76① · 국민연금법 §88③ · 고용보험 및 산업재해보상보험의 보험료징수 등에 관한 법률 §13②④"],
+// ── 통장·금융
+["통장", "통장·금융", "카드대금 결제 출금", "카드대금 카드결제 결제대금 신한카드 KB국민 삼성카드 현대카드 롯데카드 하나카드 BC카드", "미지급금", "253", "X", "카드 사용 시점에 비용/미지급금으로 기록했으면 결제 출금은 미지급금 감소.", ""],
+["통장", "통장·금융", "매출대금 입금", "매출 입금 대금 수금 거래처입금", "외상매출금", "108", "X", "세금계산서 발행분 회수.", "일반기업회계기준 문단 실2.25"],
+["통장", "통장·금융", "매입대금 송금", "매입 송금 대금지급 결제 거래처송금", "외상매입금", "251", "X", "상품·원재료 매입은 외상매입금, 그 외 비용·자산 미지급분은 미지급금(253).", "일반기업회계기준 문단 실2.42"],
+["통장", "통장·금융", "배달앱·오픈마켓 정산 입금", "정산 배민정산 쿠팡정산 스마트스토어정산 요기요 11번가 정산금", "외상매출금", "108", "X", "수수료·광고비 차감 후 입금되면 매출 총액 회수 + 수수료 비용으로 나눠 기록. 정산내역서 보관.", "일반기업회계기준 문단 실2.25"],
+["통장", "통장·금융", "현금매출 입금", "현금매출 현금입금 시재 매장현금", "상품매출", "401", "X", "현금영수증 발행분·미발행분 구분해 부가세 신고에 반영.", "일반기업회계기준 문단 2.46"],
+["통장", "통장·금융", "매출 환불 (고객 반환)", "환불 반품환불 취소 고객환불 매출취소", "매출환입및에누리", "402", "X", "세금계산서 발행분은 수정세금계산서 발행. 카드매출 취소는 카드사 취소내역으로 확인.", "일반기업회계기준 문단 2.46"],
+["통장", "통장·금융", "선수금 입금 (계약금)", "선수금 계약금 착수금 선입금 예약금", "선수금", "259", "X", "재화·용역 공급 시 매출로 대체. 선발급 세금계산서를 낸 경우 공급시기 처리 확인.", "일반기업회계기준 문단 16.10~16.11"],
+["통장", "통장·금융", "매출할인 (조기결제 할인)", "매출할인 조기결제 할인 결제할인", "매출할인", "403", "X", "외상대금 조기 회수에 따른 할인.", "일반기업회계기준 문단 2.46"],
+["공통", "통장·금융", "대손 (거래처 부도·소액채권)", "대손 부도 회수불능 파산 폐업 소액채권 받을돈", "대손상각비", "835", "C", "법인: 부도 후 6개월 경과 어음·수표·중소기업 외상매출금, 회수비용이 더 큰 30만원 이하 채권 등 요건 확인. 부가세 대손세액공제는 별도 요건.", "법인세법 시행령 §19의2① · 부가가치세법 §45"],
+["통장", "통장·금융", "임대료 수입", "임대료 월세입금 임차인 관리비수입", "임대료수입", "904", "X", "부동산임대업은 매출(임대료수입), 그 외 업종의 일시 임대는 영업외수익.", "일반기업회계기준 문단 2.51, 실2.48"],
+["통장", "통장·금융", "임대보증금 수령·반환 (임대인)", "임대보증금 보증금수령 보증금반환 임차인", "임대보증금", "294", "X", "부채. 간주임대료 대상 여부 확인.", "부가가치세법 §29⑩1호"],
+["통장", "통장·금융", "대출이자 출금", "대출이자 이자 차입금이자 기업은행 IBK", "이자비용", "951", "X", "원금 상환분은 단기·장기차입금(260/293) 감소로 분리.", "법인세법 시행령 §19 7호"],
+["통장", "통장·금융", "대출 원금 입금·상환", "대출 실행 원금상환 차입 상환 마이너스통장", "단기차입금", "260", "X", "만기 1년 초과는 장기차입금(293).", "일반기업회계기준 문단 2.23"],
+["통장", "통장·금융", "중도상환수수료", "중도상환수수료 조기상환 상환수수료", "지급수수료", "831", "X", "금융 용역은 면세(대통령령 범위).", "부가가치세법 §26①11호"],
+["통장", "통장·금융", "신용보증기금·기술보증 보증료", "신용보증기금 신보 기술보증기금 기보 지역신용보증재단 보증료", "지급수수료", "831", "X", "신용보증기금업·기술보증기금 보증 업무는 면세. 그 밖의 보증기관은 시행령 §40① 열거 여부 확인.", "부가가치세법 §26①11호 · 시행령 §40①3호·6호"],
+["통장", "통장·금융", "금융리스료 지급", "금융리스 리스료 리스원금 리스이자", "금융리스부채", "—", "X", "원금은 리스부채 감소, 이자분은 이자비용. 운용리스는 지급임차료.", "일반기업회계기준 문단 13.13~13.18"],
+["통장", "통장·금융", "할부금·할부이자 (자산 할부 구입)", "할부 할부금 할부이자 캐피탈 분할납부", "미지급금", "253", "X", "원금은 미지급금 감소, 이자분은 이자비용(951).", ""],
+["통장", "통장·금융", "예금이자 입금", "예금이자 결산이자 이자입금 보통예금이자", "이자수익", "901", "X", "법인: 원천징수세액은 선납세금(136)으로 총액 기록. 개인사업자: 예금이자는 이자소득이라 사업소득 수입금액에서 제외.", "일반기업회계기준 문단 실2.48"],
+["통장", "통장·금융", "정기예금 가입·만기", "정기예금 예금가입 만기해지 정기예금이자 예치", "정기예금", "105", "X", "결산일 기준 만기 1년 이내는 정기예금(단기투자자산), 1년 초과는 장기금융상품. 취득 당시 만기 3개월 이내면 현금성자산.", "일반기업회계기준 문단 실2.26"],
+["통장", "통장·금융", "정기적금 납입·만기", "적금 정기적금 적금납입 적금만기 부금", "정기적금", "106", "X", "매달 넣는 적금은 정기적금으로 누적. 결산일 기준 만기 1년 초과분은 장기금융상품.", "일반기업회계기준 문단 실2.26"],
+["통장", "통장·금융", "저축성보험 납입", "저축성보험 연금보험 변액 적립보험", "장기성예금 (기타투자자산)", "—", "X", "보험료 납입액 중 보장성보험료와 사업비는 영업외비용, 나머지는 투자자산으로 인식하고 매 결산일에 해약환급금으로 평가(KASB가 GKQA08-009 회신을 인용해 안내).", "KASB 질의회신 SSI-35533 (K-IFRS 1008 문단 10~12)"],
+["통장", "통장·금융", "외화 환전·외환차손익", "환전 외화 달러 송금 해외송금 외환 환차", "외환차익·외환차손", "907", "X", "외화 결제 시 장부 환율과 실제 환율 차이는 외환차익(907)·외환차손(952). 기말 평가는 외화환산손익.", "일반기업회계기준 문단 23.10~23.12, 실2.48~실2.49"],
+["통장", "통장·금융", "계좌 간 이체 (본인 사업 계좌)", "계좌이체 대체 본인계좌 자금이동 이체", "보통예금", "103", "X", "손익과 무관한 대체 거래. 양쪽 계좌에 같은 금액이 찍히는지 확인.", ""],
+["통장", "통장·금융", "현금 인출·입금 (ATM)", "ATM 현금인출 현금입금 출금 시재", "현금", "101", "X", "인출 후 사용처 증빙 확보. 사용처 불명이면 법인은 가지급금, 개인은 인출금.", ""],
+["통장", "통장·금융", "대표자 개인 용도 출금 (법인)", "대표 개인 이체 가지급 대표자 생활비 본인송금", "가지급금", "134", "X", "업무와 관련 없이 특수관계인에게 빌려준 자금(가지급금)은 차입금 지급이자 손금불산입 대상이고, 부당행위계산에 해당하면 인정이자를 익금에 산입. 가급적 원인 확인 후 정리.", "법인세법 §28①4호나목 · 시행령 §53① · §89⑤"],
+["통장", "통장·금융", "대표자가 법인에 입금", "대표 입금 가수금 대표자차입", "가수금", "257", "X", "원인 확인되면 차입금·매출 등으로 대체. 같은 사람에 대한 가지급금과 가수금이 함께 있으면 지급이자 손금불산입 계산 때 상계.", "법인세법 시행령 §53③"],
+["통장", "통장·금융", "대표자 인출·출자 (개인사업자)", "인출 생활비 개인용도 대표 이체 자본금 입금", "인출금", "338", "X", "개인사업자는 대표 개인 사용분을 인출금으로. 비용 처리 금지.", "소득세법 §33①5호"],
+["통장", "통장·금융", "자본금 납입 (설립·증자)", "자본금 설립 증자 주금납입 출자", "자본금", "331", "X", "액면 초과분은 주식발행초과금. 주금납입증명 보관.", "일반기업회계기준 문단 2.29, 15.3"],
+["통장", "통장·금융", "개인·지인 차입", "차입 지인 가족 개인차입 빌린돈", "단기차입금", "260", "X", "차용증·이자 약정 보관. 이자 지급 시 비영업대금 25% 원천징수.", "소득세법 §129①1호나목"],
+["통장", "통장·금융", "거래처 대여금", "대여 대여금 거래처대여 빌려준돈", "단기대여금", "114", "X", "대여 약정서 보관.", ""],
+["공통", "통장·금융", "개인카드 업무사용 정산", "개인카드 정산 경비정산 직원카드 대표카드", "해당 비용 계정", "—", "C", "임직원·종업원 및 가족 명의 카드로 사업 관련 매입을 하고 부가세가 구분된 전표를 받으면 공제 가능. 그 밖의 타인 명의 카드는 공제 불가(세금계산서 수취 필요). 법인의 기업업무추진비는 법인 명의 카드만 적격증빙.", "부가가치세법 §46③ · 서면인터넷방문상담3팀-1912 (2007.07.05) · 법인세법 시행령 §41⑥"],
+["통장", "통장·금융", "정부지원금·고용지원금 입금", "지원금 보조금 고용장려금 두루누리 일자리 국고보조금", "잡이익", "930", "X", "재화·용역 공급과 직접 관련되지 않은 국고보조금·공공보조금은 공급가액에 포함하지 않음. 자산 취득 목적 국고보조금은 자산 차감 계정.", "부가가치세법 §29⑤4호"],
+["통장", "통장·금융", "보험금 수령", "보험금 보험금입금 보상금 해약환급금", "잡이익 (보험금수익)", "930", "X", "화재·사고 보험금은 영업외수익. 해약환급금은 자산 계상분과 상계.", "일반기업회계기준 문단 2.51"],
+["공통", "통장·금융", "카드 포인트·캐시백", "캐시백 포인트 마일리지 적립금 리워드", "잡이익", "930", "X", "자산 취득과 직접 관련해 약정된 카드 리워드는 그 자산의 취득원가에서 차감. 그 밖의 현금성 캐시백은 잡이익 또는 해당 비용 차감으로 처리하는 것이 관행.", "KASB 질의회신 2021-I-KQA006 (K-IFRS 1016 문단 16~17)"],
+["통장", "통장·금융", "부가세 환급금 입금", "부가세환급 환급금 국세환급 조기환급", "미수금", "120", "X", "확정신고한 환급세액은 확정신고기한 후 30일 이내(조기환급 대상은 15일 이내) 환급. 신고 시 잡은 미수금 회수.", "부가가치세법 §59①"],
+["통장", "통장·금융", "간편결제 정산 (네이버·카카오·토스페이)", "네이버페이 카카오페이 토스페이 페이코 간편결제 정산", "외상매출금", "108", "X", "수수료 차감 후 정산되면 매출 총액 회수 + 지급수수료로 나눔. 매출은 결제일 기준으로 집계.", "일반기업회계기준 문단 실2.25"],
+["통장", "통장·금융", "제로페이·지역화폐 정산", "제로페이 지역화폐 지역사랑상품권 온누리 정산", "외상매출금", "108", "X", "가맹점 매출 정산 입금. 수수료가 있으면 지급수수료로 분리.", "일반기업회계기준 문단 실2.25"],
+["통장", "통장·금융", "가상계좌 입금 (고객 결제)", "가상계좌 고객입금 무통장입금 이체입금", "외상매출금", "108", "X", "입금자명과 매출처 대사. 매칭이 안 되면 가수금으로 두고 확인.", "일반기업회계기준 문단 실2.25"],
+["통장", "통장·금융", "받을어음 수령·만기 입금", "어음 받을어음 전자어음 만기 결제 어음입금", "받을어음", "110", "X", "어음 수령 시 외상매출금→받을어음, 만기 입금 시 받을어음 감소.", ""],
+["통장", "통장·금융", "어음 할인 (만기 전 현금화)", "어음할인 할인료 전자어음할인 매출채권할인", "받을어음", "110", "X", "할인료는 매출채권처분손실(매각거래) 또는 이자비용(차입거래). 거래 형태 확인.", "일반기업회계기준 문단 6.5~6.11"],
+["통장", "통장·금융", "지급어음 발행·결제", "지급어음 어음결제 어음지급 전자어음발행", "지급어음", "252", "X", "발행 시 외상매입금→지급어음, 만기 결제 시 지급어음 감소.", ""],
+["통장", "통장·금융", "수출대금 외화 입금", "수출대금 네고 외화입금 T/T 신용장 수출입금", "외상매출금", "108", "X", "선적일 환율로 매출 기록, 입금일 환율 차이는 외환차익·외환차손.", "일반기업회계기준 문단 실2.25, 23.10~23.12"],
+["통장", "통장·금융", "수입대금 해외 송금", "수입대금 해외송금 T/T 송금 외화지급 수입결제", "외상매입금", "251", "X", "선적 전 송금이면 선급금. 송금 수수료는 지급수수료.", "일반기업회계기준 문단 실2.42"],
+["통장", "통장·금융", "선급금 지급 (계약금·착수금)", "선급금 계약금지급 착수금지급 선지급 중도금지급", "선급금", "131", "X", "재화·용역을 받으면 해당 계정으로 대체. 선발급 세금계산서 수취 여부 확인.", "일반기업회계기준 문단 실2.27"],
+["통장", "통장·금융", "선급비용 (보험료·임차료 선납)", "선납 선급비용 연납 1년치 선지급 보험료선납", "선급비용", "133", "X", "결산 때 경과분만 비용으로 대체.", "일반기업회계기준 문단 실2.25"],
+["통장", "통장·금융", "정책자금 대출 (중진공·소진공 등)", "정책자금 중진공 소진공 중소벤처기업진흥공단 소상공인시장진흥공단 신용보증 정책대출", "장기차입금", "293", "X", "만기 1년 이내 도래분은 유동성장기부채로 대체.", "일반기업회계기준 문단 2.23, 실2.43"],
+["통장", "통장·금융", "정부 R&D 출연금·사업비 입금", "출연금 R&D 정부과제 국책과제 사업비 협약", "정부보조금 (국고보조금)", "—", "X", "재화·용역 공급과 직접 관련되지 않은 국고보조금·공공보조금은 공급가액에 포함하지 않음. 사용 목적에 따라 자산 차감·비용 차감·수익 처리.", "부가가치세법 §29⑤4호"],
+["통장", "통장·금융", "오입금·출처 불명 입금", "오입금 착오입금 불명입금 확인중 미확인입금", "가수금", "257", "X", "원인 확인 전까지 가수금. 오입금이면 반환 시 상계.", ""],
+["통장", "통장·금융", "착오 출금·반환받을 돈", "착오송금 반환청구 잘못이체 미수", "미수금", "120", "X", "반환받으면 미수금 감소.", "일반기업회계기준 문단 실2.27"],
+["통장", "통장·금융", "직원 부담금 회수 (회사 대납분)", "직원부담 회수 대납 개인부담금 환수", "미수금", "120", "X", "회사가 먼저 낸 직원 개인 부담분을 돌려받는 경우.", "일반기업회계기준 문단 실2.27"],
+["통장", "통장·금융", "외화예금 입출금", "외화예금 외화통장 달러예금 외화계좌", "외화예금", "—", "X", "원화 환산 차이는 외환차손익, 기말 평가는 외화환산손익.", "일반기업회계기준 문단 23.9~23.10"],
+["통장", "통장·금융", "공탁금·입찰보증금 지급", "공탁 공탁금 입찰보증금 계약보증금 하자보증금 예치", "보증금 (기타비유동자산)", "—", "X", "돌려받을 돈이라 자산. 몰수되면 잡손실.", "일반기업회계기준 문단 실2.38"],
+["통장", "통장·금융", "카드 연회비", "연회비 카드연회비 법인카드연회비", "지급수수료", "831", "X", "여신전문금융업 용역은 면세.", "부가가치세법 §26①11호 · 시행령 §40①9호"],
+["통장", "통장·금융", "카드 할부수수료·리볼빙·현금서비스 이자", "할부수수료 리볼빙 현금서비스 카드론 카드이자", "이자비용", "951", "X", "카드사 신용 공여 대가. 개인카드 사적 사용분이면 비용 아님.", "법인세법 시행령 §19 7호"],
+["통장", "통장·금융", "이익배당 지급 (법인 → 주주)", "배당지급 배당금지급 주주배당 결산배당", "미지급배당금", "—", "X", "주총 결의 시 이익잉여금→미지급배당금, 지급 시 배당소득 14% 원천징수(지방소득세 별도).", "소득세법 §129①2호"],
+["통장", "통장·금융", "건강보험 연말 정산분 (추가납부·환급)", "정산보험료 건강보험정산 보험료정산 4월정산 환급", "복리후생비", "811", "X", "회사부담분은 복리후생비 가감, 직원부담분은 예수금으로 급여에서 공제·환급.", "법인세법 시행령 §45①"],
+["통장", "통장·금융", "국민연금·고용보험 환급", "연금환급 고용보험환급 보험료환급 과오납환급", "세금과공과", "817", "X", "당초 비용 계정(세금과공과·복리후생비)에서 차감.", ""],
+["통장", "통장·금융", "보증금·위약금·소송 승소금 수령", "위약금수령 지체상금수령 승소금 배상금수령 합의금수령", "잡이익", "930", "X", "재화·용역 공급 없이 받는 위약금·손해배상금은 부가세 과세대상 아님. 잡이익으로 처리.", "서삼46015-10929 (2002.05.31)"],
+["통장", "통장·금융", "고철·부산물·폐품 매각", "고철 스크랩 부산물 폐지 폐품 매각 파지", "잡이익", "930", "S", "재화의 양도라 매출 부가세 대상. 매각 대금은 잡이익.", "부가가치세법 §4 · §9①"],
+["통장", "통장·금융", "중고 비품·기계 매각", "중고매각 비품매각 기계매각 장비처분 중고판매", "비품·기계장치", "—", "S", "사업용 자산 양도는 재화의 공급이라 매출 부가세 대상. 장부가액과 차이는 유형자산처분이익·손실.", "부가가치세법 §4 · §9①"],
+["통장", "통장·금융", "증권·CMA 계좌로 자금 이체", "증권계좌 CMA 투자계좌 증권이체", "단기투자자산", "—", "X", "회사 명의 계좌 간 이동이면 손익 없음. 대표 개인 증권계좌로 보냈다면 가지급금·인출금.", "일반기업회계기준 문단 실2.26"],
+["공통", "통장·금융", "가상자산 매수·매도", "비트코인 가상자산 코인 업비트 빗썸 이더리움", "가상자산 (무형자산 등)", "—", "X", "가상자산의 공급은 부가세 과세대상 아님. 대표 개인 투자면 가지급금·인출금.", "기준-2019-법령해석부가-0517 (2021.03.04)"],
+["카드", "통장·금융", "카드 사용분 미지급금 계상", "카드사용 미지급금 카드전표 카드결제분 카드매입", "미지급금", "253", "X", "카드 사용일에 비용(자산)과 미지급금을 기록하고, 결제일에 통장 출금으로 미지급금을 반제.", ""],
+["카드", "통장·금융", "카드 결제 취소·환불", "카드취소 결제취소 환불 승인취소 부분취소", "해당 비용 계정 (감소)", "—", "X", "원래 기록한 비용·자산 계정을 같은 금액만큼 줄임. 부가세 공제분이 있으면 부가세대급금도 줄임.", ""],
+["카드", "통장·금융", "선불 충전 (페이·쿠팡캐시·하이패스)", "충전 페이충전 네이버페이충전 쿠팡캐시 하이패스충전 선불충전 포인트충전", "선급금", "131", "X", "충전 시 선급금, 실제 사용 시 해당 비용으로 대체.", "일반기업회계기준 문단 실2.27"],
+["카드", "통장·금융", "법인카드 개인 사용분 회수", "개인사용 회수 법인카드사적 사적사용 반환", "가지급금", "134", "X", "사적 사용분은 가지급금으로 두고 회수 시 상계. 회수하지 않아 익금산입·손금불산입되는 금액은 귀속자에게 상여 등으로 소득처분.", "법인세법 §67"],
+["통장", "통장·금융", "출장비·경비 가불 (전도금)", "가불 전도금 출장가불 경비선지급 선지급", "가지급금 (전도금)", "134", "X", "선지급 시 가지급금(전도금), 출장·경비 정산 때 영수증 금액만큼 비용으로 대체하고 남은 돈은 회수.", ""],
+["통장", "통장·금융", "직원 경비 일괄 정산 이체", "경비정산 영수증정산 비용정산 직원정산 월정산", "미지급금", "253", "X", "직원이 먼저 쓴 경비를 영수증별 비용 계정으로 기록하고 직원에게 줄 돈은 미지급금, 이체 시 반제.", ""],
+["통장", "통장·금융", "소액현금 보충 (시재 전도)", "소액현금 시재보충 현금보충 전도금보충 금고", "현금", "101", "X", "보통예금에서 인출해 사무실 시재로 옮김. 시재 지출은 영수증별 비용으로 기록.", ""],
+["통장", "통장·금융", "송금수수료 차감 입금 (거래처 부담 전가)", "수수료차감 송금수수료공제 차감입금 덜입금", "지급수수료", "831", "X", "거래처가 송금수수료를 빼고 보낸 경우 외상매출금 전액 회수로 보고 차액은 지급수수료(또는 매출할인).", "일반기업회계기준 문단 2.57"],
+["통장", "통장·금융", "원천징수 후 매출대금 입금 (3.3% 등)", "원천징수입금 3.3차감 기납부세액 원천징수공제 사업소득입금", "외상매출금", "108", "X", "거래처가 원천징수하고 보낸 경우 매출채권 전액 회수로 보고 원천징수세액은 선납세금(개인은 기납부세액).", "일반기업회계기준 문단 실2.25"],
+["통장", "통장·금융", "이중 지급·과다 지급 회수", "이중지급 중복송금 과다지급 반환입금 환수", "미수금", "120", "X", "잘못 더 보낸 돈은 미수금, 돌려받을 때 상계.", "일반기업회계기준 문단 실2.27"],
+["통장", "통장·금융", "매입 반품·취소 환불 입금", "매입환불 반품환불 구매취소 환불입금", "매입환출 (상품·원재료 감소)", "—", "X", "원래 매입 계정을 줄이고 수정세금계산서를 받음.", "일반기업회계기준 문단 7.6"],
+["통장", "통장·금융", "선급금·계약금 반환 입금", "계약금반환 선급금반환 계약해지환불 착수금반환", "선급금", "131", "X", "지급했던 선급금을 줄임. 몰수된 부분은 잡손실.", "일반기업회계기준 문단 실2.27"],
+["통장", "통장·금융", "대여금 이자 수령", "대여이자 이자수령 대여금이자 받을이자", "이자수익", "901", "X", "대여 약정에 따른 이자. 원금 회수분은 단기대여금 감소.", "일반기업회계기준 문단 실2.48"],
+["통장", "통장·금융", "리스·렌탈 보증금", "리스보증금 렌탈보증금 차량보증금 장비보증금", "보증금 (기타비유동자산)", "—", "X", "돌려받을 보증금은 자산. 만기 정산 때 상계.", "일반기업회계기준 문단 실2.41"],
+["통장", "통장·금융", "지원금 반환", "지원금반환 보조금반환 환수 반납", "잡손실 (또는 정부보조금 감소)", "980", "X", "수익관련보조금을 상환하면 상환액을 즉시 당기손익으로 인식(조건 미충족으로 선수수익에 남은 금액이 있으면 먼저 상계). 자산관련보조금을 상환하면 자산 장부금액을 늘리고, 보조금이 없었다면 인식했을 추가 감가상각누계액은 즉시 당기손익.", "일반기업회계기준 문단 17.8"],
+["통장", "통장·금융", "거래처 상계 정산 (매출·매입 상계)", "상계 상계정산 맞정산 차감정산 대금상계", "외상매출금·외상매입금", "108", "X", "채권·채무는 원칙적으로 상계 표시하지 않음. 법적 구속력 있는 상계 권리가 있고 순액 결제나 동시 결제 의도가 있을 때만 상계 표시. 상계 합의서 보관.", "일반기업회계기준 문단 2.41~2.42"],
+["카드", "통장·금융", "해외결제 청구 환율 차이", "해외결제환율 청구환율 매입환율 환율차이 카드해외", "해당 비용 계정", "—", "X", "해외 카드 사용액은 카드사 청구 원화 금액으로 비용을 확정하고, 사용일 기록액과 다르면 외환차손익으로 정리.", "일반기업회계기준 문단 23.10~23.12"],
+["카드", "통장·금융", "카드 무이자 할부 사용", "무이자할부 할부결제 카드할부 개월할부", "미지급금", "253", "X", "할부 개월수와 관계없이 사용일에 총액을 비용(자산)과 미지급금으로 기록하고 매달 결제분만큼 반제.", ""],
+["카드", "통장·금융", "카드 선결제 (결제일 전 납부)", "선결제 즉시결제 미리결제 카드선납", "미지급금", "253", "X", "선결제한 금액만큼 미지급금을 먼저 반제.", ""],
+["카드", "통장·금융", "기프트카드·선불카드로 결제", "기프트카드결제 선불카드결제 충전카드사용", "해당 비용 계정", "—", "X", "기프트카드 구입 때 선급금으로 잡았으면 사용 시 선급금을 줄이고 비용으로 대체.", "일반기업회계기준 문단 실2.27"],
+["카드", "통장·금융", "직원 개인카드 대금을 회사가 직접 결제", "직원카드결제 카드대납 개인카드대납", "미지급금", "253", "X", "직원 개인카드로 쓴 업무 경비를 회사가 카드사에 직접 내면 해당 직원 미지급금을 반제.", ""],
+["통장", "통장·금융", "당좌예금·수표 발행", "당좌 수표발행 당좌수표 당좌예금", "당좌예금", "—", "X", "수표 발행 시 당좌예금 감소. 결산일 미인출 수표는 은행 잔액 조정표로 대사. 당좌예금과 당좌차월은 법적 상계권이 있고 순액 결제 의도가 있을 때만 상계 표시(K-IFRS).", "KASB 질의회신 SSI-38597 (K-IFRS 1032 문단 42, 45)"],
+["통장", "통장·금융", "당좌차월", "당좌차월 마이너스당좌 당좌대출", "단기차입금", "260", "X", "결산일 당좌예금이 마이너스면 그 금액을 단기차입금으로 표시.", "일반기업회계기준 문단 2.23 · KASB 질의회신 SSI-38597 (K-IFRS 1032 문단 42, 45)"],
+["통장", "통장·금융", "매출대금 과입금 (거래처가 더 보냄)", "과입금 초과입금 더입금 과다입금", "선수금 (또는 미지급금)", "259", "X", "다음 거래에 쓸 돈이면 선수금, 돌려줄 돈이면 미지급금.", "일반기업회계기준 문단 16.10"],
+["통장", "통장·금융", "매출대금 분할 입금", "분할입금 일부입금 부분입금 할부수금", "외상매출금", "108", "X", "입금된 금액만 외상매출금에서 차감하고 잔액은 거래처별로 관리.", "일반기업회계기준 문단 실2.25"],
+["통장", "통장·금융", "계약금 받은 뒤 해지 (몰수)", "계약금몰수 해지몰수 위약몰수 계약파기", "잡이익", "930", "X", "선수금으로 받은 계약금을 몰수하면 잡이익으로 대체. 재화·용역 공급 없이 받는 위약금은 부가세 과세대상 아님.", "서삼46015-10929 (2002.05.31)"],
+["통장", "통장·금융", "가압류·압류 해제 입금", "가압류해제 압류해제 압류금 해제입금", "보통예금", "103", "X", "압류로 묶였던 예금이 풀리면 원래 계정으로 되돌림. 사용이 제한된 예금은 주석으로 공시.", "일반기업회계기준 문단 실2.20"],
+["통장", "통장·금융", "해외출장 외화 현금 잔액", "외화현금 환전잔액 남은달러 외화시재", "외화현금", "—", "X", "환전한 외화 중 남은 금액은 외화현금으로 두고 재환전 시 외환차손익.", "일반기업회계기준 문단 23.9~23.10"],
+// ── 자산·투자
+["통장", "자산·투자", "상장주식 매수·매도", "주식 증권 매수 매도 키움 미래에셋 삼성증권 NH투자 ETF", "단기매매증권", "107", "X", "처분손익은 단기매매증권처분이익(906)·손실(958). 개인사업자의 주식 투자는 사업과 무관(인출금). 증권계좌에 남은 현금(예수금)은 별도 항목 ‘증권계좌 예수금’ 참고(기타제예금).", "일반기업회계기준 문단 실2.26, 실2.48~실2.49"],
+["통장", "자산·투자", "배당금 입금", "배당 배당금 결산배당 중간배당", "배당금수익", "903", "X", "원천징수세액은 선납세금.", "일반기업회계기준 문단 실2.48"],
+["통장", "자산·투자", "펀드·채권 투자", "펀드 채권 MMF RP CMA 발행어음", "단기투자자산", "—", "X", "보유 목적에 따라 단기매매증권·매도가능증권 등으로 분류.", "일반기업회계기준 문단 실2.26"],
+["공통", "자산·투자", "토지·건물 매입", "부동산 토지 건물 매입 잔금 분양 상가매입", "토지·건물", "201", "C", "토지 관련 매입세액은 불공제, 건물분은 공제. 취득세·중개수수료·법무사 수수료는 취득원가.", "부가가치세법 §39①7호 · 시행령 §80"],
+["공통", "자산·투자", "부동산 중개수수료 (취득·임차)", "중개수수료 부동산중개 공인중개사 복비", "지급수수료", "831", "Y", "임차 계약 중개수수료는 지급수수료(공제). 자산 취득 관련 중개수수료는 취득원가에 포함.", "부가가치세법 §38①1호"],
+["공통", "자산·투자", "기계장치 구입", "기계 설비 생산설비 장비구입 CNC 프레스", "기계장치", "206", "Y", "자산 계상 후 감가상각. 설치비·시운전비는 취득원가.", "부가가치세법 §38①1호"],
+["공통", "자산·투자", "건설중인자산 (공장 신축·설비 설치)", "신축 공사중 건설중 착공 중도금 기성", "건설중인자산", "214", "Y", "완공 시 본 계정으로 대체. 토지 조성 관련분은 토지 관련 매입세액 여부 확인.", "시행령 §80 · 부가가치세법 §38①1호"],
+["공통", "자산·투자", "사업자등록 전 매입", "사업자등록전 등록전 개업준비 창업 준비기간", "내용별 계정", "—", "C", "사업자등록 신청 전 매입세액은 원칙 불공제. 공급시기가 속한 과세기간이 끝난 후 20일 이내 등록 신청하면 그 과세기간 기산일까지 역산한 기간 내 매입분은 공제.", "부가가치세법 §39①8호"],
+["공통", "자산·투자", "회원권 (골프·콘도)", "회원권 골프회원권 콘도회원권 리조트", "회원권 (기타비유동자산)", "—", "C", "업무 관련성이 없으면 업무무관자산으로 유지비용 손금불산입. 매입세액 공제 여부도 업무 관련성 기준.", "법인세법 §27 1호 · 부가가치세법 §39①4호"],
+["공통", "자산·투자", "주식발행비", "주식발행비 증자비용 신주발행비용 공모비용", "주식발행초과금 (차감)", "—", "X", "신주 발행에 직접 든 비용은 주식발행초과금에서 차감(없으면 주식할인발행차금).", "일반기업회계기준 문단 15.3~15.7"],
+["공통", "자산·투자", "창업비 (설립 비용)", "창업비 설립비 설립등기 법인설립비용 발기인", "창업비 (비용)", "—", "X", "법적 실체 설립에 드는 창업비와 개업비는 발생한 기간의 비용으로 인식.", "일반기업회계기준 문단 실11.17"],
+["공통", "자산·투자", "자기주식 취득", "자기주식 자사주매입 자사주 주식매입소각", "자기주식 (자본조정)", "—", "X", "취득원가로 자본에서 차감 표시. 처분손익은 자본잉여금·자본조정으로 처리.", "일반기업회계기준 문단 15.8~15.10 · K-IFRS 1032 문단 33~34"],
+["공통", "자산·투자", "전세권·임차권", "전세권 전세보증금 임차권등기 전세", "전세권 (기타비유동자산)", "—", "X", "전세보증금은 전세권 또는 임차보증금으로 자산 계상.", "일반기업회계기준 문단 실2.38"],
+["공통", "자산·투자", "장기대여금", "장기대여금 장기대여 1년초과대여", "장기대여금", "—", "X", "회수 기한이 결산일부터 1년을 넘으면 장기대여금, 1년 안으로 들어오면 단기대여금으로 대체.", "일반기업회계기준 문단 실2.30"],
+["공통", "자산·투자", "금 실물·골드바 투자", "골드바 금투자 금매입 금지금 실물금", "기타투자자산", "—", "X", "영업에 쓰지 않는 투자 목적 보유 자산은 투자자산으로 분류.", ""],
+["공통", "자산·투자", "사업 양수 영업권", "영업권 사업양수 포괄양수 권리금", "영업권", "—", "X", "사업 양수 대가가 순자산 공정가치를 넘는 금액은 영업권으로 계상 후 상각.", "일반기업회계기준 문단 12.32~12.33"],
+["공통", "자산·투자", "임차 상가 권리금 지급", "권리금 상가권리금 바닥권리금 시설권리금", "무형자산 (권리금)", "—", "X", "K-IFRS: 이전 세입자에게 준 권리금이 리스개설직접원가(리스를 체결하지 않았다면 들지 않았을 증분원가)이면 사용권자산 원가에 포함. 일반기업회계기준 적용 회사는 무형자산으로 계상해 상각하는 처리가 관행.", "KASB 질의회신 SSI-37003 (K-IFRS 1116 문단 24)"],
+["공통", "자산·투자", "건물·설비 설계 수수료", "설계비 설계용역 건축설계 설비설계 전문가수수료", "건설중인자산·건물", "214", "Y", "설계와 관련해 전문가에게 지급하는 수수료는 유형자산 취득원가에 포함.", "일반기업회계기준 문단 10.8⑷ · 부가가치세법 §38①1호"],
+["공통", "자산·투자", "기계 설치비·시운전비", "설치비 시운전 시험가동 기계설치 설비설치", "기계장치", "206", "Y", "설치비와 정상 작동 여부를 시험하는 과정의 원가는 취득원가에 포함하고, 시험 과정에서 생산된 재화의 순매각금액은 차감.", "일반기업회계기준 문단 10.8⑶⑼ · 부가가치세법 §38①1호"],
+["공통", "자산·투자", "시설장치·기계장치·비품 구분 기준", "시설장치 기계장치 비품 구분 차이 유형자산분류 내용연수", "(판단 기준)", "—", "X", "건물·임차 매장에 붙여 설치해 떼어 내면 쓸 수 없는 것은 시설장치(자가 건물이면 건물 원가). 제품을 만들거나 용역을 제공하는 공정에 직접 쓰는 설비는 기계장치. 따로 옮겨 쓸 수 있는 사무·영업용 기구는 비품. 시설장치·기계장치·비품이라는 계정 이름의 경계는 회계기준에 정해져 있지 않음(유형자산은 토지·설비자산·건설중인자산·기타로 예시). 세법 내용연수는 자산의 구조·용도·실제 이용 현황에 따라 건축물 등(별표5) 또는 업종별 자산(별표6)을 적용.", "일반기업회계기준 실2.33 · 법인세법 시행규칙 §15③ · 제도46012-12157 (2001.07.16)"],
+["공통", "자산·투자", "시설장치 예: 냉난방·환기 덕트, 전기 증설, 주방 배관·후드", "덕트 환기 후드 배관 전기증설 분전반 수도공사 설비공사 냉난방설치 시스템에어컨", "시설장치", "—", "Y", "임차 매장에 붙여 설치하는 설비 공사. 냉난방장치 설치는 세법상 자본적 지출. 자가 건물이면 건물 원가에 더함. 따로 들고 옮길 수 있는 이동식·벽걸이 에어컨은 비품.", "법인세법 시행령 §31②2호 · 소득세법 시행령 §67②2호 · 부가가치세법 §38①1호"],
+["공통", "자산·투자", "시설장치 예: 칸막이·바닥·천장·조명 공사, 붙박이 가구", "칸막이 바닥 천장 조명공사 붙박이장 붙박이가구 몰딩 타일 인테리어공사", "시설장치", "—", "Y", "벽·바닥·천장에 고정돼 떼어 내면 쓸 수 없는 것. 따로 옮길 수 있는 책상·의자·진열장은 비품. 벽 도장만 다시 하는 것은 수선비(수익적 지출).", "법인세법 시행규칙 §17 1호 · 부가가치세법 §38①1호"],
+["공통", "자산·투자", "기계장치 예: 제조 설비, 인쇄기, 제빵 오븐·반죽기, 커피 로스터, 대형 세탁기", "생산설비 인쇄기 오븐 반죽기 로스터 제분기 공작기계 포장기 상업용세탁기 세탁소", "기계장치", "206", "Y", "제품을 만들거나 용역을 제공하는 공정에 직접 쓰는 설비. 내용연수는 업종별 자산(별표6) 적용을 검토. 같은 기기라도 사무실에서 직원용으로 쓰면 비품.", "법인세법 시행규칙 §15③ · 부가가치세법 §38①1호"],
+["공통", "자산·투자", "비품 예: 책상·의자·진열장, 냉장고·쇼케이스, PC·프린터, 이동식 에어컨, 금고", "비품 진열장 쇼케이스 냉장고 프린터 복합기 이동식에어컨 벽걸이에어컨 TV 금고 가구", "비품", "212", "Y", "따로 옮겨 쓸 수 있는 기구. 가구·전기기구·가정용 기구·비품, 개인용 컴퓨터(주변기기 포함), 간판은 사업에 쓰기 시작한 해에 비용으로 처리(손비 계상)하면 금액과 관계없이 세법상 바로 손금(필요경비) 인정.", "법인세법 시행령 §31⑥2호·4호 · 소득세법 시행령 §67⑦2호·4호 · 부가가치세법 §38①1호"],
+["공통", "자산·투자", "PC방·게임방 영업용 PC 구입", "PC방 피시방 게임방 영업용컴퓨터 게이밍PC 모니터 대량구입 본체", "비품", "212", "Y", "회계상 비품(유형자산). 세법상 개인용 컴퓨터(주변기기 포함)는 사업에 쓰기 시작한 해에 비용으로 처리하면 바로 손금(필요경비) 인정. 이 조항은 100만원 이하 소액자산 규정(대량 보유·사업 개시용 자산 제외)과 별개 조항. PC방 영업용 PC에 이 조항을 적용한 국세청 예규는 확인하지 못함(적용 전 원문 확인 필요).", "법인세법 시행령 §31⑥4호 · 소득세법 시행령 §67⑦4호 · 부가가치세법 §38①1호"],
+["공통", "자산·투자", "PC 업그레이드 (그래픽카드·CPU·메모리·SSD 교체·증설)", "PC업그레이드 그래픽카드 CPU 램 메모리 SSD 증설 성능향상 부품업그레이드", "비품 (자본적 지출)·수선비", "212", "Y", "성능을 높이는 교체·증설은 자본적 지출이라 해당 비품 원가에 더하고, 바뀐 기존 부품은 장부에서 뺌. 세법상 PC 1대(개별 자산)마다 그 해 지출이 600만원 미만이면 수선비로 비용 처리해도 인정. 고장 난 부품을 같은 사양으로 바꾸는 것은 수선비.", "일반기업회계기준 10.14·10.15 · 법인세법 시행령 §31②5호·③1호 · 소득세법 시행령 §67②5호·③1호 · 부가가치세법 §38①1호"],
+["통장", "자산·투자", "비상장주식 취득", "비상장주식 지분투자 스타트업투자 출자 주식인수", "매도가능증권", "—", "X", "장기 투자 목적 비상장 지분증권은 매도가능증권 등으로 분류. 시장성이 없어 공정가치를 믿을 수 있게 측정할 수 없으면 취득원가로 평가.", "일반기업회계기준 문단 6.22~6.27, 6.30"],
+["통장", "자산·투자", "증권계좌 예수금 (매도 대금·매수 대기 현금)", "예수금 증권계좌 위탁계좌 증권사예치금 주식계좌 CMA 매도대금 증권잔고", "기타제예금", "104", "X", "증권계좌의 현금은 언제든 출금할 수 있는 예치금이라 현금및현금성자산이고 단기투자자산이 아님. 주식 자체는 단기매매증권(단기 시세차익 목적) 또는 매도가능증권. 은행 보통예금과 섞이지 않게 기타제예금에 증권사를 거래처로 두고 관리하는 것이 관행(보통예금으로 잡아도 재무상태표 표시는 같음).", "일반기업회계기준 문단 2.35, 실2.26 · K-IFRS 1007 문단 7"],
+// ── 결산·정리
+["공통", "결산·정리", "감가상각비 계상 (유형자산)", "결산 감가상각 상각비 정액법 정률법 유형자산상각", "감가상각비", "818", "X", "결산 때 유형자산별 내용연수·상각방법에 따라 계상하고 감가상각누계액으로 차감 표시.", "일반기업회계기준 문단 10.32~10.40 · K-IFRS 1016 문단 43~62A"],
+["공통", "결산·정리", "무형자산상각비 계상", "무형자산상각 개발비상각 소프트웨어상각 영업권상각", "무형자산상각비", "—", "X", "결산 때 무형자산을 상각기간에 걸쳐 직접 차감.", "일반기업회계기준 문단 11.26~11.36 · K-IFRS 1038 문단 97~106"],
+["공통", "결산·정리", "대손충당금 설정", "대손충당금 충당금설정 대손추산 매출채권평가", "대손상각비", "835", "X", "결산 때 매출채권 잔액에 회수 가능성을 반영해 대손충당금 설정. 실제 대손 발생 시 충당금과 먼저 상계.", "일반기업회계기준 문단 6.17의2 · K-IFRS 1109 문단 5.5.1~5.5.20"],
+["공통", "결산·정리", "퇴직급여충당부채 설정", "퇴직급여충당부채 퇴직충당금 퇴직금추계 결산퇴직", "퇴직급여", "806", "X", "결산 때 전 임직원 퇴직금 추계액까지 충당부채를 설정. 실제 지급 시 충당부채와 먼저 상계.", "일반기업회계기준 문단 21.8~21.10"],
+["공통", "결산·정리", "미지급비용 계상 (발생주의)", "미지급비용 미지급급여 미지급이자 발생주의 결산 12월급여", "미지급비용", "262", "X", "당기에 발생했지만 다음 달 지급하는 급여·이자·용역비를 결산 때 비용과 미지급비용으로 계상.", "일반기업회계기준 문단 2.22, 실2.42"],
+["공통", "결산·정리", "미수수익 계상 (이자 경과분)", "미수수익 미수이자 경과이자 결산이자", "미수수익", "116", "X", "결산일까지 경과한 예금·대여금 이자 중 받지 못한 분을 이자수익과 미수수익으로 계상.", "일반기업회계기준 문단 실2.27"],
+["공통", "결산·정리", "선급비용 결산 정리", "선급비용 기간배분 보험료정리 임차료선급 결산", "선급비용", "133", "X", "미리 낸 보험료·임차료 중 다음 기간분만 선급비용으로 남기고 나머지는 해당 비용으로 대체.", "일반기업회계기준 문단 실2.25"],
+["공통", "결산·정리", "선수수익 계상", "선수수익 선수임대료 선수이자 다음기간수익", "선수수익", "—", "X", "미리 받은 임대료·이자 중 다음 기간분을 선수수익으로 대체.", "일반기업회계기준 문단 16.16"],
+["공통", "결산·정리", "기말 재고 정리 (매출원가 대체)", "기말재고 재고실사 매출원가 원가대체 결산재고", "상품매출원가", "451", "X", "기초재고 + 당기매입 − 기말재고를 매출원가로 대체.", "일반기업회계기준 문단 7.20 · K-IFRS 1002 문단 34~35"],
+["공통", "결산·정리", "외화자산·부채 기말 환산", "외화환산 외화환산이익 외화환산손실 기말환율", "외화환산손익", "—", "X", "결산일 환율로 외화 채권·채무·예금을 환산하고 차이는 외화환산이익·손실.", "일반기업회계기준 문단 23.9~23.12 · K-IFRS 1021 문단 23~34"],
+["공통", "결산·정리", "법인세비용 계상", "법인세비용 미지급법인세 결산법인세 법인세추산", "법인세등", "998", "X", "결산 때 추산 법인세를 법인세등으로 계상하고 선납세금과 상계한 잔액은 미지급세금.", "법인세법 §21 1호 · 일반기업회계기준 문단 22.45~22.52 · K-IFRS 1012 문단 57~68C"],
+["공통", "결산·정리", "부가세 예수금·대급금 상계", "부가세정리 부가세상계 예수금대급금 신고정리", "부가세예수금", "255", "X", "납부세액 = 매출세액 − 매입세액. 신고 기간 말에 부가세예수금과 부가세대급금을 상계하고 차액은 미지급세금(납부) 또는 미수금(환급, 매입세액이 더 큰 경우).", "부가가치세법 §37②"],
+["공통", "결산·정리", "현금과부족 정리", "현금과부족 시재차이 현금부족 현금초과 시재", "현금과부족", "—", "X", "장부와 실제 시재 차이를 현금과부족으로 두고, 결산 때까지 원인을 못 찾으면 잡손실·잡이익.", ""],
+["공통", "결산·정리", "끝전·단수 차이 정리", "단수차이 끝전 원단위 절사 차액 잔액차이", "잡손실·잡이익", "980", "X", "거래처 송금 끝전 차이처럼 소액 차이는 잡손실·잡이익으로 정리.", ""],
+["공통", "결산·정리", "장기차입금 유동성 대체", "유동성대체 유동성장기부채 1년이내상환 장기차입금대체", "유동성장기부채", "—", "X", "결산일부터 1년 안에 갚을 장기차입금을 유동성장기부채로 대체.", "일반기업회계기준 문단 2.23"],
+["공통", "결산·정리", "단기매매증권 기말 평가", "주식평가 평가이익 평가손실 시가평가 결산주식", "단기매매증권평가손익", "—", "X", "결산일 공정가치로 평가하고 차이는 단기매매증권평가이익·손실.", "일반기업회계기준 문단 6.28~6.31 · K-IFRS 1109 문단 5.7.1"],
+["공통", "결산·정리", "미사용 소모품 자산 처리", "소모품 미사용 저장품 재고소모품", "소모품", "—", "X", "결산일까지 쓰지 않은 소모품은 재고자산 중 저장품으로 대체.", "일반기업회계기준 문단 실7.1"],
+["공통", "결산·정리", "개인사업자 인출금 결산 대체", "인출금정리 인출금대체 자본금대체 결산인출", "자본금", "331", "X", "결산 때 인출금 잔액을 자본금에서 차감해 정리.", ""],
+["공통", "결산·정리", "가지급금·가수금 결산 정리", "가지급금정리 가수금정리 미결산 원인확인 결산정리", "가지급금·가수금", "134", "X", "결산 전에 원인을 확인해 해당 계정(비용·차입금·매출 등)으로 대체. 같은 사람에 대한 가지급금과 가수금은 지급이자 손금불산입 계산 때 상계.", "법인세법 시행령 §53③"],
+["공통", "결산·정리", "재고자산 저가 평가", "재고평가 저가법 평가손실 순실현가능가치 진부화 재고평가충당금", "재고자산평가손실", "—", "X", "결산일 순실현가능가치가 취득원가보다 낮으면 차액을 평가손실(매출원가 가산)로 계상하고 평가충당금으로 차감 표시.", "일반기업회계기준 문단 7.16~7.19 · K-IFRS 1002 문단 28~33"],
+["공통", "결산·정리", "제품 제조원가 대체 (재공품·제품)", "제조원가 원가계산 재공품 제품 원가대체 완성품", "제품", "—", "X", "원재료비·노무비·제조경비를 집계해 재공품으로 모은 뒤 완성분은 제품, 판매분은 제품매출원가로 대체.", "일반기업회계기준 문단 7.7~7.11 · K-IFRS 1002 문단 12~14"],
+["공통", "결산·정리", "유형자산 처분 시 감가상각누계액 제거", "처분 누계액제거 자산폐기 자산매각 장부가액", "감가상각누계액", "—", "X", "처분 자산의 취득원가와 감가상각누계액을 함께 제거하고, 받은 대가와 장부가액의 차이를 처분손익으로 기록.", "일반기업회계기준 문단 10.44~10.45 · K-IFRS 1016 문단 67~72"],
+["공통", "결산·정리", "정부보조금 자산 차감·상각 상계", "정부보조금 국고보조금상계 보조금차감 자산차감", "정부보조금 (자산 차감)", "—", "X", "자산 취득에 쓴 보조금은 자산에서 차감 표시하고, 감가상각비 계상 때 같은 비율로 상계.", "일반기업회계기준 문단 17.5 · K-IFRS 1020 문단 24~28"],
+["공통", "결산·정리", "개발비 자산화", "개발비 무형자산 자산화 개발단계 프로젝트원가", "개발비", "—", "X", "기술적 실현 가능성 등 자산 인식 요건을 갖춘 개발 단계 지출만 개발비로 올리고, 사용 가능 시점부터 상각.", "일반기업회계기준 문단 11.17~11.22 · K-IFRS 1038 문단 51~67"],
+["공통", "결산·정리", "전기 오류 수정 (전기 누락분 발견)", "전기오류 오류수정 전기누락 과년도 전기분", "전기오류수정손익", "—", "X", "일반기업회계기준은 당기에 발견한 전기 오류를 당기 영업외손익(전기오류수정손익)으로 보고하고, 중대한 오류만 기초 금액에 반영하고 비교재무제표를 재작성. K-IFRS는 중요한 전기오류를 소급 재작성.", "일반기업회계기준 문단 5.19 · K-IFRS 1008 문단 41~49"],
+["공통", "결산·정리", "연차수당 미지급 (연차충당부채)", "연차수당 미사용연차 연차충당 연차보상", "미지급비용", "262", "X", "결산일까지 발생한 미사용 연차 보상 예상액을 급여(제수당)와 미지급비용으로 계상.", "일반기업회계기준 문단 21.5~21.5의3 · K-IFRS 1019 문단 11~24"],
+["공통", "결산·정리", "미지급 상여·성과급", "미지급상여 성과급 연말상여 결산상여", "미지급비용", "262", "X", "당기 성과에 대해 다음 해 지급할 상여는 당기 상여금과 미지급비용으로 계상.", "일반기업회계기준 문단 21.5~21.5의3 · K-IFRS 1019 문단 11~24"],
+["공통", "결산·정리", "12월분 4대보험 회사부담분 미지급", "4대보험미지급 12월보험료 보험료미지급 결산보험료", "미지급비용", "262", "X", "12월분을 다음 해 1월에 내면 회사부담분은 결산 때 비용과 미지급비용으로 계상.", "일반기업회계기준 문단 2.22"],
+["공통", "결산·정리", "퇴직금 중간정산", "중간정산 퇴직금중간 주택구입중간정산", "퇴직급여충당부채", "—", "X", "주택구입 등 대통령령으로 정한 사유로 근로자가 요구하면 퇴직 전 정산 지급 가능(정산 후 계속근로기간은 새로 계산). 퇴직급여충당부채가 있으면 먼저 상계하고 부족분은 퇴직급여.", "근로자퇴직급여 보장법 §8② · 일반기업회계기준 문단 21.8~21.10"],
+["공통", "결산·정리", "퇴직연금 운용수익 (DB형)", "퇴직연금운용수익 DB수익 운용이익 적립금수익", "퇴직연금운용자산", "—", "X", "DB형 적립금에서 생긴 운용수익은 퇴직연금운용자산 증가와 퇴직연금운용수익(영업외수익).", "일반기업회계기준 문단 21.11~21.13"],
+["공통", "결산·정리", "원상복구충당부채", "원상복구충당 복구충당부채 임차시설 철거예정", "시설장치 (복구원가 가산)", "—", "X", "임차 시설에 원상복구 의무가 있으면 예상 복구비 현재가치를 시설장치에 더하고 충당부채로 계상.", "일반기업회계기준 문단 10.8~10.13 · K-IFRS 1016 문단 16~22A · K-IFRS 1037 문단 14"],
+["공통", "결산·정리", "하자보수충당부채", "하자보수충당 하자충당 공사하자 보증기간", "하자보수비", "—", "X", "공사·제품 판매 후 보증기간 하자보수 예상액을 결산 때 비용과 충당부채로 계상.", "일반기업회계기준 문단 16.59~16.60"],
+["공통", "결산·정리", "미청구공사·초과청구공사 (진행기준)", "미청구공사 초과청구공사 진행기준 공사진행률 공정률", "미청구공사", "—", "X", "진행률로 인식한 공사수익이 청구액보다 크면 미청구공사(자산), 작으면 초과청구공사(부채).", "일반기업회계기준 문단 16.39~16.52 · K-IFRS 1115 문단 105~109"],
+["공통", "결산·정리", "기말 미청구 매출 (세금계산서 미발행분)", "미청구매출 결산매출 기말매출 미발행 컷오프", "외상매출금", "108", "X", "결산일까지 인도·용역 제공이 끝났으면 청구서 발행 전이라도 매출과 매출채권으로 계상.", "일반기업회계기준 문단 16.10~16.14 · K-IFRS 1115 문단 31~45"],
+["공통", "결산·정리", "미착품 (운송 중 수입·매입)", "미착품 운송중 선적 도착전 수입미착", "미착품", "—", "X", "운송 중인 미착상품은 소유권 기준으로 판단. 선적지인도조건이면 선적 시점에 매입자 재고자산, 목적지인도조건이면 도착·인수 시점에 포함. 입고 시 상품·원재료로 대체.", "일반기업회계기준 문단 실7.1, 실7.5"],
+["공통", "결산·정리", "적송품 (위탁판매)", "적송품 위탁판매 수탁자 위탁재고", "적송품", "—", "X", "수탁자에게 보낸 적송품은 수탁자가 제3자에게 팔 때까지 위탁자의 재고자산. 수탁자 판매 시점에 매출과 매출원가 인식.", "일반기업회계기준 문단 실7.1, 실7.5"],
+["공통", "결산·정리", "기말 카드매출 미정산분", "카드미정산 카드미수 결산카드매출 정산대기", "미수금", "120", "X", "결산일까지 승인된 카드매출 중 카드사에서 아직 입금되지 않은 금액은 미수금(카드미수금).", ""],
+["공통", "결산·정리", "대표 차입금 미지급 이자", "미지급이자 대표이자 차입이자미지급", "미지급비용", "262", "X", "약정 이자가 있으면 결산일까지 경과분을 이자비용과 미지급비용으로 계상.", "일반기업회계기준 문단 2.22"],
+["공통", "결산·정리", "가수금 결산 미정리분 대표 차입금 대체", "가수금대체 대표차입금 가수금정리 주임종차입", "단기차입금 (주임종)", "260", "X", "원인이 대표의 자금 대여로 확인되면 주주·임원·종업원 단기차입금으로 대체.", "일반기업회계기준 문단 2.23"],
+["공통", "결산·정리", "매도가능증권 기말 평가", "매도가능증권 공정가치평가 기타포괄손익 비상장주식평가 결산주식", "매도가능증권평가손익 (기타포괄손익누계액)", "—", "X", "공정가치로 평가하고 미실현보유손익은 기타포괄손익누계액으로 처리. 처분하거나 손상차손을 인식할 때 누계액을 한꺼번에 당기손익에 반영. 시장성 없는 지분증권으로 공정가치를 믿을 수 있게 측정할 수 없으면 취득원가로 평가.", "일반기업회계기준 문단 6.30~6.31"],
+["공통", "결산·정리", "만기보유증권 상각후원가 평가", "만기보유증권 상각후원가 유효이자율 채권할인 액면차이", "만기보유증권", "—", "X", "장부금액과 만기 액면금액의 차이를 상환기간에 걸쳐 유효이자율법으로 상각해 취득원가와 이자수익에 가감.", "일반기업회계기준 문단 6.29"],
+["공통", "결산·정리", "유가증권 손상차손", "유가증권손상 주식손상 채권손상 회수가능액 부도주식", "유가증권손상차손", "—", "X", "보고기간 말마다 손상의 객관적 증거를 평가하고, 회수가능액이 상각후원가(채무증권) 또는 취득원가(지분증권)보다 작으면 손상차손을 당기손익으로 인식.", "일반기업회계기준 문단 6.32"],
+["공통", "결산·정리", "충당부채·충당금 환입 표시", "대손충당금환입 퇴직급여충당부채환입 판매보증충당부채환입 환입", "대손충당금환입 등", "—", "X", "영업활동 관련 퇴직급여충당부채환입·판매보증충당부채환입·대손충당금환입은 판매비와관리비의 부(-)의 금액으로 표시.", "일반기업회계기준 문단 실2.47"],
+["공통", "결산·정리", "퇴직연금운용자산 재무상태표 표시", "퇴직연금운용자산 차감표시 DB적립금 표시", "퇴직연금운용자산", "—", "X", "확정급여형 퇴직연금 자산은 퇴직급여충당부채와 퇴직연금미지급금에서 차감하는 형식으로 표시. 부채 합계를 넘는 초과액은 투자자산으로 표시.", "일반기업회계기준 문단 21.12"],
+["공통", "결산·정리", "사용 제한 예금 분류·공시", "사용제한예금 질권 담보예금 당좌개설보증금 압류예금", "단기금융상품·장기금융상품", "—", "X", "현금및현금성자산은 사용 제한이 없는 것만 유동자산 현금으로 분류. 담보·질권 등으로 사용이 제한된 예금은 내용을 주석에 공시.", "일반기업회계기준 문단 2.20, 실2.20"],
+["공통", "결산·정리", "비유동 채권·투자자산 유동성 대체", "유동성대체 장기미수금 장기대여금 1년이내회수 만기보유증권유동", "단기대여금·미수금 등", "—", "X", "장기미수금, 투자자산의 매도가능·만기보유증권 등 비유동자산 중 1년 이내 실현되는 부분은 유동자산으로 분류.", "일반기업회계기준 문단 2.21"],
+["공통", "결산·정리", "정기예금·적금 만기 기준 분류", "정기예금분류 단기금융상품 장기금융상품 만기1년", "단기투자자산 (또는 장기금융상품)", "—", "X", "여유자금 활용 목적의 단기예금은 단기투자자산으로 분류. 결산일부터 만기 1년 초과분은 비유동자산.", "일반기업회계기준 문단 실2.26, 2.20"],
+["공통", "결산·정리", "[세무조정] 감가상각비 시부인", "감가상각시부인 상각부인액 상각범위액 감가상각세무조정", "(세무조정)", "—", "X", "결산서에 손비로 계상한 감가상각비 중 상각범위액을 넘는 금액은 손금불산입(상각부인액).", "법인세법 §23①"],
+["공통", "결산·정리", "[세무조정] 업무용승용차 감가상각 (정액법 5년)", "업무용승용차 감가상각 정액법5년 800만원 시부인", "(세무조정)", "—", "X", "업무용승용차는 정액법·내용연수 5년으로 계산한 금액을 감가상각비로 손금산입. 업무 외 사용분과 연 800만원 초과분은 별도 처리.", "법인세법 시행령 §50의2③ · 법인세법 §27의2"],
+["공통", "결산·정리", "[세무조정] 퇴직급여충당금 한도", "퇴직급여충당금 한도 총급여5% 추계액 손금한도", "(세무조정)", "—", "X", "해당 사업연도 손금 한도는 퇴직급여 지급대상 임직원(확정기여형 가입자 제외) 총급여액의 5%. 손금에 산입하는 충당금 누적액 한도는 퇴직급여 추계액 등에 비율을 곱한 금액이며, 그 비율은 2016년 이후 개시 사업연도부터 0%.", "법인세법 §33① · 시행령 §60①②"],
+["공통", "결산·정리", "[세무조정] 퇴직금 지급 시 충당금 우선 상계", "퇴직금지급 충당금상계 유보추인", "(세무조정)", "—", "X", "퇴직급여충당금을 손금에 산입한 법인이 퇴직금을 주면 퇴직급여충당금에서 먼저 지급한 것으로 봄.", "법인세법 §33②"],
+["공통", "결산·정리", "[세무조정] 퇴직연금 부담금 손금산입", "퇴직연금손금 DB부담금 DC부담금 신고조정 퇴직연금한도", "(세무조정)", "—", "X", "퇴직연금등 부담금은 손금산입. 확정기여형 외 부담금은 퇴직급여 추계액 등에서 사업연도 말 퇴직급여충당금을 뺀 금액을 한도로 손금산입하고, 둘 이상이면 먼저 계약한 것부터 산입.", "법인세법 시행령 §44의2②~④"],
+["공통", "결산·정리", "[세무조정] 대손충당금 한도", "대손충당금한도 채권잔액1% 대손실적률 충당금세무조정", "(세무조정)", "—", "X", "손금 한도는 사업연도 말 채권잔액의 1%와 채권잔액 × 대손실적률 중 큰 금액. 초과 계상액은 손금불산입.", "법인세법 §34① · 시행령 §61②"],
+["공통", "결산·정리", "[세무조정] 대손충당금 상계·환입", "대손충당금상계 충당금환입 익금산입", "(세무조정)", "—", "X", "대손금이 생기면 대손충당금과 먼저 상계하고, 상계하고 남은 대손충당금은 다음 사업연도에 익금산입.", "법인세법 §34③"],
+["공통", "결산·정리", "[세무조정] 손익 귀속시기", "귀속시기 권리의무확정 기간귀속 손익귀속", "(세무조정)", "—", "X", "익금과 손금은 그 익금·손금이 확정된 날이 속하는 사업연도에 귀속. 회계상 발생주의 계상액과 차이가 나면 세무조정.", "법인세법 §40①"],
+["공통", "결산·정리", "[세무조정] 자산 평가손익 부인과 예외", "평가손실 평가차손 재고파손 부도주식 감액손실 손금불산입", "(세무조정)", "—", "X", "자산·부채를 평가해 장부가액을 바꿔도 세법상 장부가액은 평가 전 금액. 다만 파손·부패 재고, 천재지변 등으로 파손된 유형자산, 발행법인이 부도난 주식 등은 감액 손금산입 가능.", "법인세법 §42①③"],
+["공통", "결산·정리", "[세무조정] 재고자산 평가방법 신고", "재고평가방법 원가법 저가법 선입선출 총평균 평가방법신고", "(세무조정)", "—", "X", "재고자산은 원가법(개별법·선입선출법·후입선출법·총평균법 등) 또는 저가법 중 관할 세무서장에게 신고한 방법으로 평가. 회계상 방법과 다르면 세무조정.", "법인세법 시행령 §74①"],
+["공통", "결산·정리", "[세무조정] 외화자산·부채 평가방법", "외화평가 매매기준율 외화환산손익 세무조정 평가방법신고", "(세무조정)", "—", "X", "일반 법인은 화폐성 외화자산·부채를 취득일(발생일) 환율 또는 사업연도 종료일 매매기준율 중 신고한 방법으로 평가하고, 신고한 방법을 계속 적용.", "법인세법 시행령 §76②③"],
+["공통", "결산·정리", "[세무조정] 가지급금 인정이자", "인정이자 가중평균차입이자율 당좌대출이자율 가지급금이자", "(세무조정)", "—", "X", "특수관계인 금전 대여의 시가는 가중평균차입이자율(사유가 있거나 선택하면 당좌대출이자율). 부당행위계산이면 시가와의 차액을 익금산입.", "법인세법 시행령 §89③⑤"],
+["공통", "결산·정리", "[세무조정] 임원 상여·이익처분 상여", "임원상여 상여한도 이익처분상여 급여지급기준 지배주주보수", "(세무조정)", "—", "X", "이익처분으로 주는 상여는 손금불산입. 임원 상여 중 정관·주총·이사회 결의로 정한 급여지급기준을 넘는 금액도 손금불산입.", "법인세법 시행령 §43①②"],
+// ── 외감·회계기준
+["공통", "외감·회계기준", "외부감사 대상 판단", "외감 외부감사 감사대상 자산500억 매출500억 120억 70억 100명", "(판단 기준)", "—", "X", "주식회사는 직전 사업연도 말 자산총액 500억원 이상 또는 매출액 500억원 이상이면 외부감사 대상. 그 외에는 자산 120억원·부채 70억원·매출 100억원·종업원 100명 중 2개 이상이면 대상. 유한회사는 사원 50명을 더한 5개 중 3개 이상.", "주식회사 등의 외부감사에 관한 법률 시행령 §5①②"],
+["공통", "외감·회계기준", "K-IFRS 의무 적용 대상", "K-IFRS 한국채택국제회계기준 상장법인 일반기업회계기준 회계기준선택", "(판단 기준)", "—", "X", "주권상장법인(코넥스 제외), 상장 예정 회사, 금융지주회사, 은행, 투자매매·중개업자 등, 보험회사, 신용카드업자는 K-IFRS 적용. 지배회사가 연결에 K-IFRS를 쓰면 별도재무제표도 K-IFRS. 그 밖의 외감 법인은 일반기업회계기준.", "주식회사 등의 외부감사에 관한 법률 시행령 §6①②"],
+["통장", "외감·회계기준", "이익준비금 적립 (현금배당 시)", "이익준비금 법정적립금 배당적립 준비금적립 이익잉여금처분", "이익준비금", "—", "X", "자본금의 2분의 1이 될 때까지 매 결산기 이익배당액의 10분의 1 이상을 적립. 주식배당은 제외.", "상법 §458"],
+["공통", "외감·회계기준", "자본준비금 (주식발행초과금·감자차익 등)", "자본준비금 주식발행초과금 감자차익 자본잉여금 합병차익", "자본잉여금", "—", "X", "자본거래에서 생긴 잉여금은 자본준비금으로 적립.", "상법 §459①"],
+["공통", "외감·회계기준", "결손 보전 (법정준비금 사용)", "결손보전 결손금처리 준비금사용 결손처리", "이익준비금·자본준비금 (감소)", "—", "X", "이익준비금과 자본준비금은 자본금의 결손 보전 외에는 처분할 수 없음.", "상법 §460"],
+["공통", "외감·회계기준", "준비금 자본금 전입 (무상증자)", "무상증자 준비금전입 자본전입", "자본금", "331", "X", "이사회 결의(정관으로 주총 결의 가능)로 준비금을 자본금에 전입.", "상법 §461①"],
+["공통", "외감·회계기준", "주식배당", "주식배당 신주배당 배당주식", "자본금", "331", "X", "주총 결의로 이익배당을 새로 발행하는 주식으로 할 수 있으나 이익배당총액의 2분의 1을 넘지 못함. 권면액으로 배당.", "상법 §462의2①②"],
+["공통", "외감·회계기준", "이연법인세자산·부채", "이연법인세 일시적차이 법인세효과 세무조정 이연법인세자산 이연법인세부채", "이연법인세자산·부채", "—", "X", "회계이익과 과세소득의 일시적 차이에 미래 세율을 곱해 이연법인세자산(부채)을 계상. 자산은 실현 가능성을 검토.", "일반기업회계기준 문단 22.9~22.36 · K-IFRS 1012 문단 15~45"],
+["공통", "외감·회계기준", "법인세비용 (당기·이연 합산)", "법인세비용 당기법인세 이연법인세변동 법인세기간배분", "법인세등 (법인세비용)", "998", "X", "당기 납부할 법인세에 이연법인세자산·부채 변동액을 더하거나 빼서 법인세비용 확정. 자본에 직접 반영되는 항목의 법인세효과는 자본에서 조정.", "법인세법 §21 1호 · 일반기업회계기준 문단 22.45~22.52 · K-IFRS 1012 문단 57~68C"],
+["공통", "외감·회계기준", "리스 사용권자산·리스부채 (K-IFRS 1116)", "사용권자산 리스부채 IFRS16 리스회계 리스이용자", "사용권자산", "—", "X", "K-IFRS 적용 리스이용자는 운용리스도 사용권자산과 리스부채를 계상하고 감가상각비와 이자비용을 인식. 일반기업회계기준은 운용리스료를 비용으로 처리.", "K-IFRS 1116 문단 22~60A · 일반기업회계기준 문단 13.19~13.20"],
+["공통", "외감·회계기준", "단기리스·소액자산 리스 면제", "단기리스 소액리스 리스면제 12개월이하리스", "지급임차료", "819", "X", "K-IFRS에서 리스기간 12개월 이하 리스와 소액 기초자산 리스는 사용권자산을 인식하지 않고 리스료를 비용 처리하는 방법을 선택할 수 있음.", "K-IFRS 1116 문단 5~8, B3~B8"],
+["공통", "외감·회계기준", "사채 발행 (할인·할증발행)", "사채 회사채 사채발행 할인발행 사채할인발행차금 유효이자율", "사채", "—", "X", "액면과 발행가액 차이는 사채할인(할증)발행차금으로 두고 유효이자율법으로 상각해 이자비용에 가감. 발행비용은 발행가액에서 차감.", "K-IFRS 1109 문단 5.4.1~5.4.9 · 일반기업회계기준 문단 6.14~6.17"],
+["공통", "외감·회계기준", "전환사채·신주인수권부사채", "전환사채 CB 신주인수권부사채 BW 전환권대가 신주인수권대가", "전환사채", "—", "X", "발행가액을 부채요소와 자본요소(전환권대가·신주인수권대가)로 나눠 계상. 상환할증금이 있으면 사채에 가산.", "K-IFRS 1032 문단 28~32 · 일반기업회계기준 문단 15.18~15.23"],
+["공통", "외감·회계기준", "상환전환우선주 (RCPS)", "상환전환우선주 RCPS 상환우선주 전환우선주 투자유치", "금융부채 또는 자본", "—", "X", "보유자가 상환을 청구할 수 있는 등 계약상 의무가 있으면 K-IFRS에서는 금융부채로 분류.", "K-IFRS 1032 문단 15~27"],
+["공통", "외감·회계기준", "파생상품 (선물환·통화스왑) 평가", "파생상품 선물환 통화스왑 이자율스왑 옵션 파생평가", "파생상품자산·부채", "—", "X", "공정가치로 평가하고 변동분은 당기손익(파생상품평가이익·손실). 위험회피회계 요건을 갖추면 별도 처리.", "K-IFRS 1109 문단 4.1.1~4.1.5, 5.7.1 · 일반기업회계기준 문단 6.36~6.40"],
+["공통", "외감·회계기준", "현금흐름 위험회피회계", "위험회피 헤지회계 현금흐름위험회피 위험회피수단", "기타포괄손익누계액", "—", "X", "위험회피에 효과적인 부분의 파생상품 평가손익은 기타포괄손익으로 두었다가 위험회피대상 거래가 손익에 영향을 줄 때 재분류.", "K-IFRS 1109 문단 6.5.1~6.5.16 · 일반기업회계기준 문단 6.48~6.79"],
+["공통", "외감·회계기준", "기타포괄손익-공정가치 금융자산 (매도가능증권)", "FVOCI 매도가능증권 기타포괄손익금융자산 비상장주식평가 지분상품", "기타포괄손익-공정가치측정금융자산", "—", "X", "공정가치 평가손익을 기타포괄손익으로 계상. K-IFRS에서 지분상품을 이 범주로 지정하면 처분 시에도 당기손익으로 재분류하지 않음.", "K-IFRS 1109 문단 5.7.5 · 일반기업회계기준 문단 6.22~6.27, 6.31"],
+["공통", "외감·회계기준", "상각후원가 금융자산 (만기보유증권)", "상각후원가 만기보유증권 국공채 회사채보유 채무상품", "상각후원가측정금융자산", "—", "X", "원리금만 받는 채무상품을 만기까지 보유하면 유효이자율법으로 상각후원가 측정.", "K-IFRS 1109 문단 4.1.1~4.1.5, 5.4.1~5.4.9 · 일반기업회계기준 문단 6.22~6.27"],
+["공통", "외감·회계기준", "금융자산 손상 (기대신용손실)", "기대신용손실 ECL 손상 대손 신용위험 충당금", "손실충당금", "—", "X", "K-IFRS는 매출채권 등에 기대신용손실을 손실충당금으로 인식. 매출채권은 전체기간 기대신용손실을 간편법으로 측정할 수 있음.", "K-IFRS 1109 문단 5.5.1~5.5.20 (간편법 5.5.15) · 일반기업회계기준 문단 6.17의2"],
+["공통", "외감·회계기준", "관계기업·지분법 투자", "지분법 관계기업 유의적영향력 지분법이익 지분법손실 20%", "관계기업투자", "—", "X", "유의적인 영향력이 있는 투자는 지분법 적용. 피투자회사 순이익 중 지분 해당액을 지분법이익으로 인식하고 배당은 투자 장부금액에서 차감.", "K-IFRS 1028 문단 16~43 · 일반기업회계기준 문단 8.7~8.13"],
+["공통", "외감·회계기준", "연결 내부거래 제거", "연결 내부거래 종속기업 연결재무제표 내부거래제거 미실현이익", "(연결조정)", "—", "X", "연결재무제표 작성 시 지배·종속기업 간 매출·매입, 채권·채무, 미실현이익을 제거.", "K-IFRS 1110 문단 B86 · 일반기업회계기준 문단 4.9"],
+["공통", "외감·회계기준", "유형자산 재평가모형", "재평가 재평가잉여금 토지재평가 공정가치평가 재평가모형", "재평가잉여금", "—", "X", "재평가모형을 고르면 공정가치로 주기적으로 재평가하고 증가분은 재평가잉여금(기타포괄손익), 감소분은 당기손실(이전 잉여금 한도 내 상계).", "K-IFRS 1016 문단 31~42 (증감 처리 39~40) · 일반기업회계기준 문단 10.24~10.31"],
+["공통", "외감·회계기준", "유형·무형자산 손상차손", "손상차손 손상검사 회수가능액 손상환입 자산손상", "손상차손", "—", "X", "손상 징후가 있으면 회수가능액과 비교해 부족분을 손상차손으로 인식. 이후 회복되면 손상 전 장부금액 한도에서 환입(영업권 제외).", "K-IFRS 1036 문단 58~64, 109~125 · 일반기업회계기준 문단 20.8~20.12, 20.19~20.28"],
+["공통", "외감·회계기준", "영업권 손상검사", "영업권손상 손상검사 현금창출단위 영업권평가", "손상차손", "—", "X", "K-IFRS는 영업권이 배분된 현금창출단위를 매년 손상검사하고, 영업권 손상차손은 이후 환입하지 않음. 일반기업회계기준은 영업권을 20년 이내 내용연수에 걸쳐 정액 상각.", "K-IFRS 1036 문단 96, 124 · 일반기업회계기준 문단 12.32"],
+["공통", "외감·회계기준", "투자부동산", "투자부동산 임대목적부동산 시세차익부동산 공정가치모형", "투자부동산", "—", "X", "임대수익이나 시세차익 목적 부동산은 투자부동산으로 분류. K-IFRS는 원가모형·공정가치모형 중 선택.", "K-IFRS 1040 문단 30~56"],
+["공통", "외감·회계기준", "차입원가 자본화", "차입원가 이자자본화 건설자금이자 적격자산", "건설중인자산", "214", "X", "K-IFRS는 적격자산과 직접 관련된 차입원가를 자산 원가로 자본화해야 함. 일반기업회계기준은 기간비용 처리가 원칙이고, 적격자산 차입원가는 자본화할 수 있으며 선택한 방법을 계속 적용.", "K-IFRS 1023 문단 8~25 · 일반기업회계기준 문단 18.4~18.5"],
+["공통", "외감·회계기준", "확정급여채무 보험수리적 평가", "확정급여채무 DBO 보험수리 재측정요소 퇴직급여채무 계리", "확정급여채무", "—", "X", "DB형은 보험수리적 방법으로 확정급여채무를 측정하고 사외적립자산을 차감. K-IFRS는 재측정요소를 기타포괄손익으로 인식.", "K-IFRS 1019 문단 55~152 (구성요소 120~130) · 일반기업회계기준 문단 21.8~21.13"],
+["공통", "외감·회계기준", "주식기준보상 (주식선택권)", "주식선택권 스톡옵션 주식기준보상 주식보상비용 RSU", "주식보상비용", "—", "X", "부여일 공정가치를 가득기간에 걸쳐 비용과 자본(주식선택권)으로 인식. 현금결제형은 부채로 계상하고 매 결산일 재측정.", "K-IFRS 1102 문단 10~33D · 일반기업회계기준 문단 19.9~19.28"],
+["공통", "외감·회계기준", "수익인식 5단계 (K-IFRS 1115)", "수익인식 1115 수행의무 거래가격 배분 계약식별", "매출", "—", "X", "계약 식별 → 수행의무 식별 → 거래가격 산정 → 수행의무별 배분 → 수행의무 이행 시 수익 인식 순서로 판단.", "K-IFRS 1115 문단 9~90"],
+["공통", "외감·회계기준", "계약자산·계약부채", "계약자산 계약부채 선수금 미청구 수행의무", "계약부채", "—", "X", "대가를 먼저 받으면 계약부채, 수행을 먼저 했지만 청구권이 조건부이면 계약자산.", "K-IFRS 1115 문단 105~109"],
+["공통", "외감·회계기준", "본인·대리인 판단 (총액·순액)", "본인 대리인 총액인식 순액인식 위탁판매 중개수수료매출", "매출 (총액 또는 순액)", "—", "X", "재화·용역을 고객에게 넘기기 전에 통제하면 본인으로 총액, 중개만 하면 대리인으로 수수료 순액을 매출로 인식.", "K-IFRS 1115 문단 B34~B38"],
+["공통", "외감·회계기준", "변동대가 (리베이트·성과보수)", "변동대가 리베이트 수량할인 성과보수 판매장려 추정", "매출 (차감)", "—", "X", "리베이트·수량할인 등 변동대가는 유의적으로 되돌리지 않을 가능성이 매우 높은 금액까지만 거래가격에 포함.", "K-IFRS 1115 문단 56~57"],
+["공통", "외감·회계기준", "반품권 있는 판매 (환불부채)", "반품 환불부채 반환제품회수권 반품충당 반품예상", "환불부채", "—", "X", "반품 예상분은 매출로 인식하지 않고 환불부채로 계상, 회수할 재고는 반환제품회수권(자산)으로 계상.", "K-IFRS 1115 문단 55, B20~B27"],
+["공통", "외감·회계기준", "계약 체결 증분원가 자산화", "계약원가 수주수수료 영업수당 증분원가 계약획득원가", "계약원가 (자산)", "—", "X", "계약을 따내지 못했다면 들지 않았을 원가(수주 수수료 등)는 회수가 예상되면 자산으로 올리고 수익 인식에 맞춰 상각. 1년 이내면 비용 처리 가능.", "K-IFRS 1115 문단 91~94"],
+["공통", "외감·회계기준", "판매보증충당부채", "판매보증 품질보증 무상수리 보증충당 AS충당", "판매보증비", "—", "X", "판매 후 무상보증 예상 비용을 결산 때 비용과 충당부채로 계상.", "K-IFRS 1037 문단 14~26 · 일반기업회계기준 문단 14.3~14.4"],
+["공통", "외감·회계기준", "손실이 예상되는 공사 (공사손실충당부채)", "공사손실 손실예상공사 공사손실충당부채 적자공사", "공사손실충당부채", "—", "X", "총공사원가가 총공사수익을 넘을 것으로 예상되면 예상 손실 전액을 즉시 비용과 충당부채로 인식.", "일반기업회계기준 문단 16.53~16.56 · K-IFRS 1037 문단 66~69"],
+["공통", "외감·회계기준", "장기 채권·채무 현재가치 할인", "현재가치할인 현재가치할인차금 장기미수금 장기미지급금 명목가치", "현재가치할인차금", "—", "X", "장기 연불 거래 등 명목금액과 현재가치 차이가 중요하면 현재가치할인차금으로 차감 표시하고 유효이자율법으로 상각.", "일반기업회계기준 문단 6.12~6.13의3 · K-IFRS 1109 문단 5.1.1~5.1.3"],
+["공통", "외감·회계기준", "임차보증금 현재가치 (K-IFRS)", "임차보증금현재가치 보증금할인 장기선급임차료", "임차보증금·선급임차료", "232", "X", "K-IFRS에서 무이자 임차보증금은 현재가치로 측정하고 차이는 사용권자산(또는 선급임차료)에 가산.", "K-IFRS 1109 문단 5.1.1~5.1.3 · K-IFRS 1116 문단 23~46B"],
+["공통", "외감·회계기준", "소송충당부채·우발부채", "소송 소송충당부채 우발부채 패소예상 손해배상소송", "소송충당부채", "—", "X", "패소 가능성이 높고 금액을 신뢰성 있게 추정할 수 있으면 충당부채, 그렇지 않으면 주석에 우발부채로 공시.", "K-IFRS 1037 문단 14, 28 · 일반기업회계기준 문단 14.3~14.5"],
+["공통", "외감·회계기준", "금융보증계약", "금융보증 지급보증 보증계약 계열사보증", "금융보증부채", "—", "X", "특수관계 회사 등에 지급보증을 서면 K-IFRS에서는 공정가치로 금융보증부채를 인식하고 이후 손실충당금과 비교해 측정.", "K-IFRS 1109 문단 4.2.1"],
+["공통", "외감·회계기준", "매출채권 양도 (팩토링) 제거 판단", "팩토링 매출채권양도 채권매각 제거 소구권", "매출채권처분손실 (또는 단기차입금)", "—", "X", "위험과 보상을 대부분 이전하면 매각거래로 채권을 제거하고 처분손실 인식, 소구권 등으로 위험이 남으면 차입거래로 단기차입금 계상.", "K-IFRS 1109 문단 3.2.1~3.2.23 · 일반기업회계기준 문단 6.5~6.11"],
+["공통", "외감·회계기준", "매각예정비유동자산·중단영업", "매각예정 중단영업 사업부매각 처분예정자산", "매각예정비유동자산", "—", "X", "1년 안 매각 가능성이 매우 높으면 매각예정으로 분류하고 감가상각을 중단, 장부금액과 순공정가치 중 작은 금액으로 측정. 중단영업 손익은 별도 표시.", "K-IFRS 1105 문단 6~14, 15, 25, 31~36A"],
+["공통", "외감·회계기준", "보고기간 후 사건", "보고기간후사건 후속사건 결산후사건 수정사건", "(사건 성격별 조정)", "—", "X", "보고기간 말 존재하던 상황의 증거를 주는 사건은 재무제표를 수정, 그 후 발생한 상황은 주석 공시.", "K-IFRS 1010 문단 8~11 · 일반기업회계기준 문단 24.3~24.6"],
+["공통", "외감·회계기준", "회계정책 변경·회계추정 변경", "회계정책변경 추정변경 내용연수변경 상각방법변경 소급적용", "(변경 성격별 처리)", "—", "X", "회계정책 변경은 경과규정이 없으면 소급 적용, 내용연수·잔존가치 등 회계추정 변경은 변경 기간부터 전진 적용.", "K-IFRS 1008 문단 19, 36 · 일반기업회계기준 문단 5.9~5.17"],
+["공통", "외감·회계기준", "외화 기능통화·해외사업장 환산", "기능통화 해외사업장 해외지점 해외현지법인 환산차이", "해외사업환산손익 (기타포괄손익)", "—", "X", "해외사업장 재무제표를 표시통화로 환산할 때 생긴 차이는 기타포괄손익으로 누적했다가 처분 시 당기손익으로 재분류.", "K-IFRS 1021 문단 38~49 (처분 시 재분류 48) · 일반기업회계기준 문단 23.14~23.18"],
+["공통", "외감·회계기준", "재고자산 원가흐름 가정", "선입선출 총평균 이동평균 개별법 원가흐름 단가결정", "상품·제품", "—", "X", "선입선출법·가중평균법·개별법 중 회사 특성에 맞는 방법을 정해 계속 적용. K-IFRS는 개별법 대상이 아니면 선입선출법이나 가중평균법만 사용(후입선출법 삭제).", "K-IFRS 1002 문단 23~27 (25) · 일반기업회계기준 문단 7.12~7.15"],
+["공통", "외감·회계기준", "중소기업 회계처리 특례 적용 대상", "중소기업특례 31장 특례적용 비상장중소기업 간편회계", "(판단 기준)", "—", "X", "외부감사 대상 중소기업(중소기업기본법)은 제31장 특례를 적용할 수 있음. 상장법인·증권신고서 제출법인·사업보고서 제출대상법인, 금융회사, 연결실체에 중소기업이 아닌 기업이 포함된 지배기업은 제외. 비외감 중소기업도 준용 가능. 특례를 그만두면 회계정책 변경으로 처리.", "일반기업회계기준 문단 31.2~31.3, 31.17"],
+["공통", "외감·회계기준", "[중소기업 특례] 시가 없는 파생상품 평가 생략", "중소기업특례 파생상품 평가생략 통화선도 장외파생", "파생상품", "—", "X", "정형화된 시장에서 거래되지 않아 시가가 없는 파생상품은 계약 후 평가 회계처리를 하지 않을 수 있음.", "일반기업회계기준 문단 31.4"],
+["공통", "외감·회계기준", "[중소기업 특례] 시장성 없는 지분증권 원가 평가", "중소기업특례 비상장주식 원가법 시장성없는주식", "매도가능증권 등", "—", "X", "시장성이 없는 지분증권은 취득원가를 장부금액으로 할 수 있음. 손상차손누계액이 있으면 취득원가에서 차감.", "일반기업회계기준 문단 31.5"],
+["공통", "외감·회계기준", "[중소기업 특례] 지분법 미적용", "중소기업특례 지분법생략 관계기업 원가법", "관계기업투자", "—", "X", "관계기업·공동지배기업에 지분법을 적용하지 않을 수 있음. 이 경우 장부금액은 취득원가(손상차손누계액 차감) 또는 제6장을 준용해 측정한 금액.", "일반기업회계기준 문단 31.6"],
+["공통", "외감·회계기준", "[중소기업 특례] 장기 채권·채무 현재가치평가 생략", "중소기업특례 현재가치생략 장기연불 장기대여", "장기 채권·채무", "—", "X", "장기연불조건 매매거래와 장기금전대차거래 등에서 생긴 채권·채무는 현재가치평가를 하지 않을 수 있음.", "일반기업회계기준 문단 31.7"],
+["공통", "외감·회계기준", "[중소기업 특례] 주식선택권 행사 시점 회계처리", "중소기업특례 주식선택권 스톡옵션 행사시점", "주식발행초과금·자기주식처분손익", "—", "X", "주식결제형 주식기준보상은 실제 행사·발행 전까지 회계처리를 하지 않을 수 있음. 행사 때 신주 발행이면 행사가격과 액면금액 차액을 주식발행초과금, 자기주식 교부면 장부금액과 차액을 자기주식처분손익으로 처리.", "일반기업회계기준 문단 31.8"],
+["공통", "외감·회계기준", "[중소기업 특례] 1년 내 용역·공사 완성기준, 할부매출 회수기일", "중소기업특례 완성기준 인도기준 할부매출 회수기일", "매출", "—", "X", "1년 안에 끝나는 용역매출과 건설형 공사계약은 완료·완성한 날에 수익 인식 가능. 1년 이상 할부매출은 할부금 회수기일이 된 날에 실현된 것으로 할 수 있음.", "일반기업회계기준 문단 31.9"],
+["공통", "외감·회계기준", "[중소기업 특례] 내용연수·잔존가치 세법 적용", "중소기업특례 세법내용연수 기준내용연수 잔존가치", "감가상각비", "818", "X", "유형·무형자산의 내용연수와 잔존가치를 법인세법 등 법령에 따라 정할 수 있음.", "일반기업회계기준 문단 31.10"],
+["공통", "외감·회계기준", "[중소기업 특례] 장기할부 부동산 처분이익 회수기일 인식", "중소기업특례 장기할부 토지처분 건물처분 처분이익", "유형자산처분이익", "914", "X", "토지·건물 등을 장기할부조건으로 처분하면 처분이익을 할부금 회수기일이 된 날에 실현된 것으로 할 수 있음.", "일반기업회계기준 문단 31.11"],
+["공통", "외감·회계기준", "[중소기업 특례] 법인세비용 = 세법상 납부세액", "중소기업특례 이연법인세생략 법인세비용 납부세액", "법인세등", "998", "X", "법인세비용을 법인세법 등 법령에 따라 납부할 금액으로 할 수 있음(이연법인세를 인식하지 않음).", "일반기업회계기준 문단 31.12"],
+["공통", "외감·회계기준", "현금흐름표 작성 (영업·투자·재무 활동)", "현금흐름표 간접법 직접법 영업활동 투자활동 재무활동", "(현금흐름표)", "—", "X", "현금흐름을 영업·투자·재무 활동으로 구분해 표시. 영업활동은 직접법 또는 간접법으로 보고.", "K-IFRS 1007 문단 10~24 · 일반기업회계기준 문단 2.58~2.73"],
+["공통", "외감·회계기준", "이자·배당·법인세 현금흐름 분류", "이자지급 배당금수취 배당지급 법인세납부 현금흐름분류", "(현금흐름표)", "—", "X", "이자·배당금의 수취와 지급, 법인세 납부의 현금흐름 분류를 정하고 매기 일관되게 적용.", "K-IFRS 1007 문단 31~36"],
+["공통", "외감·회계기준", "비현금거래·재무활동 부채 변동 공시", "비현금거래 현물출자 리스취득 재무활동부채 차입금변동", "(주석)", "—", "X", "현금 유출입이 없는 투자·재무 거래는 현금흐름표에서 빼고 주석 공시. 재무활동에서 생기는 부채의 변동도 공시.", "K-IFRS 1007 문단 43~44E"],
+["공통", "외감·회계기준", "공급자금융약정 공시", "공급자금융 리버스팩토링 매입채무금융 SCF", "(주석)", "—", "X", "공급자금융약정의 조건, 관련 부채 금액 등을 공시.", "K-IFRS 1007 문단 44F~44H"],
+["공통", "외감·회계기준", "특수관계자 공시", "특수관계자 관계회사 대주주 임원보수 특수관계자거래", "(주석)", "—", "X", "특수관계자의 범위를 판단하고 특수관계자와의 거래·채권채무 잔액·주요 경영진 보상 등을 주석 공시.", "K-IFRS 1024 문단 13~27 · 일반기업회계기준 문단 25.2~25.11"],
+["공통", "외감·회계기준", "주당이익 (기본·희석)", "주당이익 EPS 기본주당이익 희석주당이익 가중평균주식수", "(손익계산서 표시)", "—", "X", "보통주 귀속 이익을 가중평균유통보통주식수로 나눠 기본주당이익을 계산하고, 잠재적보통주 효과를 반영해 희석주당이익 계산.", "K-IFRS 1033 문단 9~63 · 일반기업회계기준 문단 26.3~26.24"],
+["공통", "외감·회계기준", "중간재무보고 (분·반기)", "중간재무제표 반기보고서 분기보고서 중간기간", "(중간재무제표)", "—", "X", "중간재무보고서의 구성·인식·측정 기준. 연차와 같은 회계정책 적용.", "K-IFRS 1034 문단 5~42 · 일반기업회계기준 문단 29.2~29.16"],
+["공통", "외감·회계기준", "영업부문 공시", "영업부문 부문정보 보고부문 사업부문공시", "(주석)", "—", "X", "최고영업의사결정자에게 보고되는 영업부문을 식별하고 보고부문별 정보를 공시.", "K-IFRS 1108 문단 5~34"],
+["공통", "외감·회계기준", "공정가치 측정·서열체계 공시", "공정가치 수준1 수준2 수준3 서열체계 가치평가기법", "(측정·주석)", "—", "X", "공정가치를 측정하는 방법과 투입변수 수준(1~3)에 따른 서열체계 공시.", "K-IFRS 1113 문단 9~99"],
+["공통", "외감·회계기준", "금융상품 위험 공시", "신용위험 유동성위험 시장위험 금융상품공시 민감도", "(주석)", "—", "X", "금융상품에서 생기는 신용·유동성·시장위험의 특성과 정도를 공시.", "K-IFRS 1107 문단 31~42"],
+["공통", "외감·회계기준", "사업결합 취득법 (PPA)", "사업결합 취득법 PPA 공정가치배분 합병 인수", "(취득 자산·부채)", "—", "X", "취득자 식별, 취득일 결정, 식별 가능한 취득 자산·인수 부채를 공정가치로 인식·측정하고 영업권 또는 염가매수차익 인식.", "K-IFRS 1103 문단 4~53 · 일반기업회계기준 문단 12.7~12.38"],
+["공통", "외감·회계기준", "염가매수차익", "염가매수차익 부의영업권 저가인수", "염가매수차익", "—", "X", "이전대가 등이 식별 가능한 순자산 공정가치보다 작으면 재검토 후 남은 차익을 취득일에 당기손익으로 인식(K-IFRS).", "K-IFRS 1103 문단 32~40 · 일반기업회계기준 문단 12.32~12.33"],
+["공통", "외감·회계기준", "사업결합 취득 관련 원가", "취득관련원가 실사비용 자문수수료 M&A수수료", "지급수수료", "831", "X", "사업결합에 든 자문·법률·회계·실사 수수료 등 취득 관련 원가는 발생한 기간의 비용(지분·채무증권 발행원가는 별도).", "K-IFRS 1103 문단 53 · 일반기업회계기준 문단 12.37"],
+["공통", "외감·회계기준", "사업결합 조건부 대가", "조건부대가 언아웃 earn-out 추가지급", "조건부대가 (부채·자본)", "—", "X", "취득일 공정가치로 이전대가에 포함하고 이후 공정가치 변동은 분류에 따라 후속 측정.", "K-IFRS 1103 문단 58 · 일반기업회계기준 문단 12.38"],
+["공통", "외감·회계기준", "연결 범위 판단 (지배력)", "지배력 연결범위 종속기업 실질지배 의결권", "(연결 판단)", "—", "X", "힘, 변동이익 노출, 힘을 사용해 이익에 영향을 미치는 능력을 모두 가지면 지배력이 있다고 보고 연결.", "K-IFRS 1110 문단 5~18 · 일반기업회계기준 문단 4.5~4.7의2"],
+["공통", "외감·회계기준", "비지배지분", "비지배지분 소수주주지분 NCI", "비지배지분 (자본)", "—", "X", "연결재무상태표에서 비지배지분을 지배기업 소유주지분과 구분해 자본에 표시.", "K-IFRS 1110 문단 22~24"],
+["공통", "외감·회계기준", "지배력 상실 (종속기업 처분)", "지배력상실 종속기업처분 연결제외 지분매각", "처분손익", "—", "X", "지배력을 잃으면 종속기업 자산·부채와 비지배지분을 제거하고 남은 투자는 공정가치로 인식, 차이를 손익으로 처리.", "K-IFRS 1110 문단 25~26 · 일반기업회계기준 문단 4.15~4.16"],
+["공통", "외감·회계기준", "별도재무제표 종속·관계기업 투자", "별도재무제표 개별재무제표 종속기업투자 원가법", "종속기업투자", "—", "X", "별도재무제표에서 종속기업·관계기업 투자는 원가법, 공정가치(제1109호) 또는 지분법 중 선택해 회계처리.", "K-IFRS 1027 문단 9~14 · 일반기업회계기준 문단 4.18~4.20"],
+["공통", "외감·회계기준", "공동약정 (공동영업·공동기업)", "공동약정 공동영업 공동기업 조인트벤처 JV 컨소시엄", "(약정 유형별)", "—", "X", "공동영업은 자기 몫의 자산·부채·수익·비용을 인식, 공동기업은 지분법 적용.", "K-IFRS 1111 문단 4~25"],
+["공통", "외감·회계기준", "동일지배거래 (계열사 합병·분할)", "동일지배 계열사합병 지배하합병 분할 사업양수도 그룹내", "(장부금액 승계)", "—", "X", "동일지배하에 있는 기업 간 합병·주식 인수도·사업 인수도·분할의 회계처리 기준.", "일반기업회계기준 문단 32.9~32.16"],
+["공통", "외감·회계기준", "온실가스 배출권·배출부채", "배출권 온실가스 배출부채 탄소배출권 할당량", "배출권 (무형자산)", "—", "X", "의무 이행용 배출권과 단기매매용 배출권을 나눠 인식·측정하고, 배출부채는 의무 이행에 필요한 금액으로 측정.", "일반기업회계기준 문단 33.2~33.20"],
+["공통", "외감·회계기준", "중단사업손익 (일반기업회계기준)", "중단사업 사업부폐지 사업매각 중단사업손익", "중단사업손익", "—", "X", "중단사업의 손익을 계속사업과 구분해 인식·측정하고 손익계산서에 별도 표시.", "일반기업회계기준 문단 28.2~28.19"],
+["공통", "외감·회계기준", "리스제공자 금융리스·운용리스 분류", "리스제공자 금융리스채권 운용리스수익 리스분류 임대인", "리스채권·운용리스자산", "—", "X", "리스제공자는 기초자산의 위험과 보상이 대부분 이전되면 금융리스(리스채권), 아니면 운용리스(리스료 수익)로 분류.", "K-IFRS 1116 문단 61~88 · 일반기업회계기준 문단 13.21~13.33"],
+["공통", "외감·회계기준", "판매후리스", "판매후리스 세일앤리스백 매각후임차", "(판매 여부별)", "—", "X", "자산 이전이 판매에 해당하면 판매로 처리하고 남은 사용권만큼 사용권자산 인식, 판매가 아니면 금융거래로 처리.", "K-IFRS 1116 문단 98~103 · 일반기업회계기준 문단 13.35~13.38"],
+["공통", "외감·회계기준", "리스 변경·재평가", "리스변경 리스기간변경 리스료변경 재측정", "리스부채", "—", "X", "리스기간·리스료가 바뀌면 리스부채를 재측정하고 사용권자산을 조정.", "K-IFRS 1116 문단 23~46B"],
+["공통", "외감·회계기준", "기간에 걸쳐 이행하는 수행의무 (진행률)", "진행률 투입법 산출법 기간에걸쳐 진행기준", "매출", "—", "X", "기간에 걸쳐 이행하는 수행의무는 진행률을 측정해 수익 인식(산출법·투입법).", "K-IFRS 1115 문단 31~45, B2~B19"],
+["공통", "외감·회계기준", "계약의 결합·계약변경", "계약변경 추가계약 계약결합 변경계약", "매출", "—", "X", "계약 결합 요건과 계약변경을 별도 계약으로 볼지, 기존 계약의 일부로 볼지 판단.", "K-IFRS 1115 문단 17~21"],
+["공통", "외감·회계기준", "유의적인 금융요소 (장기 선수·후불)", "유의적금융요소 할부판매 선수금이자 화폐의시간가치", "매출·이자", "—", "X", "대가 지급 시점과 이전 시점 차이로 유의적인 금융효익이 있으면 거래가격을 화폐의 시간가치로 조정하고 이자수익·비용을 구분 표시.", "K-IFRS 1115 문단 47~72"],
+["공통", "외감·회계기준", "보증 (확신 유형·용역 유형)", "보증 품질보증 연장보증 무상AS 용역유형보증", "판매보증충당부채·계약부채", "—", "X", "합의된 규격 충족을 확신시키는 보증은 충당부채, 추가 용역을 제공하는 보증은 별도 수행의무로 거래가격 배분.", "K-IFRS 1115 문단 B28~B33"],
+["공통", "외감·회계기준", "추가 재화·용역에 대한 고객 선택권", "고객선택권 갱신권 할인권 멤버십혜택 중요한권리", "계약부채", "—", "X", "고객에게 중요한 권리를 주는 선택권은 별도 수행의무로 보고 거래가격 일부를 배분.", "K-IFRS 1115 문단 B39~B43"],
+["공통", "외감·회계기준", "고객이 행사하지 않은 권리 (낙전수입)", "낙전 미사용 상품권소멸 기프트카드미사용 breakage", "매출", "—", "X", "고객이 행사하지 않을 것으로 예상되는 권리 금액은 고객의 권리 행사 형태에 비례해 수익 인식.", "K-IFRS 1115 문단 B44~B47"],
+["공통", "외감·회계기준", "환불되지 않는 선수수수료 (가입비)", "가입비 입회비 셋업수수료 설치비 선수수수료", "계약부채", "—", "X", "약속한 재화·용역 이전과 관련 없는 선수수수료는 미래 재화·용역에 대한 선수금으로 보아 그 이전 시점에 수익 인식.", "K-IFRS 1115 문단 B48~B51"],
+["공통", "외감·회계기준", "라이선싱 (접근권·사용권)", "라이선스 로열티 사용권 접근권 지식재산", "매출", "—", "X", "라이선스가 접근권이면 기간에 걸쳐, 사용권이면 한 시점에 수익 인식. 판매기준·사용기준 로열티는 별도 규정.", "K-IFRS 1115 문단 B52~B63B"],
+["공통", "외감·회계기준", "재매입약정", "재매입약정 환매조건 콜옵션 풋옵션 바이백", "리스 또는 금융약정", "—", "X", "재매입 의무·권리가 있으면 고객이 통제를 얻지 못해 조건에 따라 리스 또는 금융약정으로 처리.", "K-IFRS 1115 문단 B64~B76"],
+["공통", "외감·회계기준", "위탁약정 (K-IFRS)", "위탁약정 위탁판매 수탁자 적송", "재고자산", "—", "X", "수탁자에게 넘긴 재고가 위탁약정이면 수탁자가 통제를 얻지 못하므로 인도 시 수익을 인식하지 않음.", "K-IFRS 1115 문단 B77~B78"],
+["공통", "외감·회계기준", "미인도청구약정", "미인도청구 bill-and-hold 보관판매 청구후보관", "매출", "—", "X", "대금을 청구했지만 고객 요청으로 기업이 보관하는 경우, 요건을 모두 충족해야 고객이 통제를 얻은 것으로 보고 수익 인식.", "K-IFRS 1115 문단 B79~B82"],
+["공통", "외감·회계기준", "법인세 처리의 불확실성", "불확실한법인세 세무조사위험 세무불확실성 IFRIC23", "당기·이연법인세", "—", "X", "과세당국이 불확실한 법인세 처리를 수용할 가능성이 높지 않다고 결론 내리면, 가능성이 가장 높은 금액과 기댓값 중 불확실성 해소를 더 잘 예측하는 방법으로 과세소득·세무기준액 등에 그 영향을 반영.", "K-IFRS 해석서 2123 문단 6~14"],
+["공통", "외감·회계기준", "구조조정 충당부채", "구조조정 사업부폐쇄 인력감축 구조조정비용", "구조조정충당부채", "—", "X", "구조조정 대상 사업·소재지·인원·지출 등을 담은 구체적인 공식 계획이 있고, 영향받는 당사자가 실행을 정당하게 기대하게 된 경우에만 의제의무가 생겨 충당부채로 인식.", "K-IFRS 1037 문단 70~83"],
+["공통", "외감·회계기준", "해고급여 (명예퇴직금)", "해고급여 명예퇴직 희망퇴직 위로금 퇴직위로금", "해고급여", "—", "X", "해고급여는 제안을 철회할 수 없게 된 때와 관련 구조조정원가를 인식한 때 중 이른 날에 인식.", "K-IFRS 1019 문단 159~171"],
+["공통", "외감·회계기준", "장기근속포상 등 기타장기종업원급여", "장기근속 근속포상 안식휴가 장기유급휴가", "기타장기종업원급여", "—", "X", "장기근속포상·장기유급휴가 등은 확정급여채무와 비슷하게 측정하되 재측정요소도 당기손익으로 인식.", "K-IFRS 1019 문단 153~158"],
+["공통", "외감·회계기준", "채무조정·출자전환 (채무자)", "채무조정 출자전환 채무면제 조건변경 워크아웃", "채무조정이익·자본", "—", "X", "채무 조건이 바뀌거나 출자전환하면 채무자는 장부금액과 지급 대가(지분 공정가치 등)의 차이를 채무조정이익으로 인식.", "일반기업회계기준 문단 6.86~6.94 · K-IFRS 1109 문단 3.3.1~3.3.5"],
+["공통", "외감·회계기준", "생물자산·수확물 (농림어업)", "생물자산 수확물 농업 축산 양식 과수", "생물자산", "—", "X", "생물자산은 순공정가치로 측정하고 변동은 당기손익. 수확 시점의 수확물도 순공정가치로 측정.", "K-IFRS 1041 문단 10~33"],
+["공통", "외감·회계기준", "이익잉여금처분계산서 공시", "이익잉여금처분계산서 처분계산서 결손금처리계산서", "(주석)", "—", "X", "상법 등 관련 법규에서 이익잉여금처분계산서 작성을 요구하는 경우 주석으로 공시.", "일반기업회계기준 문단 2.89"],
+// ── 업종별
+["카드", "업종별", "음식점 식자재 (면세 농축수산물)", "식자재 농산물 정육 수산 채소 쌀 시장 마트 식재료", "원재료", "153", "C", "가공되지 않은 농·축·수산물은 면세라 부가세 없음. 음식점은 의제매입세액공제 대상.", "부가가치세법 §42 · 부가가치세법 §26①1호"],
+["카드", "업종별", "음식점 주류 매입", "주류 소주 맥주 막걸리 와인 주류도매", "원재료", "153", "Y", "주류는 과세라 세금계산서 수취 시 공제.", "부가가치세법 §38①1호"],
+["카드", "업종별", "음식점 가스(LPG)·숯", "LPG 가스 프로판 숯 연료 가스통", "수도광열비", "815", "Y", "주방 연료.", "부가가치세법 §38①1호"],
+["공통", "업종별", "음식점 배달대행 수수료", "배달대행 바로고 생각대로 부릉 배달비 라이더", "지급수수료", "831", "Y", "배달대행사 세금계산서분 공제.", "부가가치세법 §38①1호"],
+["카드", "업종별", "음식점 일회용품·포장용기", "일회용품 포장용기 용기 수저 비닐 배달용기", "소모품비", "830", "Y", "", "부가가치세법 §38①1호"],
+["공통", "업종별", "건설 자재 매입", "자재 철근 레미콘 시멘트 목재 건자재 골재", "재료비 (공사원가)", "—", "Y", "현장별로 공사원가에 집계.", "부가가치세법 §38①1호"],
+["공통", "업종별", "건설 외주공사 (하도급)", "하도급 외주 전문건설 기성 하청 시공", "외주공사비 (공사원가)", "—", "Y", "하도급 대금. 세금계산서 수취분 공제.", "부가가치세법 §38①1호"],
+["공통", "업종별", "건설 장비 임차", "굴삭기 포크레인 크레인 펌프카 덤프 장비대", "지급임차료 (공사원가)", "—", "Y", "현장별 공사원가.", "법인세법 시행령 §19 6호 · 부가가치세법 §38①1호"],
+["통장", "업종별", "건설 일용노무비", "노무비 일용 인부 출력 현장인부 팀장", "노무비 (공사원가)", "—", "X", "일용근로소득 6% 원천징수, 일용근로소득 지급명세서 제출.", "소득세법 §129①4호"],
+["카드", "업종별", "건설 현장 식대 (함바)", "함바 현장식당 현장식대 식권 현장밥", "복리후생비 (공사원가)", "—", "C", "현장 근로자 식대. 식당이 일반과세자면 공제. 영수증 발급 기간의 간이과세자면 불공제.", "부가가치세법 §46③3호"],
+["공통", "업종별", "건설 하자보수비", "하자보수 하자 AS 보수공사", "하자보수비", "—", "Y", "", "부가가치세법 §38①1호"],
+["카드", "업종별", "건설기계·덤프 유류", "건설기계 덤프 굴삭기 중장비 경유 유류", "차량유지비 (공사원가)", "—", "Y", "개별소비세 과세 승용차가 아니므로 공제.", "부가가치세법 §39①5호"],
+["통장", "업종별", "건설공제조합 출자금", "건설공제조합 출자 출자금 전문건설공제조합 공제조합", "출자금 (투자자산)", "—", "X", "비용 아님(자산). 배당 수령 시 배당금수익.", "일반기업회계기준 문단 실2.30"],
+["통장", "업종별", "건설 보증수수료 (이행·하자 보증)", "보증수수료 이행보증 하자보증 계약보증 선급금보증 공제조합", "지급수수료", "831", "C", "건설공제조합 보증 업무는 시행령 §40① 면세 금융·보험 용역에 따로 열거되어 있지 않음. 세금계산서를 받은 경우 사업 관련 매입세액으로 공제. 공사별 원가 집계 가능.", "부가가치세법 §38①1호 · 시행령 §40①"],
+["공통", "업종별", "쇼핑몰 반품 배송비", "반품 반품배송 회수 교환배송 반품택배", "운반비", "824", "Y", "판매자 부담 반품 운임.", "부가가치세법 §38①1호"],
+["공통", "업종별", "쇼핑몰 해외배송·국제특송", "해외배송 국제특송 DHL FedEx UPS EMS 국제택배", "운반비", "824", "X", "항공기·선박으로 화물을 국내에서 국외로 수송하는 외국항행용역은 영세율이라 공제할 매입세액이 없음.", "부가가치세법 §23①②"],
+["공통", "업종별", "병의원·학원 (면세사업자) 매입", "병원 의원 학원 면세사업자 의료소모품 교재", "내용별 계정", "—", "N", "면세사업 관련 매입세액은 불공제라 부가세 포함 전액을 비용·자산으로. 겸영이면 공통매입세액 안분.", "부가가치세법 §39①7호 · §40"],
+["카드", "업종별", "미용 성형·동물 진료 (카드 공제 제외)", "성형외과 피부과 미용시술 동물병원 수의사", "내용별 계정", "—", "N", "수의사 동물진료(시행령 §88⑤5호)와 §88⑤4호 해당 의료용역은 카드 매입세액 공제 제외.", "시행령 §88⑤4호·5호"],
+["공통", "업종별", "부동산임대업 중개·관리 수수료", "임대관리 중개수수료 임대대행 부동산관리", "지급수수료", "831", "Y", "임대 사업 관련 수수료. 겸영 주택임대분은 안분.", "부가가치세법 §40"],
+["통장", "업종별", "화물운수 유가보조금 입금", "유가보조금 유류보조 화물복지카드 유류구매카드", "잡이익", "930", "X", "재화·용역 공급과 직접 관련되지 않은 국고보조금·공공보조금은 공급가액에 포함하지 않음. 유류비 차감 또는 잡이익으로 처리.", "부가가치세법 §29⑤4호"],
+["통장", "업종별", "건설 기성금·공사대금 입금", "기성금 기성 공사대금 준공금 공사미수 관급", "공사미수금", "—", "X", "진행기준·인도기준에 따라 공사수익 인식 후 미수금 회수. 선수금 성격이면 선수금.", "일반기업회계기준 문단 16.39, 16.63"],
+["통장", "업종별", "용역·수수료 매출 입금", "용역대금 수수료수입 컨설팅대금 프로젝트대금 용역매출", "외상매출금", "108", "X", "세금계산서 발행분 회수. 매출 계정은 용역매출·수수료수익.", "일반기업회계기준 문단 실2.25"],
+["통장", "업종별", "프랜차이즈 본사 물품대금 (가맹점)", "본사물품 물류대금 원부자재 가맹본부 식자재대금", "원재료", "153", "Y", "가맹본부 세금계산서 기준. 면세 식자재가 섞이면 계산서분 따로.", "부가가치세법 §38①1호"],
+["카드", "업종별", "카페 원두·우유·시럽", "원두 우유 시럽 파우더 생크림 카페재료 컵", "원재료", "153", "C", "원두·시럽은 과세(공제). 가공되지 않은 농·축산물 해당분은 면세로 의제매입세액공제 대상. 컵·빨대는 소모품비.", "부가가치세법 §42 · 부가가치세법 §26①1호"],
+["공통", "업종별", "숙박업 린넨·세탁 용역", "린넨 세탁용역 침구 타월 객실세탁", "지급수수료", "831", "Y", "세탁 용역. 비품 교체 구입은 소모품비·비품.", "부가가치세법 §38①1호"],
+["공통", "업종별", "미용실 시술 재료 (미용업 사업자)", "미용재료 염색약 파마약 샴푸 헤어재료 네일재료", "원재료", "153", "Y", "재료 구입은 공제 가능(미용업 사업자가 매입하는 쪽). 미용업 매출 쪽은 카드 공제 제외 업종이라 고객에게 영수증 발급.", "시행령 §88⑤1호"],
+["통장", "업종별", "병의원 공단부담금 입금", "공단부담금 요양급여 건강보험심사평가원 심평원 의료급여 지급", "외상매출금", "108", "X", "면세 의료매출. 원천징수된 소득세가 있으면 선납세금(개인은 기납부세액).", "일반기업회계기준 문단 실2.25"],
+["통장", "업종별", "부동산임대 관리비 수납", "관리비수납 임차인관리비 공용관리비 전기료대납", "관리비수입", "—", "S", "임대료와 함께 받는 관리비는 과세. 임차인이 부담할 보험료·수도료·공공요금 등을 구분 징수해 납입 대행하는 금액은 임대관리 대가에 포함하지 않음.", "서삼46015-10519 (2001.10.22)"],
+["공통", "업종별", "운수업 차량 할부·지입료", "지입료 지입 화물 할부 영업용 번호판", "지급수수료", "831", "C", "지입회사 관리비는 세금계산서로 공제. 차량 할부원금은 미지급금 감소, 이자는 이자비용.", "부가가치세법 §38①1호"],
+["공통", "업종별", "온라인 판매 반품 상품 재입고", "반품입고 재입고 반품재고 회수상품", "상품", "146", "X", "매출환입 처리 후 재고 회복. 폐기 대상이면 재고자산감모손실.", "일반기업회계기준 문단 2.46"],
+["통장", "업종별", "부동산임대 법인 보증금 간주익금", "간주익금 임대보증금 부동산임대법인 차입금과다", "(세무조정)", "—", "X", "차입금이 기준을 넘는 부동산임대업 주업 법인이 주택 외 부동산을 빌려주고 받은 보증금·전세금 등은 대통령령으로 계산한 금액을 익금에 가산.", "조세특례제한법 §138①"],
+// ── 사적·기타
+["공통", "사적·기타", "기부금", "기부 후원 교회 사찰 재단 사랑의열매 장학 기부", "기부금", "953", "X", "특례·일반·비지정 기부금 구분 후 한도 계산. 영수증 필수.", "법인세법 §24"],
+["카드", "사적·기타", "해외 결제 (일반)", "해외결제 해외 달러 USD 아마존 알리익스프레스 직구 테무", "내용별 계정", "—", "X", "해외 공급자는 국내 부가세가 없어 공제 대상 아님. 수입 통관 시 세관 수입세금계산서는 공제.", "부가가치세법 §38①2호"],
+["카드", "사적·기타", "개인 쇼핑 (사적 사용)", "쿠팡 개인 옷 의류 화장품 백화점 무신사 생활용품 개인", "가지급금 (법인)·인출금 (개인)", "134", "N", "사업과 직접 관련 없는 지출은 매입세액 불공제, 비용 아님.", "부가가치세법 §39①4호 · 시행령 §77 · 소득세법 §33①5호"],
+["카드", "사적·기타", "OTT·음원·게임 구독 (개인)", "넷플릭스 유튜브프리미엄 멜론 디즈니 티빙 웨이브 스포티파이 게임", "가지급금 (법인)·인출금 (개인)", "134", "N", "개인 구독은 비용 아님. 업무용 콘텐츠·매장 배경음악 등 업무 관련성이 분명하면 예외.", "부가가치세법 §39①4호"],
+["카드", "사적·기타", "골프·레저 (사적)", "골프 스크린골프 레저 스키 테니스 개인레슨", "가지급금 (법인)·인출금 (개인)", "134", "N", "거래처 접대가 아니면 비용 아님.", "부가가치세법 §39①4호 · 소득세법 §33①5호"],
+["카드", "사적·기타", "미용실·목욕탕·사우나", "미용실 헤어 이발 목욕 사우나 찜질방", "가지급금 (법인)·인출금 (개인)", "134", "N", "목욕·이발·미용업은 카드 매입세액 공제 불가. 사업과 관련 없는 지출은 비용 아님.", "시행령 §88⑤1호"],
+["카드", "사적·기타", "공연·영화·놀이공원 입장권", "영화 CGV 메가박스 롯데시네마 공연 입장권 놀이공원 전시", "내용별 계정", "—", "N", "입장권 발행 사업은 카드 공제 불가. 직원 단체관람이면 복리후생비, 거래처 접대면 기업업무추진비.", "시행령 §88⑤3호"],
+["카드", "사적·기타", "병원·약국 (대표·가족)", "병원 의원 약국 치과 한의원 진료 처방", "가지급금 (법인)·인출금 (개인)", "134", "X", "대표·가족 진료는 비용 아님. 진료 등 의료보건 용역은 면세. 직원 건강관리 목적이면 복리후생비.", "소득세법 §33①5호 · 부가가치세법 §26①5호"],
+["공통", "사적·기타", "대표 개인 보험료 (실손·종신)", "실손보험 종신보험 개인보험 대표보험 암보험", "가지급금 (법인)·인출금 (개인)", "134", "X", "대표 개인을 위한 보험료는 비용 아님. 법인이 계약자·수익자인 임원 보험은 보험·교육·연구 분류 참고.", "소득세법 §33①5호"],
+["공통", "사적·기타", "대표 자택 관리비·공과금", "자택 아파트관리비 집 전기요금 가스요금 자택", "인출금", "338", "X", "가사 관련 경비는 필요경비 불산입.", "소득세법 §33①5호"],
+["카드", "사적·기타", "가족 여행·숙박 (사적)", "가족여행 휴가 호텔 리조트 여행사 항공 여행", "가지급금 (법인)·인출금 (개인)", "134", "N", "업무 출장이 아니면 비용 아님.", "부가가치세법 §39①4호 · 소득세법 §33①5호"],
+["공통", "사적·기타", "도난·화재 등 재해 손실", "도난 분실 화재 침수 재해 손실", "재해손실·잡손실", "961", "X", "도난·재해 사실 입증(경찰 신고서·사진) 보관. 보험금은 별도 수익.", "일반기업회계기준 문단 2.52"],
+["통장", "사적·기타", "위약금·지체상금 지급", "위약금 지체상금 계약해지 해지위약금 페널티", "잡손실", "980", "X", "재화·용역 공급 없이 지급하는 위약금·손해배상금은 부가세 과세대상 아님.", "서삼46015-10929 (2002.05.31)"],
+["통장", "사적·기타", "손해배상금 지급", "손해배상 배상금 피해보상 보상금 합의", "잡손실", "980", "X", "업무 관련 손해배상은 비용. 업무와 관련해 고의 또는 중대한 과실로 타인의 권리를 침해해 지급하는 손해배상금은 필요경비 불산입.", "소득세법 §33①15호"],
+["통장", "사적·기타", "교통사고 합의금 (업무 중)", "교통사고 합의금 형사합의 피해자합의 사고처리", "잡손실", "980", "X", "업무 수행 중 사고 합의금은 비용 검토.", "법인세법 §21 3호 · 소득세법 §33①15호"],
+["공통", "사적·기타", "업무무관 자산 유지비 (법인)", "업무무관 별장 리조트 사적사용 고급차 요트", "손금불산입 (가지급금 등)", "—", "N", "업무와 관련 없는 자산의 유지·관리비는 손금불산입, 매입세액 불공제.", "법인세법 §27 1호 · 부가가치세법 §39①4호"],
+["카드", "사적·기타", "대형마트·창고형 마트 (혼합 구매)", "이마트 홈플러스 롯데마트 코스트코 트레이더스 하나로마트 마트", "내용별 계정", "—", "C", "가정용이 섞인 영수증은 전체 비용 처리 금지.", "부가가치세법 §39①4호 · 소득세법 §33①5호"],
+["카드", "사적·기타", "주말·심야 배달음식 (업무 관련성 불분명)", "주말배달 심야배달 휴일배달 배달음식 가정배달", "가지급금 (법인)·인출금 (개인)", "134", "N", "업무 관련성이 확인되지 않는 지출은 비용으로 넣지 않음. 야근 식대라면 근무 기록과 함께 복리후생비.", "부가가치세법 §39①4호 · 소득세법 §33①5호"],
+["카드", "사적·기타", "드럭스토어·화장품 (사적)", "올리브영 롭스 화장품 드럭스토어 시코르 세포라", "가지급금 (법인)·인출금 (개인)", "134", "N", "개인 소비는 비용 아님.", "부가가치세법 §39①4호 · 소득세법 §33①5호"],
+["카드", "사적·기타", "자녀 학원비·교육비 (사적)", "학원비 자녀 과외 유치원 어린이집 학습지", "가지급금 (법인)·인출금 (개인)", "134", "X", "가사 관련 지출은 비용 아님. 교육 용역은 면세.", "부가가치세법 §26①6호 · 소득세법 §33①5호"],
+["카드", "사적·기타", "유흥주점 단독 이용 (사적)", "유흥주점 룸살롱 단란주점 바 클럽", "가지급금 (법인)·인출금 (개인)", "134", "N", "거래처 접대가 아니면 비용 아님. 접대면 기업업무추진비.", "부가가치세법 §39①4호·6호"],
+["통장", "사적·기타", "개인사업자 개인 계좌 사업용 사용", "개인계좌 사업용 대표계좌 미등록계좌", "보통예금 (사업용 계좌 대체)", "103", "X", "사업 관련 입출금이 개인 계좌로 오가면 해당 거래만 장부에 반영하고 나머지는 인출금·출자로 정리.", "소득세법 §160의5①③"]
+];
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const norm=s=>String(s||"").toLowerCase().replace(/\s+/g,"");
+function kindsOf(b){const k=[];if(/§|예규|서면|부가\d|기준-\d|사전-|\(\d{4}\.\d{2}\.\d{2}\)/.test(b))k.push("법령·예규");if(/K-IFRS|일반기업회계기준|KASB/.test(b))k.push("회계기준");if(!k.length)k.push("회계 관행");return k}
+const GROUP_OF=c=>c==="결산·정리"?"close":c==="외감·회계기준"?"audit":"daily";
+const GROUP_NAME={daily:"일상 거래",close:"결산 정리",audit:"외감·회계기준"};
+const RULES=R.map(r=>({src:r[0],cat:r[1],title:r[2],kw:r[3],acct:r[4],code:r[5],vat:r[6]||"Z",note:r[7],basis:r[8],kinds:kindsOf(r[8]),grp:GROUP_OF(r[1])}));
+const DAILY_CATS=CATS.filter(c=>GROUP_OF(c)==="daily");
+// 계정과목별 보기: 괄호 설명과 "·" 뒤 대안 계정을 뺀 대표 계정으로 묶음
+const UNDET="(거래 내용에 따라 계정 결정)";
+const acctKey=r=>{const k=r.acct.replace(/\s*\([^)]*\)/g,"").split("·")[0].trim();return /^(내용별 계정|해당 자산|해당 비용|\(판단 기준\)|\(세무조정\)|\(주석\))/.test(k)?UNDET:k};
+RULES.forEach(r=>{r.ak=acctKey(r)});
+// 법인 / 개인사업자 구분: 거래명·계정에 적힌 구분으로 판단, 둘 다 해당하면 공통
+const ENT={v:"전체"}; try{const e=localStorage.getItem("acct-ent");if(e==="법인"||e==="개인")ENT.v=e}catch(e){}
+function entOf(r){
+  const t=r.title, a=r.acct;
+  if(r.grp==="audit"||/\(법인\)|법인세|법인카드|법인지방소득세|중간예납|이연법인세|외감/.test(t)||/^(법인세|미지급법인세|선납세금|이연법인세)/.test(a))return "법인";
+  if(/개인사업자|대표 개인\)|대표 본인|사업주 본인/.test(t)||(/^인출금/.test(a)&&!/법인/.test(a)))return "개인";
+  return "공통";
+}
+RULES.forEach(r=>{r.ent=entOf(r)});
+const entOK=r=>ENT.v==="전체"||r.ent==="공통"||r.ent===ENT.v;
+// "가지급금 (법인)·인출금 (개인)" 같은 계정은 고른 사업자에 맞는 쪽만 표시
+function acctFor(r){
+  if(ENT.v==="전체")return r.acct;
+  const m=r.acct.match(/^(.+?)\s*\(법인\)\s*·\s*(.+?)\s*\(개인\)(.*)$/);
+  return m?(ENT.v==="법인"?m[1]:m[2])+m[3]:r.acct;
+}
+const ACODE={}; RULES.forEach(r=>{ if(r.code&&r.code!=="—"&&!ACODE[r.ak]) ACODE[r.ak]=r.code; });
+const acctOrder=(a,b)=>{const ca=a===UNDET?99999:ACODE[a]?+ACODE[a]:9999, cb=b===UNDET?99999:ACODE[b]?+ACODE[b]:9999; return ca-cb||a.localeCompare(b,"ko")};
+
+// 목록 탭별 필터 상태
+const ST={
+  daily:{src:"전체",kind:"전체",grp:"전체",cat:"전체",view:"cat",acct:"전체"},
+  close:{kind:"전체",view:"cat",acct:"전체"},
+  audit:{kind:"전체",view:"cat",acct:"전체"},
+  results:{grp:"전체"}
+};
+let query="", favMode=false;
+const VKEY=g=>g==="daily"?"acct-view":"acct-view-"+g;
+try{["daily","close","audit"].forEach(g=>{if(localStorage.getItem(VKEY(g))==="acct")ST[g].view="acct"})}catch(e){}
+
+// 탭
+const TABS=["daily","close","audit","taxref"];
+let current="daily";
+function showTab(t){
+  current=t; favMode=false; $("#favBtn").classList.remove("on"); $("#favBtn").setAttribute("aria-pressed","false");
+  if(query){query="";$("#q").value="";}
+  ["results",...TABS].forEach(x=>$("#tab-"+x).classList.toggle("hidden",x!==t));
+  document.querySelectorAll("#mainTabs button").forEach(b=>b.classList.toggle("on",b.dataset.tab===t));
+  try{localStorage.setItem("acct-tab2",t)}catch(e){}
+  if(GROUP_NAME[t])renderList(t);
+}
+function showResults(){
+  favMode=false; $("#favBtn").classList.remove("on"); $("#favBtn").setAttribute("aria-pressed","false");
+  ["results",...TABS].forEach(x=>$("#tab-"+x).classList.toggle("hidden",x!=="results"));
+  document.querySelectorAll("#mainTabs button").forEach(b=>b.classList.remove("on"));
+  renderResults();
+}
+$("#mainTabs").onclick=e=>{const b=e.target.closest("button");if(b)showTab(b.dataset.tab)};
+document.addEventListener("click",e=>{const a=e.target.closest("[data-go]");if(!a)return;e.preventDefault();
+  if(a.dataset.go==="flow"){const f=$("#flow-box");f.open=true;f.scrollIntoView({behavior:"smooth",block:"start"})} else showTab(a.dataset.go)});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"&&document.activeElement===$("#q")){showTab(current);return}
+  const typing=/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName);
+  if(typing||e.ctrlKey||e.metaKey||e.altKey)return;
+  if(e.key>="1"&&e.key<=String(TABS.length)){showTab(TABS[+e.key-1]);}
+  else if(e.key==="/"){e.preventDefault();$("#q").focus();}
+});
+
+function seg(el,items,obj,key,after){
+  el.innerHTML=items.map(v=>`<button type="button" data-v="${esc(v)}" class="${obj[key]===v?"on":""}">${esc(v)}</button>`).join("");
+  el.onclick=e=>{const b=e.target.closest("button");if(!b)return;obj[key]=b.dataset.v;after()};
+}
+const KINDS=["전체","법령·예규","회계기준","회계 관행"];
+function fillSel(el,items,obj,key,after,label){
+  el.innerHTML=items.map(v=>`<option value="${esc(v)}"${obj[key]===v?" selected":""}>${label?label(v):esc(v)}</option>`).join("");
+  el.onchange=()=>{obj[key]=el.value;after()};
+}
+function catCounts(){
+  const s=ST.daily, c={};
+  RULES.forEach(r=>{ if(r.grp!=="daily")return; if(s.src!=="전체"&&r.src!==s.src&&r.src!=="공통")return; if(s.kind!=="전체"&&!r.kinds.includes(s.kind))return; c[r.cat]=(c[r.cat]||0)+1; });
+  c["전체"]=Object.values(c).reduce((a,b)=>a+b,0); return c;
+}
+const CAT_GROUPS=[
+  ["비용",["식비·복리","접대·선물","교통·출장","차량","세금과공과","통신·수도광열","임차·관리·수선","소모품·자산","수수료·광고·판매","보험·교육·연구"]],
+  ["매입·인건",["매입·원가","인건비·원천"]],
+  ["통장·자산",["통장·금융","자산·투자"]],
+  ["기타",["업종별","사적·기타"]]
+];
+const GRP_OF_CAT={}; CAT_GROUPS.forEach(([g,cs])=>cs.forEach(c=>GRP_OF_CAT[c]=g)); DAILY_CATS.forEach(c=>{if(!GRP_OF_CAT[c])GRP_OF_CAT[c]="기타"});
+function renderSide(){
+  const c=catCounts(), s=ST.daily;
+  const gc={}; DAILY_CATS.forEach(v=>{const g=GRP_OF_CAT[v]; gc[g]=(gc[g]||0)+(c[v]||0)});
+  const groups=["전체",...CAT_GROUPS.map(g=>g[0])];
+  const seg=`<div class="seg grp-seg">${groups.map(g=>`<button type="button" data-g="${g}" class="${s.grp===g?"on":""}">${g}<span>${g==="전체"?(c["전체"]||0):(gc[g]||0)}</span></button>`).join("")}</div>`;
+  const cats=s.grp==="전체"?[]:DAILY_CATS.filter(v=>GRP_OF_CAT[v]===s.grp);
+  const row=cats.length?`<div class="cat-row">${cats.map(v=>`<button type="button" data-v="${esc(v)}" class="${s.cat===v?"on":""}">${esc(v)}<span>${c[v]||0}</span></button>`).join("")}</div>`:"";
+  $("#daily-chips").innerHTML=seg+row;
+}
+$("#daily-chips").onclick=e=>{
+  const g=e.target.closest("button[data-g]"), b=e.target.closest("button[data-v]");
+  if(g){ST.daily.grp=g.dataset.g;ST.daily.cat="전체";}
+  else if(b){ST.daily.cat=ST.daily.cat===b.dataset.v?"전체":b.dataset.v;}
+  else return;
+  controls();renderList("daily");
+};
+const KSHORT={"전체":"전체","법령·예규":"법령","회계기준":"기준","회계 관행":"관행"};
+function segL(el,items,obj,key,after,label){
+  el.innerHTML=items.map(v=>`<button type="button" data-v="${esc(v)}" class="${obj[key]===v?"on":""}">${label?label(v):esc(v)}</button>`).join("");
+  el.onclick=e=>{const b=e.target.closest("button");if(!b)return;obj[key]=b.dataset.v;after()};
+}
+// 묶어 보기(분류별/계정과목별)와 계정 선택: 탭마다 따로
+function acctControls(g){
+  const s=ST[g], ac={};
+  segL($("#"+g+"-view"),["cat","acct"],s,"view",()=>{s.acct="전체";try{localStorage.setItem(VKEY(g),s.view)}catch(e){}controls();renderList(g)},v=>v==="cat"?"분류별":"계정과목별");
+  RULES.forEach(r=>{ if(r.grp!==g||!entOK(r))return; if(s.src&&s.src!=="전체"&&r.src!==s.src&&r.src!=="공통")return; if(s.kind!=="전체"&&!r.kinds.includes(s.kind))return;
+    if(s.cat&&s.cat!=="전체"){ if(r.cat!==s.cat)return; } else if(s.grp&&s.grp!=="전체"&&GRP_OF_CAT[r.cat]!==s.grp)return;
+    ac[r.ak]=(ac[r.ak]||0)+1; });
+  const keys=Object.keys(ac).sort(acctOrder);
+  if(s.acct!=="전체"&&!ac[s.acct])s.acct="전체";
+  const total=keys.reduce((a,k)=>a+ac[k],0);
+  fillSel($("#"+g+"-acct"),["전체",...keys],s,"acct",()=>{controls();renderList(g)},v=>v==="전체"?`계정: 전체 (${total})`:`${esc(v)}${ACODE[v]?" "+ACODE[v]:""} (${ac[v]})`);
+  $("#"+g+"-acct").style.display=s.view==="acct"?"":"none";
+}
+function controls(){
+  const re=g=>()=>{controls();renderList(g)};
+  segL($("#daily-src"),["전체","카드","통장"],ST.daily,"src",re("daily"));
+  segL($("#daily-kind"),KINDS,ST.daily,"kind",re("daily"),v=>KSHORT[v]);
+  segL($("#close-kind"),KINDS,ST.close,"kind",re("close"),v=>KSHORT[v]);
+  ["daily","close"].forEach(g=>segL($("#"+g+"-ent"),["전체","법인","개인"],ENT,"v",()=>{try{localStorage.setItem("acct-ent",ENT.v)}catch(e){}controls();renderList(g)},v=>v==="개인"?"개인사업자":v));
+  segL($("#audit-kind"),KINDS,ST.audit,"kind",re("audit"),v=>KSHORT[v]);
+  ["daily","close","audit"].forEach(acctControls);
+  const s=ST.daily;
+  renderSide();
+  // 적용 중인 필터 표시
+  const f=[]; if(s.src!=="전체")f.push(["src","출처 "+s.src]); if(s.kind!=="전체")f.push(["kind","근거 "+KSHORT[s.kind]]);
+  if(s.grp&&s.grp!=="전체")f.push(["grp","묶음 "+s.grp]); if(s.cat!=="전체")f.push(["cat","분류 "+s.cat]); if(s.view==="acct"&&s.acct!=="전체")f.push(["acct","계정 "+s.acct]);
+  $("#daily-active").innerHTML=f.length?`<span class="af-l">적용 중</span>${f.map(([k,t])=>`<button type="button" data-k="${k}" aria-label="${esc(t)} 해제">${esc(t)} <b aria-hidden="true">×</b></button>`).join("")}${f.length>1?'<button type="button" data-k="all" class="af-all">모두 해제</button>':""}`:"";
+}
+$("#daily-active").onclick=e=>{const b=e.target.closest("button[data-k]");if(!b)return;const k=b.dataset.k,s=ST.daily;
+  if(k==="all"){s.src=s.kind=s.grp=s.cat=s.acct="전체";} else { s[k]="전체"; if(k==="grp")s.cat="전체"; }
+  controls();renderList("daily")};
+controls();
+
+function textMatch(r){
+  if(!query)return true;
+  return query.split(/\s+/).filter(Boolean).every(t=>{
+    if(/^\d{3}$/.test(t))return r.code===t;   // 숫자 세 자리는 계정 코드로 정확히 찾음
+    return norm([r.title,r.kw,r.acct,r.note,r.cat,r.basis,r.code].join(" ")).includes(norm(t));
+  });
+}
+function filt(g){
+  const s=ST[g];
+  return RULES.filter(r=>r.grp===g
+    &&(!s.src||s.src==="전체"||r.src===s.src||r.src==="공통")
+    &&(!s.cat||s.cat==="전체"||r.cat===s.cat)
+    &&(!s.grp||s.grp==="전체"||s.cat!=="전체"||(GRP_OF_CAT[r.cat]===s.grp))
+    &&(s.kind==="전체"||r.kinds.includes(s.kind))
+    &&entOK(r)
+    &&(!s.view||s.view!=="acct"||s.acct==="전체"||r.ak===s.acct));
+}
+const KCLS={"법령·예규":"law","회계기준":"std","회계 관행":"prc"};
+const NUM_RE=/(\d[\d,.]*\s?(?:만원|억원|천원|원|%|년|개월|일|명|건|회|세|배|대)|1천분의\s?\d+|100분의\s?\d+|\d+분의\s?\d+)/g;
+function boldNums(s){return s.split(/(<[^>]+>)/).map(p=>p.startsWith("<")?p:p.replace(NUM_RE,'<span class="num">$1</span>')).join("")}
+function markQ(s){
+  if(!query)return s;
+  const ts=query.split(/\s+/).filter(Boolean).map(t=>t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"));
+  if(!ts.length)return s;
+  const re=new RegExp("("+ts.join("|")+")","gi");
+  return s.split(/(<[^>]+>)/).map(p=>p.startsWith("<")?p:p.replace(re,"<mark>$1</mark>")).join("");
+}
+const fmt=s=>markQ(boldNums(esc(s)));
+function noteHtml(n){
+  const parts=n.split(/(?<=\.)\s+/).filter(Boolean);
+  return parts.length>1?`<ul>${parts.map(p=>`<li>${fmt(p)}</li>`).join("")}</ul>`:`<p>${fmt(n)}</p>`;
+}
+// 근거 조문 → 국가법령정보센터 링크
+const LAW_ALIAS={"보험료징수법":"고용보험 및 산업재해보상보험의 보험료징수 등에 관한 법률","보장법":"근로자퇴직급여 보장법","외감법":"주식회사 등의 외부감사에 관한 법률"};
+function lawResolve(name,st){
+  name=(name||"").trim(); if(LAW_ALIAS[name])name=LAW_ALIAS[name];
+  if(!name)return st.last;
+  if(/^(시행령|시행규칙)$/.test(name)){ if(!st.base)return ""; name=st.base+" "+name; }
+  else st.base=name.replace(/\s*(시행령|시행규칙)$/,"");
+  st.last=name; return name;
+}
+const lawUrl=(name,jo,ui)=>name?`https://www.law.go.kr/법령/${encodeURIComponent(name.replace(/\s+/g,""))}/제${jo}조${ui?"의"+ui:""}`:"";
+function basisHtml(r){
+  if(!r.basis)return `<span class="chip">회계 관행 (법령·예규·기준서 근거 없음)</span>`;
+  const st={base:"",last:""};
+  return r.basis.split(" · ").map(b=>{const k=/K-IFRS|일반기업회계기준|KASB/.test(b)?"std":"law";
+    const m=b.match(/^(.*?)\s*§\s*(\d+)(?:의(\d+))?/); const u=m?lawUrl(lawResolve(m[1],st),m[2],m[3]):"";
+    return u?`<a class="chip ${k} lk" href="${u}" target="_blank" rel="noopener" title="국가법령정보센터에서 조문 열기">${markQ(esc(b))}<i aria-hidden="true">↗</i></a>`:`<span class="chip ${k}">${markQ(esc(b))}</span>`}).join("");
+}
+const KLABEL=k=>k.map(x=>({"법령·예규":"법령","회계기준":"기준","회계 관행":"관행"})[x]).join("·");
+const KCOL=k=>k.includes("법령·예규")?"law":k.includes("회계기준")?"std":"prc";
+// 적격증빙 기준 (일상 거래만): 거래명·계정으로 판정
+const EV_LAW="법인세법 §116② · 법인세법 시행령 §158②1호 · 소득세법 §160의2②";
+function evidence(r){
+  if(r.grp!=="daily")return null;
+  const t=r.title+" "+r.kw, a=r.acct, c=r.cat;
+  if(/기업업무추진비/.test(a)){
+    const gyeong=/경조|축의|조의|부의|화환/.test(t);
+    return {k:"ent",txt:gyeong?"경조금은 건당 20만원 초과분부터 카드·현금영수증·(세금)계산서 필요. 없으면 손금불산입":"건당 3만원 초과면 카드·현금영수증·(세금)계산서 필요(카드는 실제 공급 가맹점 명의). 없으면 손금불산입",law:"법인세법 §25②③ · 법인세법 시행령 §41①"};
+  }
+  if(/프리랜서|사업소득|3\.3|인적용역/.test(t))return {k:"wh",txt:"원천징수한 사업소득자 용역은 원천징수영수증으로 갈음(적격증빙 수취 대상 아님)",law:"법인세법 시행령 §158②3호"};
+  if(/정액 지급|일비|실비 정산/.test(r.title))return {k:"no",txt:"직원에게 지급하는 돈이라 적격증빙 수취 대상 아님(지급 기준·정산 내역 보관)",law:"법인세법 §116①"};
+  if(/은행|송금|이체수수료|대출|보증료/.test(r.title)&&/수수료|이자/.test(a))return {k:"no",txt:"금융회사의 금융·보험용역은 적격증빙 수취 대상 사업자에서 제외",law:"법인세법 시행령 §158①1호다목"};
+  const foreign=/구글|메타|페이스북|애플|아마존|AWS|어도비|넷플릭스|해외결제/.test(t)&&!/출장|카드 이용|공항|면세점/.test(r.title);
+  if(c==="인건비·원천"||c==="통장·금융"||c==="세금과공과"||/급여|상여|퇴직|잡급|임금|예수금|이자|차입금|대여금|예금|적금|증권|주식|가지급금|가수금|인출금|자본금|배당|잡이익|보험금|보증금|기부금|세금과공과|법인세|부가세|선납세금|대손/.test(a)||/경조사|축의|조의|부의/.test(t))
+    return {k:"no",txt:"재화·용역을 사고 대가를 주는 거래가 아니라 적격증빙 수취 대상 아님(지급 근거 서류는 보관)",law:"법인세법 §116① · §116②"};
+  if(/보험료/.test(a))return {k:"no",txt:"보험회사의 금융·보험용역은 적격증빙 수취 대상 사업자에서 제외",law:"법인세법 시행령 §158①1호다목"};
+  return {k:"req",txt:"카드·현금영수증·세금계산서·계산서 중 하나 필요. 건당 3만원(부가세 포함) 이하는 일반 영수증 가능"+(foreign?". 국내사업장 없는 해외 사업자에게 결제한 분은 수취 대상에서 제외":""),law:EV_LAW+(foreign?" · 법인세법 시행령 §158①1호라목":"")};
+}
+function evHtml(r){
+  const e=evidence(r); if(!e)return "";
+  const st={base:"",last:""};
+  const law=e.law.split(" · ").map(b=>{const m=b.match(/^(.*?)\s*§\s*(\d+)(?:의(\d+))?/);const u=m?lawUrl(lawResolve(m[1],st),m[2],m[3]):"";return u?`<a class="chip law lk" href="${u}" target="_blank" rel="noopener">${esc(b)}<i aria-hidden="true">↗</i></a>`:`<span class="chip law">${esc(b)}</span>`}).join("");
+  const tag={req:"적격증빙 필요",ent:"접대 적격증빙",wh:"원천징수영수증",no:"수취 대상 아님"}[e.k];
+  return `<div class="jd-sec"><b>증빙</b><div><p><span class="ev ev-${e.k}">${tag}</span> ${esc(e.txt)}</p><div class="chips">${law}</div></div></div>`;
+}
+function detailHtml(r){
+  return `<div class="jd-sec"><b>처리</b>${r.note?noteHtml(r.note):'<p class="jd-kw">—</p>'}</div>
+    <div class="jd-sec"><b>근거</b><div class="chips">${basisHtml(r)}</div></div>
+    ${evHtml(r)}
+    ${r.kw?`<div class="jd-sec"><b>키워드</b><p class="jd-kw">${markQ(esc(r.kw))}</p></div>`:""}`;
+}
+// 즐겨찾기: 내 브라우저에만 저장
+const fkey=r=>r.grp+"|"+r.cat+"|"+r.title;
+let FAV=new Set(); try{FAV=new Set(JSON.parse(localStorage.getItem("acct-fav")||"[]"))}catch(e){}
+const starBtn=r=>{const on=FAV.has(fkey(r));return `<button type="button" class="star${on?" on":""}" data-fav="${esc(fkey(r))}" aria-pressed="${on}" aria-label="즐겨찾기" title="즐겨찾기"><svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M4 2.5h8v11l-4-2.8-4 2.8z"/></svg></button>`};
+function item(r,showGrp){
+  const code=r.code&&r.code!=="—"?esc(r.code):"";
+  return `<tr class="r" tabindex="0"><td class="c-tx">${starBtn(r)}<small class="src">${esc(r.src)}</small>${markQ(esc(r.title))}${showGrp?`<div class="jd-g">${GROUP_NAME[r.grp]} › ${esc(r.cat)}</div>`:""}${r.note?`<div class="jd-p">${fmt(r.note)}</div>`:""}</td><td class="c-ac">${markQ(esc(acctFor(r)))}</td><td class="c-code">${code}</td><td class="c-vat"><span class="v ${esc(r.vat)}">${VAT[r.vat]}</span></td><td class="c-kind"><span class="kl ${KCOL(r.kinds)}">${KLABEL(r.kinds)}</span></td></tr><tr class="d hidden-row"><td colspan="5"><div class="jd-body">${detailHtml(r)}</div></td></tr>`;
+}
+const EMPTY=`<tr><td colspan="5" class="empty">맞는 기준이 없습니다. 다른 표현으로 검색하거나 맨 아래 <a class="ln" data-go="flow">판단 순서</a>를 확인하세요.</td></tr>`;
+function withHeads(rows,keyFn=r=>r.cat,labelFn=k=>esc(k)){
+  const cnt={}; rows.forEach(r=>{const k=keyFn(r);cnt[k]=(cnt[k]||0)+1});
+  let cur=null; const out=[];
+  for(const r of rows){ const k=keyFn(r); if(k!==cur){cur=k; out.push(`<tr class="cat-head"><td colspan="5">${labelFn(k)}<span>${cnt[k]}건</span></td></tr>`);} out.push(item(r,false)); }
+  return out.join("");
+}
+function renderList(g){
+  let rows=filt(g);
+  $("#"+g+"-count").textContent=`${rows.length}건`;
+  if(ST[g].view==="acct"){
+    rows=rows.map((r,i)=>[r,i]).sort((a,b)=>acctOrder(a[0].ak,b[0].ak)||a[1]-b[1]).map(x=>x[0]);
+    $("#list-"+g).innerHTML=rows.length?withHeads(rows,r=>r.ak,k=>`${esc(k)}${ACODE[k]?`<code>${ACODE[k]}</code>`:""}`):EMPTY;
+    return;
+  }
+  $("#list-"+g).innerHTML=rows.length?withHeads(rows):EMPTY;
+}
+function txItem(t){
+  const law=t.law.replace(/<br\s*\/?>/g," · ").replace(/<[^>]+>/g,"").replace(/\s+/g," ").trim();
+  return `<tr class="r tx" data-tx="${t.sid}" data-row="${t.rid}" tabindex="0"><td class="c-tx"><div class="jd-g">세무 기준표 › ${esc(t.sec)}</div>${markQ(esc(t.item))}</td><td colspan="3" class="c-rule">${fmt(t.rule)}${law&&law!=="—"?`<div class="tx-basis">근거 · ${markQ(esc(law))}</div>`:""}</td><td class="c-kind"><span class="kl law">표</span></td></tr>`;
+}
+function renderResults(){
+  // 거래명·키워드 일치 > 계정과목 > 메모·근거 순으로 정렬
+  const ts=query.split(/\s+/).filter(Boolean).map(norm);
+  const acctHit=r=>ts.length===1&&(r.code===ts[0]||norm(r.ak)===ts[0]||norm(r.acct)===ts[0]);
+  const score=r=>{const hit=f=>ts.every(t=>norm(f).includes(t));return acctHit(r)?4:hit(r.title+" "+r.kw)?3:hit(r.acct)?2:1};
+  const all=RULES.filter(r=>textMatch(r)&&entOK(r)).map((r,i)=>[r,score(r),i]).sort((a,b)=>b[1]-a[1]||a[2]-b[2]).map(x=>x[0]);
+  const tx=(typeof TAXROWS!=="undefined"&&!ts.every(t=>/^\d{3}$/.test(t))?TAXROWS:[]).filter(t=>{const hay=norm([t.sec,t.item,t.rule,t.law.replace(/<[^>]+>/g," ")].join(" "));return ts.every(x=>hay.includes(x))});
+  const counts={daily:0,close:0,audit:0}; all.forEach(r=>counts[r.grp]++);
+  const TX="세무 기준표";
+  const opts=["전체",...Object.keys(GROUP_NAME).filter(g=>counts[g]).map(g=>GROUP_NAME[g]),...(tx.length?[TX]:[])];
+  if(!opts.includes(ST.results.grp))ST.results.grp="전체";
+  seg($("#res-grp"),opts,ST.results,"grp",renderResults);
+  [...$("#res-grp").children].forEach(b=>{const v=b.dataset.v; const g=Object.keys(GROUP_NAME).find(k=>GROUP_NAME[k]===v); b.textContent=v+" "+(v===TX?tx.length:g?counts[g]:all.length+tx.length)});
+  const sel=ST.results.grp;
+  const rows=sel==="전체"?all:sel===TX?[]:all.filter(r=>GROUP_NAME[r.grp]===sel);
+  const txs=(sel==="전체"||sel===TX)?tx:[];
+  const am=all.filter(acctHit);
+  $("#res-title").textContent=am.length?`"${query}" 검색 결과 · ${am[0].ak}${ACODE[am[0].ak]?" "+ACODE[am[0].ak]:""} 계정 ${am.length}건 먼저 표시`:`"${query}" 검색 결과`;
+  const html=rows.map(r=>item(r,true)).join("")+(txs.length?`<tr class="cat-head"><td colspan="5">${TX}<span>${txs.length}건</span></td></tr>`+txs.map(txItem).join(""):"");
+  $("#list-results").innerHTML=html||EMPTY;
+}
+// 즐겨찾기 모아 보기
+function favCount(){$("#favN").textContent=RULES.filter(r=>FAV.has(fkey(r))).length}
+function renderFavs(){
+  const rows=RULES.filter(r=>FAV.has(fkey(r)));
+  $("#res-title").textContent=`즐겨찾기 ${rows.length}건`;
+  $("#res-grp").innerHTML="";
+  $("#list-results").innerHTML=rows.length?rows.map(r=>item(r,true)).join(""):`<tr><td colspan="5" class="empty">행에 마우스를 올리면 맨 앞에 나오는 책갈피 표시를 눌러 담을 수 있습니다. 즐겨찾기는 이 브라우저에만 저장됩니다.</td></tr>`;
+}
+function showFavs(){
+  if(query){query="";$("#q").value="";}
+  ["results",...TABS].forEach(x=>$("#tab-"+x).classList.toggle("hidden",x!=="results"));
+  document.querySelectorAll("#mainTabs button").forEach(b=>b.classList.remove("on"));
+  favMode=true; $("#favBtn").classList.add("on"); $("#favBtn").setAttribute("aria-pressed","true");
+  renderFavs();
+}
+$("#favBtn").onclick=()=>favMode?showTab(current):showFavs();
+document.addEventListener("click",e=>{
+  const b=e.target.closest(".star"); if(!b)return;
+  const k=b.dataset.fav; FAV.has(k)?FAV.delete(k):FAV.add(k);
+  try{localStorage.setItem("acct-fav",JSON.stringify([...FAV]))}catch(err){}
+  const on=FAV.has(k);
+  document.querySelectorAll(".star").forEach(x=>{if(x.dataset.fav===k){x.classList.toggle("on",on);x.setAttribute("aria-pressed",on)}});
+  favCount(); if(favMode)renderFavs();
+});
+favCount();
+// 최근 검색어
+let RECENT=[]; try{RECENT=JSON.parse(localStorage.getItem("acct-recent")||"[]")}catch(e){}
+function saveRecent(v){v=v.trim();if(!v)return;RECENT=[v,...RECENT.filter(x=>x!==v)].slice(0,6);try{localStorage.setItem("acct-recent",JSON.stringify(RECENT))}catch(e){}}
+function showRecent(){
+  const el=$("#recent");
+  if($("#q").value||!RECENT.length||document.activeElement!==$("#q")){el.hidden=true;return}
+  el.innerHTML=`<span class="rc-l">최근 검색</span>${RECENT.map(v=>`<button type="button" data-r="${esc(v)}">${esc(v)}</button>`).join("")}<button type="button" class="rc-x" data-clear="1">지우기</button>`;
+  el.hidden=false;
+}
+$("#q").addEventListener("focus",showRecent);
+$("#q").addEventListener("blur",()=>setTimeout(()=>{$("#recent").hidden=true},150));
+$("#q").addEventListener("keydown",e=>{if(e.key==="Enter")saveRecent(e.target.value)});
+$("#recent").addEventListener("mousedown",e=>{
+  e.preventDefault(); const b=e.target.closest("button"); if(!b)return;
+  if(b.dataset.clear){RECENT=[];try{localStorage.removeItem("acct-recent")}catch(err){}$("#recent").hidden=true;return}
+  const q=$("#q"); q.value=b.dataset.r; q.dispatchEvent(new Event("input")); saveRecent(b.dataset.r);
+});
+const CHECK=[["통장·카드", "법인카드·통장 잔액과 장부 잔액 대사", "", "잔액"], ["통장·카드", "가지급금·가수금 잔액 확인, 같은 사람의 가지급금·가수금 상계", "법인세법 시행령 §53③", "가지급금"], ["통장·카드", "대표 개인 사용분을 가지급금(법인)·인출금(개인)으로 분리", "", "개인 용도"], ["세무조정", "가지급금 인정이자 계산 (가중평균차입이자율 또는 당좌대출이자율)", "법인세법 시행령 §89③⑤", "인정이자"], ["세무조정", "업무무관 가지급금 지급이자 손금불산입", "법인세법 §28①4호 · 법인세법 시행령 §53①", "지급이자"], ["세무조정", "기업업무추진비 한도 계산 (문화비·전통시장 추가 한도 포함)", "법인세법 §25④", "기업업무추진비 한도"], ["세무조정", "업무용승용차 운행기록·관련비용, 감가상각비 연 800만원 한도", "법인세법 §27의2③ · 법인세법 시행령 §50의2⑤", "업무용승용차"], ["세무조정", "임원 상여·퇴직금 지급기준 초과분 확인", "법인세법 시행령 §43② · 법인세법 시행령 §44④", "임원"], ["결산 정리", "감가상각비 계상, 상각범위액 초과분 확인", "법인세법 §23①", "감가상각"], ["결산 정리", "퇴직급여충당금·퇴직연금 부담금 계상", "법인세법 §33① · 법인세법 시행령 §44의2②", "퇴직"], ["결산 정리", "대손충당금 설정, 대손금 요건 충족 채권 정리", "법인세법 §34① · 법인세법 시행령 §19의2①", "대손"], ["결산 정리", "재고자산 실사·평가 (신고한 평가방법 계속 적용)", "법인세법 시행령 §74①", "재고자산"], ["결산 정리", "외화자산·부채 평가", "법인세법 시행령 §76②", "외화"], ["결산 정리", "미지급비용·미수수익·선급비용·선수수익 기간 귀속 정리", "법인세법 §40①", "미지급비용"], ["결산 정리", "법인세등 계상, 중간예납·원천징수세액은 선납세금에서 대체", "법인세법 §21 1호", "법인세"], ["신고 대사", "부가세 신고분과 매출·매입 장부 금액 대사", "", "부가세"], ["신고 대사", "원천세 신고분과 급여·퇴직금·사업소득 지급액 대사", "", "원천"], ["신고 대사", "4대보험 회사부담분 결산월분 미지급 계상", "", "4대보험"]];
+let CHK={}; try{CHK=JSON.parse(localStorage.getItem("acct-chk")||"{}")}catch(e){}
+function renderChk(){
+  const groups=[...new Set(CHECK.map(c=>c[0]))]; const st={base:"",last:""};
+  $("#chkList").innerHTML=groups.map(g=>`<div class="chk-g"><b>${g}</b>${CHECK.map((c,i)=>[c,i]).filter(([c])=>c[0]===g).map(([c,i])=>{
+    const law=c[2]?c[2].split(" · ").map(b=>{const m=b.match(/^(.*?)\s*§\s*(\d+)(?:의(\d+))?/);const u=m?lawUrl(lawResolve(m[1],st),m[2],m[3]):"";return u?`<a class="lawlk" href="${u}" target="_blank" rel="noopener">${esc(b)}</a>`:esc(b)}).join(" · "):'<span class="chk-prc">회계 관행</span>';
+    return `<label class="chk-i${CHK[i]?" done":""}"><input type="checkbox" data-i="${i}"${CHK[i]?" checked":""}><span class="chk-t" data-q="${esc(c[3])}">${esc(c[1])}</span><span class="chk-law">${law}</span></label>`}).join("")}</div>`).join("");
+  const n=Object.values(CHK).filter(Boolean).length; $("#chkN").textContent=`${n} / ${CHECK.length}`;
+}
+$("#chkList").addEventListener("change",e=>{const i=e.target.dataset.i;if(i==null)return;CHK[i]=e.target.checked;try{localStorage.setItem("acct-chk",JSON.stringify(CHK))}catch(err){}renderChk()});
+$("#chkList").addEventListener("click",e=>{const t=e.target.closest(".chk-t");if(!t)return;e.preventDefault();const q=$("#q");q.value=t.dataset.q;q.dispatchEvent(new Event("input"));window.scrollTo(0,0)});
+$("#chkClear").onclick=()=>{CHK={};try{localStorage.removeItem("acct-chk")}catch(e){}renderChk()};
+renderChk();
+// 행 펼치기
+function toggleRow(tr){const d=tr.nextElementSibling;if(d&&d.classList.contains("d")){d.classList.toggle("hidden-row");tr.classList.toggle("open")}}
+document.addEventListener("click",e=>{const tr=e.target.closest("tr.r");if(!tr||tr.classList.contains("tx")||e.target.closest("a,.star"))return;toggleRow(tr)});
+document.addEventListener("keydown",e=>{const tr=e.target.closest&&e.target.closest("tr.r");if(!tr||e.target.closest(".star")||(e.key!=="Enter"&&e.key!==" "))return;e.preventDefault();tr.click()});
+function setSbarH(){document.documentElement.style.setProperty("--sbar-h",(document.querySelector(".sbar")?.offsetHeight||66)+"px")}
+// 글씨 크기 (화면 전체 배율, 이 브라우저에 기억)
+function setZoom(z){document.querySelector(".wrap").style.zoom=z;document.querySelectorAll("#fsSeg button").forEach(b=>b.classList.toggle("on",+b.dataset.z===+z));try{localStorage.setItem("acct-zoom",z)}catch(e){}setSbarH()}
+$("#fsSeg").onclick=e=>{const b=e.target.closest("button");if(b)setZoom(b.dataset.z)};
+{let z="1";try{z=localStorage.getItem("acct-zoom")||"1"}catch(e){}setZoom(z)}
+setSbarH(); addEventListener("resize",setSbarH);
+// 줄무늬: 분류마다 새로 시작
+function zebra(tb){let i=0;for(const tr of tb.children){if(tr.classList.contains("cat-head"))i=0;else if(tr.classList.contains("r")){tr.classList.toggle("alt",i%2===1);i++}}}
+document.querySelectorAll("table.xl tbody").forEach(tb=>{zebra(tb);new MutationObserver(()=>zebra(tb)).observe(tb,{childList:true})});
+function setThH(){const th=[...document.querySelectorAll(".xl thead")].find(t=>t.offsetParent);if(th)document.documentElement.style.setProperty("--th-h",th.offsetHeight+"px")}
+setThH(); addEventListener("resize",setThH); document.addEventListener("click",()=>setTimeout(setThH,0));
+
+// 자세히 보기 (메모 미리보기 2줄)
+let detail=false; try{detail=localStorage.getItem("acct-detail")==="1"}catch(e){}
+function applyDetail(){document.body.classList.toggle("show-detail",detail);document.querySelectorAll(".toolbar .detail-btn").forEach(b=>{b.classList.toggle("on",detail);b.setAttribute("aria-pressed",detail);b.textContent=detail?"간단히 보기":"자세히 보기"})}
+document.addEventListener("click",e=>{const b=e.target.closest(".toolbar .detail-btn");if(!b)return;detail=!detail;try{localStorage.setItem("acct-detail",detail?"1":"0")}catch(err){}applyDetail()});
+applyDetail();
+// 세무 기준표: 표를 행 카드로 바꾸고, 한 번에 한 표씩 보기
+// 세무 기준표: 결과 용어에 색 (불리한 처리는 빨강, 유리한 처리는 초록)
+const TERM_RE=/(손금불산입|필요경비\s?불산입|익금산입|불공제|원천징수|손금산입|익금불산입|(?<![대결])손금(?!불)|필요경비|비과세|공제|면세|영세율)/g;
+const TERM_NEG=/^(손금불산입|필요경비\s?불산입|익금산입|불공제)$/, TERM_INFO=/^(원천징수|면세|영세율)$/;
+function tagTerms(s){return s.split(/(<[^>]+>)/).map(p=>p.startsWith("<")?p:p.replace(TERM_RE,m=>`<span class="term ${TERM_NEG.test(m)?"neg":TERM_INFO.test(m)?"info":"pos"}">${m}</span>`)).join("")}
+const SECS=[...document.querySelectorAll('#tab-taxref div[id^="sec-"]')];
+const TAXROWS=[];
+const TXSHORT={"sec-vat":"매입세액 불공제","sec-vat2":"면세·영세율·과세표준","sec-dues":"세금과공과","sec-tax":"법인세·소득세 기준","sec-adj":"결산 세무조정","sec-car":"업무용승용차","sec-wht":"원천징수","sec-nontax":"비과세 근로소득","sec-ins":"4대보험 부담"};
+const lawChips=s=>s.split(/<br\s*\/?>|\s·\s|\n/).map(x=>x.replace(/<[^>]+>/g,"").trim()).filter(x=>x&&x!=="—").map(x=>`<span class="chip ${/K-IFRS|일반기업|KASB/.test(x)?"std":"law"}">${markQ(esc(x))}</span>`).join("");
+SECS.forEach(d=>{
+  const title=TXSHORT[d.id]||d.querySelector("h2").textContent.trim();
+  d.dataset.title=title;
+  d.querySelectorAll(".tbl-wrap").forEach(w=>{
+    const rows=[...w.querySelectorAll("tbody tr")].map(tr=>{
+      const td=tr.querySelectorAll("td");
+      tr.id="txr-"+TAXROWS.length;
+      const two=td.length===2, sub=td[0].querySelector(".tx-acct");
+      const r={rid:tr.id,sid:d.id,sec:title,item:(two?td[0].childNodes[0].textContent:td[0].textContent).trim(),
+        rule:two?(sub?sub.textContent.replace(/^(처리|계정) · /,""):w.querySelector("table").dataset.rule||""):(td[1]?.textContent||"").trim(),
+        law:(td[two?1:2]?.innerHTML||"").trim()};
+      TAXROWS.push(r); return r;
+    });
+    w.querySelectorAll("tbody td").forEach(td=>{td.innerHTML=boldNums(td.innerHTML)});
+    w.querySelectorAll("tbody tr").forEach(tr=>{const td=tr.children[1]; if(td&&!td.classList.contains("law"))td.innerHTML=tagTerms(td.innerHTML)});
+    {const th=w.querySelector("thead th:last-child");if(th&&/비고/.test(th.textContent))w.querySelector("table").classList.add("wide-law");}
+    w.querySelectorAll(".num").forEach(n=>{if(/^(19|20)\d{2}년/.test(n.textContent)||n.textContent==="4대")n.classList.add("yr")});
+  });
+  d.dataset.n=d.querySelectorAll("tbody tr").length;
+  const h2=d.querySelector(".slip-title h2"); if(h2)h2.insertAdjacentHTML("beforeend",`<span class="tx-n">${d.dataset.n}개 기준</span>`);
+});
+const TXGROUPS=[["부가세",["sec-vat","sec-vat2"]],["법인세·소득세",["sec-dues","sec-tax","sec-adj","sec-car"]],["인건비",["sec-wht","sec-nontax","sec-ins"]]];
+{const known=TXGROUPS.flatMap(g=>g[1]);const rest=SECS.map(d=>d.id).filter(i=>!known.includes(i));if(rest.length)TXGROUPS.push(["기타",rest]);}
+const TX_BASE={"sec-vat":"부가가치세법","sec-vat2":"부가가치세법","sec-dues":"법인세법","sec-tax":"법인세법","sec-adj":"법인세법","sec-car":"법인세법","sec-wht":"소득세법","sec-nontax":"소득세법"};
+const LAW_RE=/((?:[가-힣]+\s)?[가-힣]*법(?:률)?(?:\s(?:시행령|시행규칙))?|시행령|시행규칙)?\s*§(\d+)(?:의(\d+))?/g;
+SECS.forEach(d=>d.querySelectorAll("td.law").forEach(td=>{
+  const st={base:TX_BASE[d.id]||"",last:TX_BASE[d.id]||""};
+  td.innerHTML=td.innerHTML.split(/(<[^>]+>)/).map(p=>p.startsWith("<")?p:p.replace(LAW_RE,(all,name,jo,ui)=>{
+    const lead=name&&!/법|시행령|시행규칙/.test(name)?"":"";
+    const n=lawResolve(name,st); const u=lawUrl(n,jo,ui);
+    return u?`<a class="lawlk" href="${u}" target="_blank" rel="noopener" title="국가법령정보센터에서 조문 열기">${all}</a>`:all;
+  })).join("");
+}));
+document.querySelectorAll("#tab-taxref .grp-t").forEach(g=>{g.innerHTML=tagTerms(g.innerHTML)});
+let taxCur=SECS[0].id; try{const t=localStorage.getItem("acct-tax");if(SECS.some(d=>d.id===t))taxCur=t}catch(e){}
+function selectTax(id){
+  taxCur=id; try{localStorage.setItem("acct-tax",id)}catch(e){}
+  SECS.forEach(d=>d.classList.toggle("sec-active",d.id===id));
+  const btn=d=>`<button type="button" data-id="${d.id}" class="${d.id===id?"on":""}">${esc(d.dataset.title)}<span>${d.dataset.n}</span></button>`;
+  $("#tax-chips").innerHTML=TXGROUPS.map(([g,ids])=>`<div class="tx-grp"><span class="tx-gl">${g}</span>${SECS.filter(d=>ids.includes(d.id)).map(btn).join("")}</div>`).join("");
+}
+$("#tax-chips").onclick=e=>{const b=e.target.closest("button");if(!b)return;selectTax(b.dataset.id)};
+selectTax(taxCur);
+document.addEventListener("click",e=>{const a=e.target.closest("[data-tx]");if(!a)return;e.preventDefault();showTab("taxref");selectTax(a.dataset.tx);
+  const row=a.dataset.row&&document.getElementById(a.dataset.row);
+  if(row){row.scrollIntoView({block:"center"});row.classList.remove("flash");void row.offsetWidth;row.classList.add("flash")} else window.scrollTo(0,0)});
+let rcT;
+$("#q").addEventListener("input",e=>{
+  query=e.target.value.trim();
+  clearTimeout(rcT); if(query)rcT=setTimeout(()=>saveRecent(query),1500); showRecent();
+  if(query)showResults(); else showTab(current);
+});
+let start="daily"; try{const t=localStorage.getItem("acct-tab2");if(TABS.includes(t))start=t}catch(e){}
+showTab(start);
+</script>

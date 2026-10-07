@@ -41,6 +41,7 @@ section.card{background:var(--card);border:1px solid var(--border);border-radius
 section.card h2{font-size:14px;font-weight:700;margin:0}
 .slip-title{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;border-bottom:1px solid var(--border);margin-bottom:12px;padding-bottom:10px}
 .slip-title .chk{margin:0}
+.to-bill{margin-top:12px}.to-bill .btn{width:100%;justify-content:center}
 .slip-title .sub{font-size:12px;color:var(--sub);font-weight:400;margin-left:6px}
 
 /* 입력 */
@@ -51,8 +52,10 @@ section.card h2{font-size:14px;font-weight:700;margin:0}
 .fgrid.c5{grid-template-columns:repeat(5,minmax(0,1fr))}
 @media (max-width:900px){.fgrid,.fgrid.c5{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .f{display:flex;flex-direction:column;gap:4px;min-width:0}
-.f > label{font-size:12.5px;color:var(--sub);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.f > label em{font-style:normal;font-weight:400;color:var(--faint);font-size:11.5px}
+.f > label{font-size:12.5px;color:var(--sub);font-weight:700}
+.f > label em{font-style:normal;font-weight:400;color:var(--faint);font-size:11.5px;white-space:nowrap}
+/* 칸이 좁으면 설명(em)만 아랫줄로 — 라벨 높이를 두 줄로 고정해 입력칸 높이를 맞춤 */
+@media (min-width:641px) and (max-width:1366px){.fgrid > .f > label{min-height:3.1em;display:flex;flex-wrap:wrap;align-items:flex-end;align-content:flex-end;column-gap:4px}}
 .f.span2{grid-column:span 2}.f.span3{grid-column:span 3}
 @media (max-width:900px){.f.span3{grid-column:span 2}}
 .f.key input{border-color:var(--sage);background:var(--sage-bg);font-size:16px}
@@ -105,7 +108,7 @@ body.pm .strip > .it:last-child{grid-column:auto!important}
 .slip-col + .slip-col{border-left:1px solid var(--border)}
 @media (max-width:640px){.slip-col + .slip-col{border-left:0;border-top:1px solid var(--border)}}
 .slip-h{background:var(--text);color:#fff;text-align:center;font-weight:700;letter-spacing:8px;padding:8px;font-size:13px}
-.slip-row{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:9px 14px;border-bottom:1px solid var(--border)}
+.slip-row{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:7px 14px;border-bottom:1px solid var(--border)}
 .slip-row:nth-child(odd){background:#fcfbf9}
 .slip-row > span{display:flex;flex-direction:column}
 .slip-row small{font-size:12px;color:var(--sub)}
@@ -120,6 +123,7 @@ body.pm .strip > .it:last-child{grid-column:auto!important}
 .slip-sum b{font-size:16px;font-variant-numeric:tabular-nums}
 .slip-sum small{display:block;font-weight:400;font-size:12px;color:var(--sub)}
 .slip-foot{font-size:12px;color:var(--sub);margin:6px 2px 0}
+.slip-more{margin-top:6px}.slip-more summary{font-size:12px;font-weight:600;padding:2px}
 .netbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px;padding:16px 20px;background:var(--sage-bg);border:2px solid var(--sage);border-radius:10px}
 .netbar .l{font-size:15px;font-weight:700;color:var(--green)}
 .netbar .l small{display:block;font-size:12.5px;font-weight:400;color:var(--sub)}
@@ -129,7 +133,7 @@ body.pm .strip > .it:last-child{grid-column:auto!important}
 .emp-h b{font-size:13.5px}
 .emp-h .tot{font-size:13px;color:var(--sub)}
 .emp-h .tot strong{font-size:17px;color:var(--blue-dark);font-variant-numeric:tabular-nums}
-.emp-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+.emp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:6px}
 @media (max-width:760px){.emp-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .emp-grid div{background:var(--soft);border-radius:7px;padding:7px 9px}
 .emp-grid span{display:block;font-size:12px;color:var(--sub)}
@@ -142,6 +146,7 @@ body.pm .strip > .it:last-child{grid-column:auto!important}
 .notes li.warn{color:var(--amber-ink);background:var(--amber-bg);border-color:var(--amber-border)}
 .notes li.info{color:var(--blue-dark);background:var(--blue-bg);border-color:var(--blue-border)}
 .notes li.ok{color:var(--green);background:var(--sage-bg);border-color:var(--sage-tag)}
+.notes li.nmore-li{border:0;padding:0;background:none}.nmore summary{cursor:pointer;font-size:12.5px;color:var(--sub);font-weight:700;padding:4px 2px;list-style:none}.nmore summary::before{content:'▸ '}.nmore[open] summary::before{content:'▾ '}.nmore summary:hover{color:var(--text)}.nmore .notes{margin-top:4px}
 .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
 .btn{padding:8px 16px;border-radius:7px;border:1px solid var(--border);background:#fff;color:var(--text);font:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:.15s;white-space:nowrap}
 .btn:hover{background:#f5f2ed}
@@ -227,10 +232,30 @@ body.pm .strip > .it:last-child{grid-column:auto!important}
 .vm.no{background:var(--rose-bg);color:#7a4040}
 #visaTbl td:nth-child(2),#visaTbl td:nth-child(3),#visaTbl td:nth-child(4),#visaTbl th:nth-child(2),#visaTbl th:nth-child(3),#visaTbl th:nth-child(4){text-align:center}
 .help-wrap{max-width:none}
+/* 넓은 화면: 근로소득·일용근로는 왼쪽 입력 / 오른쪽 결과(스크롤해도 따라옴) */
+@media (min-width:1100px){
+  #tab-wage,#tab-day{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,7fr);gap:14px;align-items:start}
+  #tab-wage > section.card,#tab-day > section.card{margin-bottom:0}
+  #wageResult,#dayResult,#blResult{position:sticky;top:12px;max-height:calc(100vh - 24px);overflow-y:auto;overscroll-behavior:contain}
+  #tab-bill{display:grid;grid-template-columns:minmax(0,9fr) minmax(0,11fr);gap:14px;align-items:start}#tab-bill > section.card{margin-bottom:0}
+  #tab-wage .inputs .fgrid,#tab-wage .inputs .fgrid.c5,#tab-day .inputs .fgrid{grid-template-columns:minmax(0,1fr)}
+  #tab-wage .inputs .fgrid > .f,#tab-day .inputs .fgrid > .f{grid-column:auto!important}
+  #tab-wage .inputs .fgrid > .f > label,#tab-day .inputs .fgrid > .f > label{min-height:0;display:block}
+  #tab-wage .inputs .fgrid > .f,#tab-day .inputs .fgrid > .f{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);align-items:center;column-gap:10px;row-gap:4px}
+  #tab-wage .inputs .fgrid > .f > label em,#tab-day .inputs .fgrid > .f > label em{display:block;white-space:normal}
+  #tab-wage .inputs .fgrid > .f > :not(label):not(input):not(select),#tab-day .inputs .fgrid > .f > :not(label):not(input):not(select){grid-column:1/-1}
+  #tab-wage .inputs .fgrid,#tab-day .inputs .fgrid{row-gap:8px}
+  #tab-wage .inputs .fgrid > .f > label.chk,#tab-day .inputs .fgrid > .f > label.chk{grid-column:1/-1;display:flex}
+  #tab-day .inputs .jtbl td,#tab-day .inputs .jtbl th{overflow-wrap:anywhere}
+  #wageMode,#dayMode{display:flex;width:100%}#wageMode button,#dayMode button{flex:1;padding:8px 6px;word-break:keep-all}
+  #tab-wage .inputs .chk,#tab-day .inputs .chk{white-space:normal}
+}
+#tab-day .inputs .jtbl td,#tab-day .inputs .jtbl th{white-space:normal;word-break:keep-all}
+body.pm #tab-wage,body.pm #tab-day,body.pm #tab-bill{display:block!important}
+body.pm #wageResult,body.pm #dayResult,body.pm #blResult{position:static!important;max-height:none!important;overflow:visible!important}
 /* 넓은 화면에서는 체크박스·라벨 글씨를 한 줄로 */
-@media (min-width:901px){.f .chk,.duru-checks .chk,.f > label{white-space:nowrap}}
-@media (max-width:900px){.f > label{white-space:normal;overflow:visible;text-overflow:clip}}
-@media (max-width:640px){.fgrid > .f > label:first-child{min-height:3em}}
+@media (min-width:901px){.f .chk,.duru-checks .chk{white-space:nowrap}}
+@media (max-width:640px){.fgrid > .f > label:first-child{min-height:3.1em}}
 .hr-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 #help-hourly .strip,#tab-labor .strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
 .lb-tabs{grid-template-columns:repeat(5,minmax(0,1fr))!important}
@@ -242,6 +267,9 @@ body.pm .strip > .it:last-child{grid-column:auto!important}
 .wk-res.warn{background:var(--amber-bg);border-color:var(--amber-border);color:var(--amber-ink)}.wk-res.info{background:var(--blue-bg);border-color:var(--blue-border);color:var(--blue-dark)}.wk-res.ok{background:var(--sage-bg);border-color:var(--sage);color:var(--green)}
 .ub-pair{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 @media (max-width:640px){.lb-tabs{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+#laborTabs{display:none!important}.lb-nav{margin-bottom:12px}.lb-nav .rpt-chips{margin-top:8px}
+#lbChips button{border:1px solid var(--border);background:#fff;color:var(--text);border-radius:20px;padding:5px 13px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+#lbChips button:hover{border-color:var(--sage)}#lbChips button.on{background:var(--sage);border-color:var(--sage);color:#fff}
 .lb-five{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;margin:-4px 2px 12px;padding:8px 12px;border:1px dashed var(--border);border-radius:8px;background:var(--soft)}
 .lb-five .chk{margin:0;font-weight:700}
 .lb-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
@@ -253,7 +281,7 @@ body.pm .strip > .it:last-child{grid-column:auto!important}
 .lb-req > div > b small{display:block;font-size:11.5px;font-weight:400;color:var(--sub)}
 .lb-req2{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media (max-width:760px){.lb-req2{grid-template-columns:minmax(0,1fr)}}
-body.pm .lb-five{display:none!important}
+body.pm .lb-five,body.pm .lb-nav{display:none!important}
 @media (max-width:640px){.hr-grid{grid-template-columns:minmax(0,1fr)!important}.hr-grid > .f > label:first-child{min-height:0}}
 @media (max-width:360px){.fgrid{grid-template-columns:minmax(0,1fr)!important}.fgrid > .f > label:first-child{min-height:0}}
 .sub-tabs{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;border:0!important;background:none!important;margin-bottom:14px}
@@ -290,6 +318,25 @@ body.pm .lb-five{display:none!important}
 .rpt-date{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:10px 0 2px}
 .rpt-date label{font-size:12.5px;font-weight:700;color:var(--sub);width:52px}
 .rpt-date input{width:150px!important;height:36px}
+.bill{margin-top:12px;border:1px solid var(--border);border-radius:10px;padding:12px 16px;background:#fff}
+.bill-tbl td:not(:first-child),.bill-tbl th:not(:first-child){text-align:right}.bill-tbl .bill-sum td{background:var(--soft);font-weight:700}
+.bill-note{margin:6px 2px 0;font-size:12px;line-height:1.6}
+.bl-in{width:100%;border-collapse:collapse;table-layout:fixed}.bl-in col.cr{width:24%}.bl-in .r{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}.bl-in col.ck{width:42px}.bl-in th{line-height:1.25}.bl-in col.cd{width:34px}
+.bl-in th{font-size:12px;color:var(--sub);font-weight:700;text-align:left;padding:4px 4px 6px;white-space:nowrap}.bl-in th small{font-weight:400;color:var(--faint);font-size:11px}
+.bl-in td{padding:3px 4px;vertical-align:middle}.bl-in th:nth-child(n+3){text-align:center}.bl-in .c,.bill-tbl .c{text-align:center}
+.bl-in input:not([type=checkbox]){width:100%;box-sizing:border-box}
+.bl-del{border:0;background:none;color:var(--faint);cursor:pointer;font-size:14px}.bl-del:hover{color:#c0392b}
+.bl-h{font-size:13.5px;margin:16px 0 6px}.bill-tbl td small{display:block;font-size:11px;color:var(--faint);font-weight:400}
+@media (max-width:560px){.bl-in col.cr{width:0}.bl-in td.bl-tot,.bl-in th.r{display:none}.bl-in col.ck{width:30px}.bl-in col.cd{width:20px}.bl-in .r{font-size:12.5px}.bl-in th{font-size:11px;padding:4px 2px 6px}.bl-in td{padding:3px 2px}.bl-in th small{display:none}.bl-in input:not([type=checkbox]){padding-left:6px;padding-right:6px}
+.bill-tbl th,.bill-tbl td:first-child{white-space:normal;word-break:keep-all;overflow-wrap:anywhere}.bl-in td{overflow:visible}.bill-tbl td,.bill-tbl th{padding-left:6px;padding-right:6px}}
+.bill-strip{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1.2fr);gap:8px;margin-bottom:12px}
+.bill-strip .it{background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:9px 12px}
+.bill-strip .it span{display:block;font-size:12px;color:var(--sub);font-weight:700}.bill-strip .it small{font-weight:400;color:var(--faint);font-size:11px}
+.bill-strip .it b{font-size:18px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.bill-strip .it.emp{background:var(--blue-bg);border-color:var(--blue-border)}.bill-strip .it.emp b{color:var(--blue-dark)}
+.bill-strip .it.main{background:var(--sage-bg);border:1.5px solid var(--sage)}.bill-strip .it.main b{color:var(--green);font-size:21px}
+.bill-strip .op{display:flex;align-items:center;font-size:18px;color:var(--faint);font-weight:700}
+@media (max-width:560px){.bill-strip{grid-template-columns:1fr}.bill-strip .op{display:none}.bill-strip .it small{display:none}}
 .rpt-t3{table-layout:fixed;margin:6px 0 4px}.rpt-t3 th:first-child,.rpt-t3 td:first-child{width:24%}
 .rpt-t3 td{text-align:left;vertical-align:top;white-space:normal!important;word-break:keep-all;font-size:13px;line-height:1.5;padding:8px 12px}
 .rpt-t3 td:first-child{font-weight:700;background:var(--soft)}
@@ -497,12 +544,14 @@ body.pm .cost-tbl td,body.pm .cost-tbl th{padding-top:4px;padding-bottom:4px}
   </div>
   <span id="rateBadge" class="rate-chip"></span>
 </header>
+<div class="alert warn noprint" id="yearAlert"></div>
 
 <nav class="tabs">
   <button data-tab="wage" class="on">근로소득</button>
+  <button data-tab="bill">4대보험 고지액</button>
   <button data-tab="day">일용근로</button>
   <button data-tab="biz">사업소득 3.3%</button>
-  <button data-tab="help">실무 도우미</button>
+  <button data-tab="help">4대보험 신고·기준</button>
   <button data-tab="labor">노무</button>
   <button data-tab="set">요율·설정</button>
 </nav>
@@ -584,7 +633,8 @@ body.pm .cost-tbl td,body.pm .cost-tbl th{padding-top:4px;padding-bottom:4px}
             <option value="C">150~1,000인 미만</option>
             <option value="D">1,000인 이상·국가·지자체</option>
           </select></div>
-        <div class="f"><label for="iaRate">산재보험료율 (%) <em>업종별 고시 · 저장됨</em></label><input id="iaRate" class="num" inputmode="decimal" placeholder="미입력"></div>
+        <div class="f"><label for="iaInd">산재 업종 <em>2026년 고시 · 저장됨</em></label><select id="iaInd"><optgroup label="주요 업종"><option value="8">도소매·음식·숙박업 (8‰)</option><option value="6">전문·보건·교육·여가관련 서비스업 (6‰)</option><option value="8">시설관리 및 사업지원 서비스업 (8‰)</option><option value="8">기타의 각종사업 (8‰)</option><option value="7">부동산 및 임대업 (7‰)</option><option value="5">금융 및 보험업 (5‰)</option><option value="35">건설업 (35‰)</option><option value="16">식료품 제조업 (16‰)</option><option value="13">기계기구·금속·비금속광물제품 제조업 (13‰)</option><option value="6">전기기계기구·정밀기구·전자제품 제조업 (6‰)</option><option value="18">육상 및 수상운수업 (18‰)</option><option value="8">철도·항공·창고·운수관련서비스업 (8‰)</option><option value="9">통신업 (9‰)</option></optgroup><optgroup label="그 밖의 업종"><option value="185">석탄광업 및 채석업 (185‰)</option><option value="57">석회석·금속·비금속·기타광업 (57‰)</option><option value="11">섬유 및 섬유제품 제조업 (11‰)</option><option value="20">목재 및 종이제품 제조업 (20‰)</option><option value="9">출판·인쇄·제본업 (9‰)</option><option value="13">화학 및 고무제품 제조업 (13‰)</option><option value="7">의약품·화장품·연탄·석유제품 제조업 (7‰)</option><option value="10">금속제련업 (10‰)</option><option value="24">선박건조 및 수리업 (24‰)</option><option value="12">수제품 및 기타제품 제조업 (12‰)</option><option value="7">전기·가스·증기·수도사업 (7‰)</option><option value="58">임업 (58‰)</option><option value="27">어업 (27‰)</option><option value="20">농업 (20‰)</option><option value="9">국가 및 지방자치단체의 사업 (9‰)</option></optgroup><option value="custom">직접 입력 (개별실적요율 등)</option></select></div>
+        <div class="f"><label for="iaRate">산재보험료율 (%) <em>업종 요율 + 출퇴근 0.06%</em></label><input id="iaRate" class="num" inputmode="decimal" placeholder="미입력"></div>
         <div class="f"><label for="ratio">원천징수 비율</label>
           <select id="ratio"><option value="100">100%</option><option value="80">80%</option><option value="120">120%</option></select></div>
         <div class="f"><label>적용할 보험</label>
@@ -596,13 +646,13 @@ body.pm .cost-tbl td,body.pm .cost-tbl th{padding-top:4px;padding-bottom:4px}
       </div>
       <div class="fgrid">
         <div class="f"><label for="mwHours">월 소정근로시간 <em>최저임금 확인용 · 주휴 포함</em></label><input id="mwHours" class="num" type="number" min="1" value="209"></div>
-        <div class="f span2"><label for="eiMode">고용보험 <em>65세 출생연도 기준은 '실무 도우미' 탭</em></label>
+        <div class="f span2"><label for="eiMode">고용보험 <em>65세 출생연도 기준은 '4대보험 신고·기준' 탭</em></label>
           <select id="eiMode">
             <option value="on">적용</option>
             <option value="over65">65세 이후 새로 고용 — 실업급여분 제외, 고용안정분만 사업주 부담</option>
             <option value="off">적용 제외</option>
           </select></div>
-        <div class="f span2" style="grid-column:1/-1"><label>두루누리 사회보험료 지원 <em>요건 확인은 '실무 도우미' 탭</em></label>
+        <div class="f span2" style="grid-column:1/-1"><label>두루누리 사회보험료 지원 <em>요건 확인은 '4대보험 신고·기준' 탭</em></label>
           <label class="chk"><input type="checkbox" id="duru">적용 (10명 미만 · 월 보수 270만원 미만 · 신규가입자) — 국민연금·고용보험 80% 지원</label></div>
       </div>
     </details>
@@ -611,17 +661,34 @@ body.pm .cost-tbl td,body.pm .cost-tbl th{padding-top:4px;padding-bottom:4px}
   <section class="card" id="wageResult">
     <div class="alert" id="wageAlert"></div>
     <div class="strip" id="wageStrip"></div>
-    <div class="slip-title"><h2>급여 명세 <span class="sub">계산·검토용</span></h2><label class="chk noprint"><input type="checkbox" id="showBasis">산출 근거 보기</label></div>
+    <div class="slip-title"><h2>급여 명세 <span class="sub">계산·검토용</span></h2><label class="chk noprint" id="basisChk"><input type="checkbox" id="showBasis">산출 근거 보기</label></div>
     <div class="slip" id="wageSlip"></div>
-    <p class="slip-foot">※ 근로기준법 시행령 제27조의2 기재사항(근로자 식별정보·지급일·계산방법·근로시간 등)을 담지 않아 법정 임금명세서로 교부할 수 없습니다. 보험료는 당월 과세급여 기준 예상액이며 실제 고지액과 다를 수 있습니다(국민연금은 전년도 소득으로 정한 기준소득월액을 7월~다음 해 6월에 적용).</p>
+    <details class="nmore slip-more"><summary>※ 법정 임금명세서 아님 · 보험료는 예상액</summary><p class="slip-foot">※ 근로기준법 시행령 제27조의2 기재사항(근로자 식별정보·지급일·계산방법·근로시간 등)을 담지 않아 법정 임금명세서로 교부할 수 없습니다. 보험료는 당월 과세급여 기준 예상액이며 실제 고지액과 다를 수 있습니다(국민연금은 전년도 소득으로 정한 기준소득월액을 7월~다음 해 6월에 적용).</p></details>
     <div id="wageNet"></div>
-    <div id="wageEmp"></div>
+    <div class="to-bill noprint"><button class="btn" id="toBill">📬 이 금액으로 4대보험 고지액 보기 →</button></div>
     <ul class="notes" id="wageNotes"></ul>
-    <div class="btns"><button class="btn" onclick="copyResult('wage')">📋 결과 복사 (엑셀 붙여넣기)</button><button class="btn" onclick="window.print()">🖨️ 인쇄</button></div>
+    <div class="btns"><button class="btn" onclick="copyMsg('wage')">💬 거래처 안내문 복사</button><button class="btn" onclick="copyResult('wage')">📋 결과 복사 (엑셀 붙여넣기)</button><button class="btn" onclick="window.print()">🖨️ 인쇄</button></div>
   </section>
 </div>
 
 <!-- ============ 사업소득 ============ -->
+<!-- ============ 4대보험 고지액 ============ -->
+<div id="tab-bill" class="hidden">
+  <section class="card inputs">
+    <div class="slip-title"><h2>4대보험 월 고지 예상액 <span class="sub">직원 부담 + 사업주 부담</span></h2></div>
+    <p class="hint" id="blSet"></p>
+    <table class="bl-in"><colgroup><col class="cp"><col class="ck"><col class="ck"><col class="ck"><col class="ck"><col class="ck"><col class="cr"><col class="cd"></colgroup><thead><tr><th>월 보수 <small>비과세 제외</small></th><th>연금</th><th>건강</th><th>고용</th><th title="두루누리 사회보험료 지원 (10명 미만 · 월 보수 270만원 미만 · 신규가입자)">두루<br>누리</th><th title="65세 이후 새로 고용 — 고용보험 실업급여분 제외">65세<br>이후</th><th class="r">고지 합계</th><th></th></tr></thead><tbody id="blRows"></tbody></table>
+    <div class="btns" style="margin-top:8px"><button class="btn" id="blAdd">+ 직원 추가</button></div>
+  </section>
+  <section class="card" id="blResult">
+    <div class="bill-strip" id="blStrip"></div>
+    <h3 class="bl-h">보험별</h3>
+    <table class="jtbl jtbl-full rpt-t3 bill-tbl" id="blByIns"></table>
+        <ul class="notes" id="blNotes"></ul>
+    <div class="btns"><button class="btn" onclick="copyMsg('bill')">💬 거래처 안내문 복사</button><button class="btn" onclick="copyResult('bill')">📋 결과 복사 (엑셀 붙여넣기)</button><button class="btn" onclick="window.print()">🖨️ 인쇄</button></div>
+  </section>
+</div>
+
 <div id="tab-biz" class="hidden">
   <div class="biz-wrap">
   <section class="card inputs">
@@ -657,10 +724,11 @@ body.pm .cost-tbl td,body.pm .cost-tbl th{padding-top:4px;padding-bottom:4px}
 <!-- ============ 일용근로 ============ -->
 <div id="tab-day" class="hidden">
   <section class="card inputs">
-    <div class="in-head"><div class="grp-t" style="margin:0">일용근로자 원천징수 · 4대보험</div></div>
+    <div class="in-head"><div class="seg-toggle" id="dayMode"><button data-mode="day" class="on">일당으로 계산</button><button data-mode="month">월 지급액으로 계산</button></div></div>
     <div class="fgrid">
-      <div class="f key"><label for="dayWage">일당 (세전)</label><input id="dayWage" class="money" inputmode="numeric" placeholder="0"></div>
-      <div class="f"><label for="dayDays">근무일수 <em>한 번에 지급하는 일수</em></label><input id="dayDays" class="num" type="number" min="1" max="31" value="1"></div>
+      <div class="f key" id="rowDayWage"><label for="dayWage">일당 (세전)</label><input id="dayWage" class="money" inputmode="numeric" placeholder="0"></div>
+      <div class="f key hidden" id="rowDayMonth"><label for="dayMonth">월 지급액 (세전) <em>그 달 일당 합계</em></label><input id="dayMonth" class="money" inputmode="numeric" placeholder="0"></div>
+      <div class="f"><label for="dayDays"><span id="dayDaysLab">근무일수</span> <em id="dayDaysEm">한 번에 지급하는 일수</em></label><input id="dayDays" class="num" type="number" min="1" max="31" value="1"></div>
       <div class="f"><label for="dayEi">고용보험</label>
         <select id="dayEi"><option value="on">적용</option><option value="over65">65세 이후 새로 고용 (실업급여 제외)</option><option value="off">적용 제외</option></select></div>
       <div class="f"><label for="dayHours">월 근로시간 <em>국민연금 60시간 판정용</em></label><input id="dayHours" class="num" type="number" min="0" placeholder="예: 64"></div>
@@ -706,7 +774,7 @@ body.pm .cost-tbl td,body.pm .cost-tbl th{padding-top:4px;padding-bottom:4px}
         <tr><td>근로내용 확인신고 <small>(고용·산재)</small></td><td><b>근로한 날이 속하는 달의 다음 달 15일</b></td><td>제출하면 고용보험 피보험자격 취득·상실 신고를 한 것으로 봄(고용보험법 시행령 제7조 제1항). 고용보험에 신고하면 산재보험 고용·종료 신고는 생략 가능(보험료징수법 제16조의10 제3항·제4항·제7항)</td></tr>
         <tr><td>일용근로소득 지급명세서 <small>(국세청)</small></td><td><b>지급일이 속하는 달의 다음 달 말일</b></td><td>근로내용 확인신고서를 제출하면 지급명세서를 제출한 것으로 봄(소득세법 제164조 제1항 단서, 같은 법 시행령 제213조 제4항)</td></tr>
       </tbody></table>
-      <p class="hint" style="margin:4px 2px 0">근로내용 확인신고는 <b>근로한 달</b>, 지급명세서는 <b>지급한 달</b>을 기준으로 기한을 계산합니다. 근로내용 확인신고 기한(다음 달 15일)에 맞춰 내면 두 신고를 한 번에 처리할 수 있습니다. <a href="#" onclick="goReport('day');return false">실무 도우미 › 4대보험 신고에서도 보기 →</a></p>
+      <p class="hint" style="margin:4px 2px 0">근로내용 확인신고는 <b>근로한 달</b>, 지급명세서는 <b>지급한 달</b>을 기준으로 기한을 계산합니다. 근로내용 확인신고 기한(다음 달 15일)에 맞춰 내면 두 신고를 한 번에 처리할 수 있습니다. <a href="#" onclick="goReport('day');return false">4대보험 신고·기준 탭 › 신고 안내에서도 보기 →</a></p>
 </details>
     <details class="more">
       <summary>판정 설정 <span class="sum-txt">국민연금 월 소득 기준</span></summary>
@@ -730,7 +798,7 @@ body.pm .cost-tbl td,body.pm .cost-tbl th{padding-top:4px;padding-bottom:4px}
         <li>국민연금·건강보험은 신고한 보수로 고지되므로 여기 금액은 예상치입니다. 요율은 오늘 날짜 기준입니다.</li>
       </ul>
     </details>
-    <div class="btns"><button class="btn" onclick="copyResult('day')">📋 결과 복사 (엑셀 붙여넣기)</button><button class="btn" onclick="window.print()">🖨️ 인쇄</button></div>
+    <div class="btns"><button class="btn" onclick="copyMsg('day')">💬 거래처 안내문 복사</button><button class="btn" onclick="copyResult('day')">📋 결과 복사 (엑셀 붙여넣기)</button><button class="btn" onclick="window.print()">🖨️ 인쇄</button></div>
   </section>
 </div>
 
@@ -860,7 +928,8 @@ body.pm .cost-tbl td,body.pm .cost-tbl th{padding-top:4px;padding-bottom:4px}
 <!-- ============ 노무 ============ -->
 <div id="tab-labor" class="hidden">
   <div class="help-wrap">
-  <div class="seg-toggle sub-tabs lb-tabs" id="laborTabs">
+  <div class="lb-nav"><div class="seg-toggle rpt-gtabs" id="lbGTabs"></div><div class="rpt-chips" id="lbChips"></div></div>
+  <div class="seg-toggle sub-tabs lb-tabs" id="laborTabs" style="display:none">
     <button data-sub="ot" class="on"><b>⏰ 연장·야간·휴일수당</b><small>통상시급·가산수당</small></button>
     <button data-sub="leave"><b>🌴 연차휴가</b><small>발생 일수·미사용 수당</small></button>
     <button data-sub="sev"><b>💼 퇴직금</b><small>평균임금·퇴직소득세</small></button>
@@ -1338,8 +1407,20 @@ const floor10 = n => Math.floor(n / 10) * 10;
 const pInt = s => Math.round(parseFloat(s || 0) * 10000);
 // 금액 × 요율 후 10원 미만 절사
 const prem = (base, pct) => Math.floor(base * pInt(pct) / 1e7) * 10;
+// 2026년: 출퇴근재해 0.6‰(고용노동부고시 제2025-91호), 임금채권부담금 0.9‰(고시 제2025-100호), 석면피해구제분담금 0.06‰(근로복지공단 보험료율표)
+const IA_COMMUTE = 0.6, IA_WF = '0.09', IA_ASB = '0.006';
+const iaExtra = pay => pay > 0 ? prem(pay, IA_WF) + prem(pay, IA_ASB) : 0;
 const clamp = (v, lo, hi) => Math.min(Math.max(v, lo), hi);
 function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1800); }
+// 내장 기준(요율·최저임금·산재 업종 요율·임금채권·석면·두루누리·공휴일)이 몇 년 기준인지 — 매년 갱신 후 올림
+const DATA_YEAR = 2026;
+function yearNotice(now) {
+  const y = now.getFullYear(), m = now.getMonth() + 1;
+  const what = '4대보험 요율, 최저임금, 산재 업종 요율·임금채권부담금·석면분담금, 두루누리 기준, 공휴일(신고 기한 계산)';
+  if (y > DATA_YEAR) return `⚠ 지금은 ${y}년인데 이 도구의 기준은 <b>${DATA_YEAR}년</b> 값입니다. ${what}을 ${y}년 고시로 확인·갱신하기 전에는 계산 결과를 그대로 쓰지 마세요.`;
+  if (y === DATA_YEAR && m === 12) return `다음 달(${y + 1}년 1월)부터 ${what}이 바뀔 수 있습니다. 1월 지급분 계산 전에 새 고시를 확인하세요.`;
+  return '';
+}
 function thisMonth() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`; }
 
 /* ---------------- 4대보험 ---------------- */
@@ -1371,12 +1452,13 @@ function insurance(pay, rs, o) {
     r.ei.w = o.ei65 ? 0 : prem(pay, rs.ei.w);
     r.ei.e = (o.ei65 ? 0 : prem(pay, rs.ei.e)) + prem(pay, rs.ei[o.size] || '0');
   }
-  if (o.useIa && o.iaRate && pay > 0) r.ia.e = prem(pay, o.iaRate);
+  r.ia.x = 0;
+  if (o.useIa && o.iaRate && pay > 0) { r.ia.e = prem(pay, o.iaRate); r.ia.x = iaExtra(pay); }
   if (o.duru) applyDuru(r, npsPay, pay);
   return finish(r);
   function finish(x) {
     x.w = x.nps.w + x.nhi.w + x.ltc.w + x.ei.w;
-    x.e = x.nps.e + x.nhi.e + x.ltc.e + x.ei.e + x.ia.e;
+    x.e = x.nps.e + x.nhi.e + x.ltc.e + x.ei.e + x.ia.e + (x.ia.x || 0);
     return x;
   }
 }
@@ -1641,6 +1723,13 @@ function netBar(label, val, sub) {
 const stripIt = (lab, v, cls) => `<div class="it ${cls || ''}"><span>${lab}</span><b>${typeof v === 'number' ? won(v) : v}</b></div>`;
 const op = s => `<div class="op">${s}</div>`;
 
+// 안내 목록: 경고(warn)는 그대로, 나머지는 「안내 N건 더 보기」로 접음
+function noteList(list) {
+  const w = list.filter(n => n.cls === 'warn'), o = list.filter(n => n.cls !== 'warn');
+  const li = n => `<li class="${n.cls}">${n.text}</li>`;
+  return w.map(li).join('') + (o.length ? `<li class="nmore-li"><details class="nmore"><summary>안내 ${o.length}건 더 보기</summary><ul class="notes">${o.map(li).join('')}</ul></details></li>` : '');
+}
+let lastWage = null;
 function showWage(r, extraNotes, target) {
   const i = r.ins, rs = r.rs, p = r.p;
   // 상단 경고: 지원하지 않는 기간 / 확인되지 않은 요율
@@ -1682,16 +1771,21 @@ function showWage(r, extraNotes, target) {
   const D = i.duru;
   const ec = [['국민연금', i.nps.e, D && D.npsE ? `두루누리 −${fmt(D.npsE)}` : ''], ['건강보험', i.nhi.e], ['장기요양', i.ltc.e],
     ['고용보험', i.ei.e, (p.ei65 ? `65세 이후 · 고용안정 ${rs.ei[p.size]}%만` : `고용안정 ${rs.ei[p.size]}% 포함`) + (D && D.eiE ? ` · 두루누리 −${fmt(D.eiE)}` : '')]];
-  const iaCell = !p.useIa ? `<div><span>산재보험</span><b>적용 안 함</b></div>` : iaNa ? `<div class="na"><span>산재보험</span><b>미입력</b></div>` : `<div><span>산재보험 · ${p.iaRate}%</span><b>${fmt(i.ia.e)}</b></div>`;
-  $('wageEmp').innerHTML = `<div class="emp"><div class="emp-h"><b>사업주 부담</b><span class="tot">사업주 총 인건비 <strong>${won(r.employerCost)}</strong> (지급 합계 + 사업주 부담${iaNa ? ' · 산재보험 미포함' : ''})</span></div>` +
-    `<div class="emp-grid">${ec.map(([l, v, s]) => `<div><span>${l}${s ? ` · ${s}` : ''}</span><b>${fmt(v)}</b></div>`).join('')}${iaCell}<div class="sum"><span>합계</span><b>${fmt(i.e)}</b></div></div></div>`;
+  lastWage = { pay: r.taxable, nps: !!p.useNps, nhi: !!p.useNhi, ei: !!p.useEi, ei65: !!p.ei65, duru: !!p.duru };
+  MSG.wage = r.gross ? [`[급여 계산 안내] ${ymVal()} 지급분`,
+    ...(wageMode === 'rev' ? [`- 필요 기본급 ${won(r.p0.basic)}`] : []),
+    `- 지급 합계 ${won(r.gross)} (과세 ${fmt(r.taxable)} · 비과세 ${fmt(r.nontax)})`,
+    `- 공제 합계 ${won(r.dedW)} (4대보험 ${fmt(i.w)} · 소득세 ${fmt(r.it.tax)} · 지방소득세 ${fmt(r.it.local)})`,
+    `- 실수령(차인지급액) ${won(r.net)}`,
+    `- 회사 부담 4대보험 ${won(i.e)}${iaNa ? ' (산재보험 제외)' : ''} → 사업주 총 인건비 ${won(r.employerCost)}`,
+    `- 4대보험 월 고지 예상 ${won(i.w + i.e)} (직원 ${fmt(i.w)} + 회사 ${fmt(i.e)})`,
+    MSG_FOOT].join('\n') : '';
 
   const mh = Math.max(0, intv('mwHours', 209)), mc = mwCheck(r.p0, p.ym, mh), mwNotes = [];
   const mwIn = '산입: 기본급·기타 과세수당·식대(현금)·보육수당 / 제외: 연장수당·현물 식사, 판단이 필요한 자가운전보조금·연구활동비·기타 비과세';
   if (mc.pay && !mc.mw) mwNotes.push({ cls: 'info', text: `${p.ym.slice(0, 4)}년 최저임금이 계산기에 없어 최저임금 확인을 하지 않았습니다.` });
   else if (mc.need && !mc.ok) mwNotes.push({ cls: 'warn', text: `<b>최저임금 미달 가능</b> — 산입 임금 ${won(mc.pay)}(시간당 ${won(mc.hourly)})이 최저 ${won(mc.need)}(월 ${fmt(mh)}시간 × ${won(mc.mw)})보다 ${won(mc.need - mc.pay)} 적습니다. ${mwIn}. 수습 감액·적용 제외는 반영하지 않았습니다(최저임금법 제5조·제6조).` });
-  else if (mc.need) mwNotes.push({ cls: 'ok', text: `최저임금 충족 — 산입 임금 ${won(mc.pay)}, 시간당 ${won(mc.hourly)} (${p.ym.slice(0, 4)}년 ${won(mc.mw)} · 월 ${fmt(mh)}시간 기준). ${mwIn}.` });
-  $('wageNotes').innerHTML = extraNotes.concat(r.notes, mwNotes).map(n => `<li class="${n.cls}">${n.text}</li>`).join('');
+  $('wageNotes').innerHTML = noteList(extraNotes.concat(r.notes, mwNotes));
 
   // 입력칸 바로 아래 오류
   $('err-kids').textContent = p.kids > p.deps - 1 ? '공제대상가족 수(본인 제외)보다 많습니다' : '';
@@ -1700,7 +1794,7 @@ function showWage(r, extraNotes, target) {
   COPY.wage = [['[지급]', ''], ...r.payRows.map(x => [x[0].replace(/<small>/g, ' (').replace(/<\/small>/g, ')'), x[1]]), ['지급 합계', r.gross], ['과세 급여', r.taxable], ['비과세 급여', r.nontax], ['', ''],
     ['[공제]', ''], ...dedRows.map(x => [x[0], x[1]]), ['공제 합계', r.dedW], ['', ''],
     ['차인지급액', r.net], ...(wageMode === 'rev' && target ? [['목표 차인지급액', target], ['필요 기본급 (월 기준)', r.p0.basic]] : []), ['', ''],
-    ['[사업주 부담]', ''], ...ec.map(x => [x[0], x[1]]), ['산재보험', iaNa ? '미입력' : i.ia.e], ['사업주 부담 합계', i.e], ['사업주 총 인건비', r.employerCost]];
+    ['[사업주 부담]', ''], ...ec.map(x => [x[0], x[1]]), ['산재보험', iaNa ? '미입력' : i.ia.e], ['임금채권·석면분담금', i.ia.x || 0], ['사업주 부담 합계', i.e], ['사업주 총 인건비', r.employerCost]];
   updateBadge(rs, issues.length > 0);
 }
 function updateSummaries(p) {
@@ -1791,15 +1885,19 @@ function renderBiz() {
 // 일별 세액(원 미만 절사)의 합계로 소액부징수(1,000원 미만)를 판단(해석례 법인46013-558, 1998.03.06)
 const DAY_DEDUCT = 150000;
 // ins4: 가입 판정 결과 국민연금·건강보험 대상이면 { nps: true, nhi: true } (지급액을 한 달 보수로 보고 계산)
-function dayCalc(wage, days, eiMode, size, ym, ins4) {
+// total: 월 지급액으로 계산할 때 그 달 지급 합계 (일당 = total ÷ days, 나누어떨어지지 않는 원 단위는 일부 날에 1원씩)
+function dayCalc(wage, days, eiMode, size, ym, ins4, total) {
   const rs = ratesFor(ym || thisMonth());
-  const pay = wage * days;
-  const daily = Math.floor(Math.max(0, wage - DAY_DEDUCT) * 27 / 1000);
-  let tax = floor10(daily * days), exempt = false;
+  const dTax = w => Math.floor(Math.max(0, w - DAY_DEDUCT) * 27 / 1000);
+  let extra = 0;
+  if (total != null) { wage = Math.floor(total / days); extra = total - wage * days; }
+  const pay = wage * days + extra;
+  const daily = dTax(wage);
+  let tax = floor10(daily * (days - extra) + dTax(wage + 1) * extra), exempt = false;
   if (tax > 0 && tax < 1000) { tax = 0; exempt = true; }
   const local = Math.floor(tax / 100) * 10;
   const ins = insurance(pay, rs, { useNps: !!(ins4 && ins4.nps), useNhi: !!(ins4 && ins4.nhi), useEi: eiMode !== 'off', ei65: eiMode === 'over65', duru: !!(ins4 && ins4.duru), useIa: false, size });
-  return { wage, days, pay, daily, tax, local, exempt, ins, eiW: ins.ei.w, eiE: ins.e, net: pay - tax - local - ins.w };
+  return { wage, days, pay, daily, extra, tax, local, exempt, ins, eiW: ins.ei.w, eiE: ins.e, net: pay - tax - local - ins.w };
 }
 // 일용근로자 국민연금·건강보험 가입 판정
 // 국민연금: 1개월 이상 계속 근로 + (월 8일 이상 / 월 60시간 이상 / 고시 소득 이상), 건설현장은 60시간 기준 없음(국민연금법 시행령 제2조 제1호)
@@ -1818,19 +1916,30 @@ function dayJudge(o) {
   }
   return { nps, nhi, why };
 }
+let dayMode = 'day';
+function setDayMode(m) {
+  dayMode = m;
+  $('dayMode').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.mode === m));
+  $('rowDayWage').classList.toggle('hidden', m === 'month'); $('rowDayMonth').classList.toggle('hidden', m !== 'month');
+  $('dayDaysLab').textContent = m === 'month' ? '그 달 근무일수' : '근무일수';
+  $('dayDaysEm').textContent = m === 'month' ? '월 지급액을 나눌 일수' : '한 번에 지급하는 일수';
+  if (m === 'month' && !money('dayMonth') && money('dayWage')) $('dayMonth').value = fmt(money('dayWage') * Math.max(1, intv('dayDays', 1)));
+  renderDay();
+}
 function renderDay() {
   const days = Math.max(1, intv('dayDays', 1)), ei = $('dayEi').value, size = $('size').value;
   $('daySize').textContent = $('size').selectedOptions[0].text;
-  // 가입 판정 (일당 × 근무일수를 한 달 소득으로 봄)
-  const jw = money('dayWage');
-  const J = dayJudge({ long: $('dayLong').checked, days, hours: intv('dayHours', 0), build: $('dayBuild').checked, pay: jw * days, limit: money('dayNpsLimit') });
+  // 가입 판정 (일당 × 근무일수, 월 지급액 기준이면 그 금액을 한 달 소득으로 봄)
+  const mon = dayMode === 'month', total = mon ? money('dayMonth') : null;
+  const jw = mon ? Math.floor(total / days) : money('dayWage');
+  const J = dayJudge({ long: $('dayLong').checked, days, hours: intv('dayHours', 0), build: $('dayBuild').checked, pay: mon ? total : jw * days, limit: money('dayNpsLimit') });
   const inc = $('dayInc4').checked ? { nps: J.nps, nhi: J.nhi } : null;
   const eiChip = ei === 'off' ? [false, '고용보험 적용 제외 (선택)'] : ei === 'over65' ? [true, '고용보험 대상 · 실업급여 제외 (65세 이후 새로 고용)'] : [true, '고용보험 대상 (1일 근로자도 · 시간 기준 없음)'];
   $('dayJudge').innerHTML = [...J.why, eiChip, [true, '산재보험 대상 (1일 근로자도)']].map(([ok, s]) => `<span class="${ok ? 'jy' : 'jn'}">${s}</span>`).join('');
 
-  const f = dayCalc(jw, days, ei, size, null, inc), i = f.ins;
+  const f = dayCalc(jw, days, ei, size, null, inc, total), i = f.ins;
   const ia = ($('iaRate').value || '').replace(/[^\d.]/g, '');
-  const iaE = $('useIa').checked && ia && f.pay ? prem(f.pay, ia) : 0;
+  const iaE = $('useIa').checked && ia && f.pay ? prem(f.pay, ia) + iaExtra(f.pay) : 0;
   const empTotal = f.eiE + iaE;
   const notes = f.exempt ? [{ cls: 'info', text: '일별 세액 합계가 1,000원 미만이라 소액부징수로 원천징수하지 않았습니다.' }]
     : f.wage && f.wage <= DAY_DEDUCT ? [{ cls: 'info', text: '일당이 15만원 이하라 소득세가 없습니다(15만원은 비과세가 아니라 1일 근로소득공제액이며, 고용보험은 전액에 부과됩니다).' }]
@@ -1839,7 +1948,7 @@ function renderDay() {
   // 요약 줄 · 명세서(지급 | 공제) · 실수령 · 사업주 부담
   $('dayStrip').innerHTML = stripIt(`지급액 (${days}일)`, f.pay) + op('−') + stripIt('공제 합계', f.pay - f.net) + op('=') +
     stripIt('실수령', f.net, 'main') + stripIt('사업주 총 인건비', f.pay + empTotal, 'emp');
-  const payRows = [[`일당 × ${days}일<small>일당 ${fmt(f.wage)}</small>`, f.pay]];
+  const payRows = [[mon ? `월 지급액 (${days}일)<small>일당 환산 ${fmt(f.wage)}${f.extra ? ` (${f.extra}일은 +1원)` : ''}</small>` : `일당 × ${days}일<small>일당 ${fmt(f.wage)}</small>`, f.pay]];
   const dedRows = [
     ['소득세', f.tax, '', f.exempt ? '소액부징수' : '', `일 ${fmt(f.daily)} × ${days}일`],
     ['지방소득세', f.local],
@@ -1851,12 +1960,19 @@ function renderDay() {
     slipCol('공 제', dedRows, '공제 합계', f.pay - f.net, `4대보험 ${fmt(i.w)} · 세금 ${fmt(f.tax + f.local)}`);
   $('dayNet').innerHTML = netBar('실수령', f.net, `지급 합계 − 공제 합계 · 1일 ${won(Math.floor(f.net / days))}`);
   const ec = [['국민연금', i.nps.e], ['건강보험', i.nhi.e], ['장기요양', i.ltc.e], ['고용보험', i.ei.e, `고용안정 ${ratesFor(thisMonth()).ei[size]}% 포함`]];
-  const iaCell = !$('useIa').checked ? '<div><span>산재보험</span><b>적용 안 함</b></div>' : !ia ? '<div class="na"><span>산재보험</span><b>미입력</b></div>' : `<div><span>산재보험 · ${ia}%</span><b>${fmt(iaE)}</b></div>`;
+  const iaCell = !$('useIa').checked ? '<div><span>산재보험</span><b>적용 안 함</b></div>' : !ia ? '<div class="na"><span>산재보험</span><b>미입력</b></div>' : `<div><span>산재보험 · ${ia}% (임금채권·석면 포함)</span><b>${fmt(iaE)}</b></div>`;
   $('dayEmp').innerHTML = `<div class="emp"><div class="emp-h"><b>사업주 부담</b><span class="tot">사업주 총 인건비 <strong>${won(f.pay + empTotal)}</strong> (지급 합계 + 사업주 부담${$('useIa').checked && !ia ? ' · 산재보험 미포함' : ''})</span></div>` +
     `<div class="emp-grid">${ec.map(([l, v, s]) => `<div><span>${l}${s ? ` · ${s}` : ''}</span><b>${fmt(v)}</b></div>`).join('')}${iaCell}<div class="sum"><span>합계</span><b>${fmt(empTotal)}</b></div></div></div>`;
-  $('dayNotesF').innerHTML = notes.map(n => `<li class="${n.cls}">${n.text}</li>`).join('');
+  if (mon && f.pay) notes.unshift({ cls: 'info', text: `월 지급액 ${won(f.pay)}을 근무일수 ${days}일로 나눈 <b>일당 ${won(f.wage)}</b>으로 계산했습니다. 일용근로자 소득세는 날마다 (일당 − 15만원)으로 계산하므로, 날마다 일당이 다르면 실제 세액과 차이가 날 수 있습니다.` });
+  $('dayNotesF').innerHTML = noteList(notes);
 
-  COPY.day = [['근무일수', days], ['고용보험', $('dayEi').selectedOptions[0].text], ['', ''],
+  MSG.day = f.pay ? [`[일용근로 지급 안내] ${days}일`,
+    `- 지급액 ${won(f.pay)} (${mon ? '월 지급액 · 일당 환산 ' + won(f.wage) : '일당 ' + won(f.wage) + ' × ' + days + '일'})`,
+    `- 공제 ${won(f.pay - f.net)} (소득세 ${fmt(f.tax)} · 지방소득세 ${fmt(f.local)}${i.nps.w ? ' · 국민연금 ' + fmt(i.nps.w) : ''}${i.nhi.w ? ' · 건강보험 ' + fmt(i.nhi.w + i.ltc.w) : ''} · 고용보험 ${fmt(f.eiW)})`,
+    `- 실수령 ${won(f.net)}`,
+    `- 회사 부담 ${won(empTotal)} → 사업주 총 인건비 ${won(f.pay + empTotal)}`,
+    '※ 일용근로자 소득세는 (일당 − 15만원) × 2.7%로 날마다 계산합니다. 계산·검토용 예상액입니다.'].join('\n') : '';
+  COPY.day = [['계산 기준', mon ? '월 지급액' : '일당'], ['근무일수', days], ['고용보험', $('dayEi').selectedOptions[0].text], ['', ''],
     ['[지급]', ''], ['일당', f.wage], ['지급 합계', f.pay], ['', ''],
     ['[공제]', ''], ['소득세', f.tax], ['지방소득세', f.local], ['국민연금', i.nps.w], ['건강보험', i.nhi.w], ['장기요양보험', i.ltc.w], ['고용보험', f.eiW], ['공제 합계', f.pay - f.net], ['', ''],
     ['실수령', f.net], ['', ''],
@@ -2001,7 +2117,7 @@ function renderLeave() {
   if (!$('lv80').checked && r.years) n.push({ cls: 'warn', text: '직전 1년 출근율이 80% 미만이면 15일 대신 1개월 개근 시 1일씩 생깁니다(제60조 제2항). 표의 일수보다 적을 수 있습니다.' });
   if (r.years === 0) n.push({ cls: 'info', text: '1년 미만 근로자의 월 연차는 입사 1년이 되기 전까지 쓰지 않으면 소멸합니다(제60조 제7항).' });
   n.push({ cls: 'info', text: '퇴사 시 남은 연차는 미사용 연차수당(1일 통상임금 × 남은 일수)으로 정산합니다. 회사의 연차 사용 촉진 여부 등에 따라 달라질 수 있습니다.' });
-  $('lvNotes').innerHTML = n.map(x => `<li class="${x.cls}">${x.text}</li>`).join('');
+  $('lvNotes').innerHTML = noteList(n);
 }
 
 // 퇴직금·퇴직소득세
@@ -2045,7 +2161,7 @@ function renderSev() {
     ['퇴직소득세', `기본세율 ÷ 12 × ${r.years}년`, `<b>${won(tx.tax)}</b>`],
     ['지방소득세', '소득세 × 10%', `<b>${won(tx.local)}</b>`]]);
   n.push({ cls: 'info', text: '퇴직한 날부터 14일 안에 지급하고, 원칙적으로 근로자의 IRP 계좌로 이전합니다(55세 이후 퇴직 등은 예외 — 퇴직급여법 제9조). 퇴직일 현재 연금계좌(IRP 등)에 있거나 연금계좌로 지급되는 경우, 또는 받은 날부터 60일 안에 연금계좌에 입금하면 연금 외 수령 전까지 퇴직소득세를 원천징수하지 않습니다(소득세법 제146조 제2항).' });
-  $('svNotes').innerHTML = n.map(x => `<li class="${x.cls}">${x.text}</li>`).join('');
+  $('svNotes').innerHTML = noteList(n);
 }
 
 // 해고예고·휴업수당
@@ -2063,7 +2179,7 @@ function renderDis() {
   if ($('ds3mo').checked) n.push({ cls: 'info', text: '계속 근로 3개월 미만이면 해고예고 의무가 없습니다(제26조 제1호).' });
   if (!lb5()) n.push({ cls: 'warn', text: '5인 미만 사업장은 휴업수당(제46조)이 적용되지 않습니다. 해고예고는 적용됩니다.' });
   else n.push({ cls: 'info', text: `1일 휴업수당 = min(평균임금 70% ${won(Math.floor(r.avg * .7))}, 통상임금 ${won(r.daily)}) = ${won(r.per)}` });
-  $('dsNotes').innerHTML = n.map(x => `<li class="${x.cls}">${x.text}</li>`).join('');
+  $('dsNotes').innerHTML = noteList(n);
 }
 
 // 육아휴직 급여
@@ -2120,7 +2236,7 @@ function renderUb() {
   if (o.age >= 65 && !o.over65) n.push({ cls: 'info', text: '65세 이후에 새로 고용된 사람은 실업급여가 적용되지 않습니다(고용보험법 제10조 제2항). 65세 전부터 계속 다니던 회사에서 이직한 경우에만 받을 수 있으니, 새로 고용된 경우면 위 체크를 켜세요.' });
   if (!r.why) n.push({ cls: 'warn', text: '자기 사정 자진퇴사라도 임금체불·최저임금 미달·괴롭힘·통근 곤란·질병·육아 휴직 불허 등 [별표 2]의 정당한 사유가 있으면 받을 수 있습니다. 해당하면 이직 사유를 그 항목으로 고르세요.' });
   if (o.why === 'ok:권고사직') n.push({ cls: 'info', text: '권고사직은 경영 악화·조직 축소 등 회사 사정에 의한 경우가 [별표 2] 제5호에 해당합니다. 근로자의 중대한 귀책사유가 있는데 해고 대신 권고로 이직한 경우는 수급이 제한됩니다(제58조 제2호 나목). 이직확인서·상실 신고의 상실 사유를 실제대로 적어야 합니다.' });
-  $('ubNotes').innerHTML = n.map(x => `<li class="${x.cls}">${x.text}</li>`).join('');
+  $('ubNotes').innerHTML = noteList(n);
 }
 
 function renderLabor() { renderOt(); renderLeave(); renderSev(); renderDis(); renderBaby(); renderWorker(); renderUb(); renderCost(); }
@@ -2149,7 +2265,7 @@ function renderHourly() {
   if (mw && wage && wage < mw) notes.push({ cls: 'warn', text: `<b>최저임금 미달</b> — 시급 ${won(wage)}이 ${new Date().getFullYear()}년 최저임금 ${won(mw)}보다 ${won(mw - wage)} 적습니다(고용노동부고시 제2025-47호).` });
   notes.push({ cls: 'info', text: `월 소정근로시간(주휴 제외) ${r.soH.toFixed(1)}시간 · 월 환산 시간(주휴 포함) ${r.monthExact.toFixed(1)}시간 → 반올림 ${fmt(r.monthH)}시간` });
   if (Math.abs(r.soH - 60) < 3) notes.push({ cls: 'warn', text: '월 소정근로시간이 60시간 경계 근처입니다. 4대보험 대상 여부는 실제 근로계약·근로 기록으로 다시 확인하세요.' });
-  $('hrNotes').innerHTML = notes.map(n => `<li class="${n.cls}">${n.text}</li>`).join('');
+  $('hrNotes').innerHTML = noteList(notes);
   return r;
 }
 
@@ -2284,16 +2400,18 @@ const RPT = [
       '<table class="jtbl jtbl-full rpt-t3 rpt-t3c"><thead><tr><th>기간</th><th>하루마다 붙는 금액</th><th>상한</th></tr></thead><tbody>' +
       '<tr><td>납부기한 후 30일까지</td><td><b>체납액의 1/1,500</b></td><td><b>체납액의 2%</b></td></tr>' +
       '<tr><td>30일이 지난 뒤</td><td><b>체납액의 1/6,000 추가</b></td><td><b>합계 체납액의 5%</b></td></tr></tbody></table>' +
-      '<p class="rpt-lead" style="margin:10px 0 2px"><b>② 과태료</b> — 신고를 안 하거나 거짓으로 한 경우(법정 상한)</p>' +
-      '<table class="jtbl jtbl-full rpt-t3"><thead><tr><th>보험</th><th>위반 내용</th><th>과태료 상한</th></tr></thead><tbody>' +
-      '<tr><td>국민연금<small>국민연금법 제131조 제1항</small></td><td><b>사용자의 신고 의무 위반</b><small>자격 취득·상실, 사업장 해당 등 신고(제21조 제1항)를 안 하거나 거짓 신고</small></td><td style="text-align:center"><b>50만원 이하</b></td></tr>' +
-      '<tr><td>건강보험<small>국민건강보험법 제119조 제3항</small></td><td><b>사업장 신고 의무 위반 등</b><small>사업장 적용·변경·탈퇴 신고(제7조)를 안 하거나 거짓 신고, 공단 요구에 따른 신고·서류 제출(제94조 제1항) 위반</small></td><td style="text-align:center"><b>500만원 이하</b></td></tr>' +
-      '<tr><td>고용보험<small>고용보험법 제118조 제1항</small></td><td><b>피보험자격 신고·이직확인서</b><small>피보험자격 취득·상실 신고(제15조)를 안 하거나 거짓 신고, 이직확인서를 발급하지 않거나 거짓 작성</small></td><td style="text-align:center"><b>300만원 이하</b></td></tr>' +
-      '<tr><td>고용·산재<small>보험료징수법 제50조 제1항</small></td><td><b>보험관계·보수총액 신고</b><small>보험관계 성립·변경 신고, 보수총액 신고, 개산·확정보험료 신고를 안 하거나 거짓 신고</small></td><td style="text-align:center"><b>300만원 이하</b></td></tr></tbody></table>',
-    law: '연체금: 국민연금법 제97조, 국민건강보험법 제80조, 보험료징수법 제25조 · 과태료: 국민연금법 제131조, 국민건강보험법 제119조, 고용보험법 제118조, 보험료징수법 제50조',
+      '<p class="rpt-lead" style="margin:10px 0 2px"><b>② 과태료</b> — 신고를 안 하거나 거짓으로 한 경우 (시행령 부과기준: 1차 / 2차 / 3차 이상)</p>' +
+      '<table class="jtbl jtbl-full rpt-t3"><thead><tr><th>보험</th><th>위반 내용</th><th>법정 상한</th><th>실제 부과기준 (시행령 별표)</th></tr></thead><tbody>' +
+      '<tr><td>국민연금<small>국민연금법 제131조 제1항</small></td><td><b>사용자의 신고 의무 위반</b><small>자격 취득·상실, 사업장 해당 등 신고(제21조 제1항)를 안 하거나 거짓 신고</small></td><td style="text-align:center"><b>50만원 이하</b></td><td>17만 / 33만 / 50만원<small>국민연금법 시행령 [별표 3]</small></td></tr>' +
+      '<tr><td>건강보험<small>국민건강보험법 제119조 제3항</small></td><td><b>사업장 신고 의무 위반 등</b><small>사업장 적용·변경·탈퇴 신고(제7조)를 안 하거나 거짓 신고, 공단 요구에 따른 신고·서류 제출(제94조 제1항) 위반</small></td><td style="text-align:center"><b>500만원 이하</b></td><td>150만 / 300만 / 500만원<small>국민건강보험법 시행령 [별표 7]</small></td></tr>' +
+      '<tr><td>고용보험<small>고용보험법 제118조 제1항</small></td><td><b>피보험자격 신고·이직확인서</b><small>피보험자격 취득·상실 신고(제15조)를 안 하거나 거짓 신고, 이직확인서를 발급하지 않거나 거짓 작성</small></td><td style="text-align:center"><b>300만원 이하</b></td><td><b>취득·상실 미신고</b>: 1명당 3만원 (100만원 한도)<br><b>거짓 신고</b>: 1명당 5만 / 8만 / 10만원 (한도 100만 / 200만 / 300만)<br><b>이직확인서 미발급</b>: 10만 / 20만 / 30만원 · <b>거짓 작성</b>: 100만 / 200만 / 300만원<small>고용보험법 시행령 [별표 3]</small></td></tr>' +
+      '<tr><td>고용·산재<small>보험료징수법 제50조 제1항</small></td><td><b>보험관계·보수총액 신고</b><small>보험관계 성립·변경 신고, 보수총액 신고, 개산·확정보험료 신고를 안 하거나 거짓 신고</small></td><td style="text-align:center"><b>300만원 이하</b></td><td><b>성립·변경·보수총액·개산·확정보험료 신고</b>: 100만 / 200만 / 300만원<br><b>근로자 고용·종료·휴직·전보 신고 미이행</b>(제16조의10 제3~5항): 1명당 3만원 (100만원 한도) · 거짓: 1명당 5만 / 8만 / 10만원 (한도 100만 / 200만 / 300만)<small>보험료징수법 시행령 [별표 2]</small></td></tr></tbody></table>',
+    law: '연체금: 국민연금법 제97조, 국민건강보험법 제80조, 보험료징수법 제25조 · 과태료: 국민연금법 제131조·시행령 제114조 [별표 3], 국민건강보험법 제119조·시행령 제82조 [별표 7], 고용보험법 제118조·시행령 제146조 [별표 3], 보험료징수법 제50조·시행령 제57조 [별표 2]',
     items: [{ f: '실무 참고', s: '예시·유의사항', d: [],
       tips: ['예: 보험료 100만원을 40일 늦게 내면 → 30일분 1/1,500 × 30 = 20,000원(2% 상한) + 10일분 1/6,000 × 10 ≈ 1,667원 = 약 21,667원',
-        '표의 과태료는 법에 정한 <b>상한</b>입니다. 실제 부과 금액은 각 법 시행령의 과태료 부과기준(위반 횟수·정도)에 따릅니다(원문 확인 필요).',
+        '<b>차수</b>는 최근 1년간 같은 위반으로 과태료 처분을 받은 경우를 셉니다(보험료징수법의 성립·보수총액·개산·확정보험료 신고 위반은 최근 3년간). 처음 위반이면 1차 금액입니다.',
+        '각 시행령 일반기준에 따라 사소한 부주의·오류, 시정 완료 등은 <b>2분의 1 범위에서 감경</b>할 수 있고(과태료 체납자 제외), 고의·장기 위반 등은 2분의 1 범위에서 가중할 수 있습니다(법정 상한 이내).',
+        '고용보험 피보험자격 거짓 신고의 차수별 금액은 별표 표에 적힌 대로 옮겼으나, 같은 별표 일반기준은 이 위반을 차수 가중에서 제외한다고 적고 있어 실제 적용은 관할 고용센터에 확인하세요.',
         '천재지변 등 부득이한 사유가 있으면 연체금을 징수하지 않을 수 있습니다(각 조항 단서).',
         '신고를 늦게라도 하면 소급해서 보험료가 부과되므로, 놓친 것을 알면 바로 신고하는 것이 좋습니다.'] }] },
 
@@ -2486,7 +2604,7 @@ let costMode = 'gross';
 function costCase(kind, amt, o) {
   const ym = thisMonth(), size = $('size').value, ia = ($('iaRate').value || '').replace(/[^\d.]/g, '');
   const rs = ratesFor(ym);
-  const iaE = pay => ia ? prem(pay, ia) : 0;
+  const iaE = pay => ia ? prem(pay, ia) + iaExtra(pay) : 0;
   // 공단별 내역: w(근로자)·e(사업주) = { nps, nhi, ltc, ei, ia }, it = { tax, local }
   const split = ins => ({ w: { nps: ins.nps.w, nhi: ins.nhi.w, ltc: ins.ltc.w, ei: ins.ei.w, ia: 0 }, e: { nps: ins.nps.e, nhi: ins.nhi.e, ltc: ins.ltc.e, ei: ins.ei.e, ia: ins.ia.e } });
   if (kind === 'reg') {
@@ -2548,7 +2666,7 @@ function renderCost() {
   notes.push({ cls: 'info', text: costMode === 'net'
     ? `근로자가 매달 ${won(amt)} 이상을 받도록 각 형태의 세전 금액을 역산했습니다. 같은 실수령이라면 사업주 총비용은 ${K[R.indexOf(R.reduce((a, b) => a.total <= b.total ? a : b))][1]}(${K[R.indexOf(R.reduce((a, b) => a.total <= b.total ? a : b))][2]})이 가장 적습니다.`
     : `같은 세전 금액 ${won(amt)}이면 근로자 실수령은 ${K[R.indexOf(R.reduce((a, b) => a.net >= b.net ? a : b))][1]}(${K[R.indexOf(R.reduce((a, b) => a.net >= b.net ? a : b))][2]})이 가장 많습니다.` });
-  $('costNotes').innerHTML = notes.map(n => `<li class="${n.cls}">${n.text}</li>`).join('');
+  $('costNotes').innerHTML = noteList(notes);
   const lab = K.map(([, a, b]) => `${a}(${b})`);
   $('costAll').textContent = costOpen.w && costOpen.t && costOpen.e ? '전체 접기' : '전체 펼치기';
   // 요약 카드: 형태별 사업주 총비용(크게)과 근로자 실수령
@@ -2737,6 +2855,24 @@ function buildTests() {
   add('노무 · 실업급여', '평균 97,826 < 통상 112,000 → 통상임금 × 60% = 67,200', '67,200', fmt(ub({ ord: 112000 }).daily));
   add('노무 · 실업급여', '65세 이후 새로 고용 → 불가', 'false', String(ub({ over65: true }).ok));
   add('노무 · 실업급여', '단위기간 179일 → 불가 / 자진퇴사 → 불가', 'false / false', `${ub({ unit: 179 }).ok} / ${ub({ why: 'no:자진' }).ok}`);
+  // 산재·고지
+  const iaI = insurance(3000000, ratesFor('2026-09'), { useNps: true, useNhi: true, useEi: true, useIa: true, iaRate: '0.86', size: 'A' });
+  add('산재보험', '보수 300만 · 도소매(8‰ + 출퇴근 0.6‰ = 0.86%) → 25,800 / 임금채권 0.9‰ 2,700 + 석면 0.06‰ 180', '25,800 / 2,880', `${fmt(iaI.ia.e)} / ${fmt(iaI.ia.x)}`);
+  add('산재보험', '건설업 35‰ → 35.6‰ = 3.56%', '3.56', String(+((35 + IA_COMMUTE) / 10).toFixed(3)));
+  // 4대보험 고지액 탭 (여러 명 합산 = 각자 계산의 합)
+  const blA = calcBill([{ pay: 3000000, nps: true, nhi: true, ei: true }, { pay: 2500000, nps: false, nhi: true, ei: true }, { pay: 0, nps: true, nhi: true, ei: true }], '2026-09', { size: 'A', iaRate: '0.86', useIa: true });
+  const blB = [[3000000, true], [2500000, false]].map(([s, n]) => insurance(s, ratesFor('2026-09'), { useNps: n, useNhi: true, useEi: true, useIa: true, iaRate: '0.86', size: 'A' }));
+  add('고지액 탭', '300만 + 250만(연금 제외) 2명 합산 = 각자 계산 합', `${blB.length}명 / ${fmt(blB[0].w + blB[1].w)} / ${fmt(blB[0].e + blB[1].e)}`, `${blA.n}명 / ${fmt(blA.w)} / ${fmt(blA.e)}`);
+  // 일용 월 지급액 기준
+  const dm1 = dayCalc(0, 20, 'on', 'A', '2026-09', null, 3100000), dm2 = dayCalc(155000, 20, 'on', 'A', '2026-09', null);
+  add('일용 월 지급액', '월 310만 ÷ 20일 = 일당 155,000 → 일당 기준 계산과 같음', `${fmt(dm2.wage)} / ${fmt(dm2.tax)} / ${fmt(dm2.net)}`, `${fmt(dm1.wage)} / ${fmt(dm1.tax)} / ${fmt(dm1.net)}`);
+  const dm3 = dayCalc(0, 3, 'off', 'A', '2026-09', null, 500002);
+  add('일용 월 지급액', '월 500,002 ÷ 3일 → 166,667 ×2일 + 166,668 ×1일, 일 세액 450·450 → 1,350', '500,002 / 1,350', `${fmt(dm3.pay)} / ${fmt(dm3.tax)}`);
+  // 연도 알림 · 고지액 두루누리
+  add('연도 알림', '2027년 1월이면 경고 / 2026년 10월이면 없음', 'true / true', `${yearNotice(new Date(2027, 0, 5)).includes('2027년') } / ${yearNotice(new Date(2026, 9, 7)) === ''}`);
+  const blD = calcBill([{ pay: 2500000, nps: true, nhi: true, ei: true, duru: true }], '2026-09', { size: 'A', useIa: false });
+  const blDi = insurance(2500000, ratesFor('2026-09'), { useNps: true, useNhi: true, useEi: true, duru: true, size: 'A' });
+  add('고지액 탭', '250만 두루누리 줄 = 근로소득 두루누리 계산', `${fmt(blDi.w)} / ${fmt(blDi.e)}`, `${fmt(blD.w)} / ${fmt(blD.e)}`);
   // 신고 기한 날짜
   const dd = (c, k, s) => { const r = dueDate(c, k, new Date(s + 'T00:00:00')); return r ? `${r.d.getMonth() + 1}.${r.d.getDate()}` : '-'; };
   add('신고 기한', '2026.10.5. 입사 → 건강 14일(10.19.)', '10.19', dd('p14', 14, '2026-10-05'));
@@ -2783,12 +2919,20 @@ function updateBadge(rs, unsupported) {
   b.className = 'rate-chip ' + (unsupported ? 'bad' : c === 'ok' ? 'ok' : c === 'warn' ? 'warn' : '');
 }
 function renderAll() { renderWage(); renderDay(); renderBiz(); renderHelp(); renderVisa(); renderCost(); renderDuru(); }
+// 거래처 안내문: 카톡·메일에 붙여넣을 문장
+const MSG = {};
+const MSG_FOOT = '※ 계산·검토용 예상액입니다. 4대보험은 공단에 신고한 보수 기준으로 고지되어 실제 금액과 다를 수 있습니다.';
+function copyMsg(kind) {
+  if (!MSG[kind]) return toast('금액을 먼저 입력하세요.');
+  navigator.clipboard.writeText(MSG[kind]).then(() => toast('안내문을 복사했습니다. 카톡·메일에 붙여넣으세요.'), () => toast('복사에 실패했습니다.'));
+}
 function copyResult(kind) {
   const lines = COPY[kind].map(row => row.join('\t'));
   navigator.clipboard.writeText(lines.join('\n')).then(() => toast('복사했습니다. 엑셀에 붙여넣으세요.'), () => toast('복사에 실패했습니다.'));
 }
-function saveSite() { try { localStorage.setItem(SITE_KEY, JSON.stringify({ size: $('size').value, iaRate: $('iaRate').value })); } catch (e) {} }
-function loadSite() { try { const s = JSON.parse(localStorage.getItem(SITE_KEY) || 'null'); if (s) { $('size').value = s.size || 'A'; $('iaRate').value = s.iaRate || ''; } } catch (e) {} }
+function saveSite() { try { localStorage.setItem(SITE_KEY, JSON.stringify({ size: $('size').value, iaRate: $('iaRate').value, iaInd: $('iaInd').value })); } catch (e) {} }
+function iaFromInd() { const v = $('iaInd').value; if (v !== 'custom') $('iaRate').value = String(+((+v + IA_COMMUTE) / 10).toFixed(3)); }
+function loadSite() { $('iaInd').value = '8'; iaFromInd(); try { const s = JSON.parse(localStorage.getItem(SITE_KEY) || 'null'); if (s) { $('size').value = s.size || 'A'; if (s.iaInd) $('iaInd').value = s.iaInd; if (s.iaInd && s.iaInd !== 'custom') iaFromInd(); else if (s.iaRate) { $('iaInd').value = 'custom'; $('iaRate').value = s.iaRate; } } } catch (e) {} }
 
 // Enter = 다음 입력칸, Shift+Enter = 이전 입력칸 (보이는 칸만, 같은 탭 안에서)
 document.addEventListener('keydown', e => {
@@ -2831,7 +2975,8 @@ document.addEventListener('input', e => {
 }, true);
 document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => {
   document.querySelectorAll('.tabs button').forEach(x => x.classList.toggle('on', x === b));
-  ['wage', 'day', 'biz', 'help', 'labor', 'set'].forEach(t => $('tab-' + t).classList.toggle('hidden', t !== b.dataset.tab));
+  ['wage', 'bill', 'day', 'biz', 'help', 'labor', 'set'].forEach(t => $('tab-' + t).classList.toggle('hidden', t !== b.dataset.tab));
+  if (b.dataset.tab === 'bill') renderBill();
   if (b.dataset.tab === 'labor') renderLabor();
   if (b.dataset.tab === 'day') renderDay();
   if (b.dataset.tab === 'set') { renderSettings(); runTests(); }
@@ -2858,8 +3003,79 @@ $('showBasis').addEventListener('change', e => $('wageResult').classList.toggle(
 let wageTimer = null;
 function scheduleWage() { clearTimeout(wageTimer); if (wageMode === 'rev') wageTimer = setTimeout(renderWage, 250); else renderWage(); }
 $('tab-wage').addEventListener('input', e => { if (e.target.id !== 'showBasis') scheduleWage(); });
-$('tab-wage').addEventListener('change', e => { if (e.target.id === 'size' || e.target.id === 'iaRate') saveSite(); if (e.target.id !== 'showBasis') scheduleWage(); });
+// ===== 4대보험 고지액: 직원별 월 보수로 사업장 고지 예상액 (요율·규모·산재는 근로소득 탭 설정 사용) =====
+function blRow(pay = '') {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td><input class="money bl-pay" inputmode="numeric" placeholder="0" value="${pay}"></td>` +
+    ['nps', 'nhi', 'ei'].map(k => `<td class="c"><input type="checkbox" class="bl-${k}" checked></td>`).join('') +
+    ['duru', 'e65'].map(k => `<td class="c"><input type="checkbox" class="bl-${k}"></td>`).join('') +
+    `<td class="r bl-tot">—</td><td class="c"><button class="bl-del" title="삭제">✕</button></td>`;
+  $('blRows').appendChild(tr);
+}
+function calcBill(rows, ym, o) {
+  const rs = ratesFor(ym), keys = ['nps', 'nhi', 'ltc', 'ei', 'ia'];
+  const sum = Object.fromEntries(keys.map(k => [k, { w: 0, e: 0 }]));
+  const emps = rows.map(r => {
+    if (!(r.pay > 0)) return null;
+    const i = insurance(r.pay, rs, { useNps: r.nps, useNhi: r.nhi, useEi: r.ei, ei65: !!r.e65, duru: !!r.duru, useIa: o.useIa, iaRate: o.iaRate, size: o.size });
+    keys.forEach(k => { sum[k].w += i[k].w; sum[k].e += i[k].e + (k === 'ia' ? (i.ia.x || 0) : 0); });
+    return { pay: r.pay, w: i.w, e: i.e };
+  });
+  const ok = emps.filter(Boolean);
+  const w = ok.reduce((a, x) => a + x.w, 0), e = ok.reduce((a, x) => a + x.e, 0);
+  return { sum, emps, n: ok.length, w, e, tot: w + e };
+}
+function renderBill() {
+  if (!$('blRows').children.length) blRow();
+  const ym = ymVal(), size = $('size').value, iaRate = ($('iaRate').value || '').replace(/[^\d.]/g, ''), useIa = $('useIa').checked;
+  const rows = [...$('blRows').children].map(tr => ({
+    pay: parseInt(tr.querySelector('.bl-pay').value.replace(/[^\d]/g, ''), 10) || 0,
+    nps: tr.querySelector('.bl-nps').checked, nhi: tr.querySelector('.bl-nhi').checked, ei: tr.querySelector('.bl-ei').checked,
+    duru: tr.querySelector('.bl-duru').checked, e65: tr.querySelector('.bl-e65').checked }));
+  const r = calcBill(rows, ym, { size, iaRate, useIa });
+  [...$('blRows').children].forEach((tr, n) => { const x = r.emps[n]; tr.querySelector('.bl-tot').textContent = x ? fmt(x.w + x.e) : '—'; });
+  $('blSet').innerHTML = `적용: <b>${ym}</b> 요율 · 사업장 규모 <b>${$('size').selectedOptions[0].textContent}</b> · 산재 <b>${!useIa ? '적용 안 함' : iaRate ? iaRate + '%' : '요율 미입력'}</b> — 바꾸려면 근로소득 탭 › 보험·세금 상세 설정`;
+  $('blStrip').innerHTML = `<div class="it"><span>직원 부담분 <small>급여에서 공제</small></span><b>${won(r.w)}</b></div><div class="op">+</div>` +
+    `<div class="it emp"><span>사업주 부담분 <small>회사가 추가 부담</small></span><b>${won(r.e)}</b></div><div class="op">=</div>` +
+    `<div class="it main"><span>매월 고지 합계 <small>${r.n}명 · 공단에 내는 금액</small></span><b>${won(r.tot)}</b></div>`;
+  const head = a => `<thead><tr><th>${a}</th><th>직원 부담</th><th>사업주 부담</th><th>고지 합계</th></tr></thead>`;
+  const tr = (n, w, e) => `<tr><td>${n}</td><td>${w === null ? '—' : fmt(w)}</td><td>${fmt(e)}</td><td><b>${fmt((w || 0) + e)}</b></td></tr>`;
+  const S = r.sum, foot = `<tr class="bill-sum"><td>합계</td><td>${fmt(r.w)}</td><td>${fmt(r.e)}</td><td><b>${fmt(r.tot)}</b></td></tr>`;
+  $('blByIns').innerHTML = head('보험') + '<tbody>' + tr('국민연금', S.nps.w, S.nps.e) + tr('건강보험', S.nhi.w, S.nhi.e) + tr('장기요양보험', S.ltc.w, S.ltc.e) +
+    tr('고용보험', S.ei.w, S.ei.e) + tr('산재보험 <small>임금채권·석면 포함 · 전액 사업주</small>', null, S.ia.e) + foot + '</tbody>';
+  $('blNotes').innerHTML = noteList([
+    ['info', '실제 고지액은 이번 달 급여가 아니라 공단에 <b>신고한 보수</b>(국민연금 기준소득월액, 건강보험 보수월액, 고용·산재 월평균보수) 기준으로 계산되므로 차이가 날 수 있습니다.'],
+    ['info', '60세 이상 국민연금 제외 등 가입 대상이 아닌 보험은 해당 칸 체크를 해제하세요. <b>두루누리</b>는 10명 미만 사업장 · 월 보수 270만원 미만 · 신규가입자일 때 체크하면 국민연금·고용보험 80%를 뺍니다. <b>65세 이후</b>는 65세 이후 새로 고용된 직원으로, 고용보험 실업급여분을 빼고 고용안정분만 계산합니다. 입·퇴사 달 계산은 근로소득 탭에서 확인하세요.']
+  ].map(([cls, text]) => ({ cls, text })));
+  MSG.bill = r.n ? [`[4대보험 월 고지 예상액] ${r.n}명 · ${ym}`,
+    `- 직원 부담 ${won(r.w)} (급여에서 공제)`,
+    `- 회사 부담 ${won(r.e)}`,
+    `- 매월 고지 합계 ${won(r.tot)}`,
+    `  (국민연금 ${fmt(S.nps.w + S.nps.e)} · 건강보험 ${fmt(S.nhi.w + S.nhi.e)} · 장기요양 ${fmt(S.ltc.w + S.ltc.e)} · 고용보험 ${fmt(S.ei.w + S.ei.e)} · 산재보험 ${fmt(S.ia.e)})`,
+    MSG_FOOT].join('\n') : '';
+  COPY.bill = [['구분', '직원 부담', '사업주 부담', '고지 합계'], ...[['국민연금', S.nps], ['건강보험', S.nhi], ['장기요양보험', S.ltc], ['고용보험', S.ei], ['산재보험', S.ia]].map(([n, v]) => [n, v.w, v.e, v.w + v.e]), ['합계', r.w, r.e, r.tot]];
+}
+$('blAdd').addEventListener('click', () => { blRow(); renderBill(); $('blRows').lastElementChild.querySelector('.bl-pay').focus(); });
+$('blRows').addEventListener('click', e => { const b = e.target.closest('.bl-del'); if (!b) return; b.closest('tr').remove(); renderBill(); });
+$('tab-bill').addEventListener('input', renderBill);
+$('tab-bill').addEventListener('change', renderBill);
+// 근로소득 → 고지액 탭: 첫 줄이 비었으면 채우고, 아니면 줄을 추가
+$('toBill').addEventListener('click', () => {
+  if (!lastWage || !lastWage.pay) return toast('월 급여를 먼저 입력하세요.');
+  document.querySelector('[data-tab="bill"]').click();
+  let tr = [...$('blRows').children].find(x => !x.querySelector('.bl-pay').value.replace(/[^\d]/g, ''));
+  if (!tr) { blRow(); tr = $('blRows').lastElementChild; }
+  tr.querySelector('.bl-pay').value = fmt(lastWage.pay);
+  tr.querySelector('.bl-nps').checked = lastWage.nps; tr.querySelector('.bl-nhi').checked = lastWage.nhi; tr.querySelector('.bl-ei').checked = lastWage.ei;
+  tr.querySelector('.bl-duru').checked = lastWage.duru; tr.querySelector('.bl-e65').checked = lastWage.ei65;
+  renderBill(); window.scrollTo(0, 0);
+});
+
+$('iaInd').addEventListener('change', () => { iaFromInd(); saveSite(); });
+$('iaRate').addEventListener('input', () => { $('iaInd').value = 'custom'; });
+$('tab-wage').addEventListener('change', e => { if (['size', 'iaRate', 'iaInd'].includes(e.target.id)) saveSite(); if (e.target.id !== 'showBasis') scheduleWage(); });
 $('tab-day').addEventListener('input', renderDay);
+$('dayMode').addEventListener('click', e => { const b = e.target.closest('button'); if (b) setDayMode(b.dataset.mode); });
 $('tab-day').addEventListener('change', renderDay);
 $('tab-help').addEventListener('input', () => { renderHelp(); renderVisa(); renderCost(); renderDuru(); });
 $('tab-help').addEventListener('change', () => { renderCost(); renderDuru(); });
@@ -2877,12 +3093,24 @@ $('rptGTabs').addEventListener('click', e => { const b = e.target.closest('butto
 $('rptDate').addEventListener('input', renderReport);
 $('tab-labor').addEventListener('input', renderLabor);
 $('tab-labor').addEventListener('change', renderLabor);
+const LB_GROUPS = [['계산', ['ot', 'leave', 'sev', 'ub', 'cost', 'dis', 'baby']], ['기준 확인', ['five', 'worker', 'docs']]];
+let lbSub = 'ot';
+function renderLbNav() {
+  const g = LB_GROUPS.findIndex(x => x[1].includes(lbSub));
+  $('lbGTabs').innerHTML = LB_GROUPS.map(([n], i) => `<button data-g="${i}" class="${i === g ? 'on' : ''}">${n}</button>`).join('');
+  $('lbChips').innerHTML = LB_GROUPS[g][1].map(k => { const b = $('laborTabs').querySelector(`[data-sub="${k}"] b`); return `<button data-k="${k}" class="${k === lbSub ? 'on' : ''}">${b ? b.textContent : k}</button>`; }).join('');
+}
+function goLabor(k) { lbSub = k; $('laborTabs').querySelector(`[data-sub="${k}"]`).click(); renderLbNav(); }
+$('lbGTabs').addEventListener('click', e => { const b = e.target.closest('button'); if (b) goLabor(LB_GROUPS[+b.dataset.g][1][0]); });
+$('lbChips').addEventListener('click', e => { const b = e.target.closest('button'); if (b) goLabor(b.dataset.k); });
 $('laborTabs').querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
   $('laborTabs').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
   document.querySelectorAll('.lb-sub').forEach(s => s.classList.toggle('hidden', s.id !== 'lb-' + b.dataset.sub));
+  if (lbSub !== b.dataset.sub) { lbSub = b.dataset.sub; renderLbNav(); }
   $('tab-labor').querySelector('.lb-five').classList.toggle('hidden', ['baby', 'five', 'docs', 'ub', 'worker', 'cost'].includes(b.dataset.sub));
 }));
 renderLabor();
+renderLbNav();
 ['hrWage', 'hrHours', 'hrDays'].forEach(id => $(id).addEventListener('input', renderHourly));
 $('hr3m').addEventListener('change', renderHourly);
 $('hrSend').addEventListener('click', () => {
@@ -2944,7 +3172,7 @@ function fitPrint() {
   const h = w.scrollHeight;
   if (h > 1110) w.style.zoom = String(Math.floor(1110 / h * 100) / 100);
 }
-window.addEventListener('beforeprint', () => { document.body.classList.add('pm'); fitPrint(); });
+window.addEventListener('beforeprint', () => { document.querySelectorAll('details.nmore').forEach(d => d.open = true); document.body.classList.add('pm'); fitPrint(); });
 window.addEventListener('afterprint', () => { document.body.classList.remove('pm'); $('wrapEl').style.zoom = ''; });
 
 /* 간이세액표 교체 */
@@ -2983,6 +3211,7 @@ $('btnTaxReset').addEventListener('click', () => {
 });
 
 $('ym').value = thisMonth();
+$('yearAlert').innerHTML = yearNotice(new Date());
 { const d = new Date(); $('ageBase').value = `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`; }
 renderTaxInfo();
 loadSite();
