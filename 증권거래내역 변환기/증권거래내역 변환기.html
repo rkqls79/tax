@@ -104,30 +104,55 @@
   .footer-note { color: var(--muted); font-size: 12.5px; margin-top: 8px; }
   h2 { font-size: 16px; margin: 0 0 12px; }
   code { background: #f8f5f0; padding: 1px 5px; border-radius: 4px; font-size: 12px; }
+  .steps { margin: 0 0 18px; padding-left: 20px; font-size: 13.5px; color: var(--text); }
+  .steps li { margin: 2px 0; }
+  details.raw > summary { cursor: pointer; font-size: 13.5px; color: var(--accent); font-weight: 600; }
+  details.raw[open] > summary { margin-bottom: 10px; }
+  .raw-guide { font-size: 13.5px; margin: 0 0 10px; }
+  #rawTable tr { cursor: pointer; }
+  #rawTable tbody tr:hover td { background: var(--accent-light); }
+  #rawTable tr.picked td { background: #e3ede7; font-weight: 600; }
+  #rawTable tr.picked2 td { background: #eef4f0; }
+  #rawTable td.rn { color: var(--muted); background: #f8f5f0; text-align: center; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>📊 증권 거래내역 변환기</h1>
-  <p class="sub">거래 1건이 2행으로 쪼개진 증권사(예: 미래에셋증권) 거래내역 파일을, 거래 1건 = 1행으로 병합해줍니다. 브라우저 안에서만 처리되며 서버로 전송되지 않습니다.</p>
+  <p class="sub">증권사 거래내역에서 거래 1건이 두 줄로 나뉘어 있는 것을 한 줄로 합쳐 엑셀로 저장해줍니다. 파일은 이 컴퓨터 안에서만 처리되고 외부로 보내지지 않습니다.</p>
+
+  <ol class="steps">
+    <li>증권사 프로그램(HTS)에서 거래내역을 엑셀로 내려받습니다.</li>
+    <li>그 파일을 아래 상자에 끌어다 놓거나, 상자를 눌러 선택합니다.</li>
+    <li>한 줄로 정리된 엑셀 파일이 <b>다운로드 폴더</b>에 자동 저장됩니다.</li>
+  </ol>
 
   <div class="panel">
     <div class="drop" id="drop">
       <div class="icon">📁</div>
-      <div class="main">파일을 여기에 끌어다 놓거나 클릭해서 선택하세요</div>
-      <div class="hint">.xls / .xlsx / .html / .htm / .csv — 실제로는 HTML 표 형식인 xls 파일도 지원합니다</div>
+      <div class="main">거래내역 파일을 여기에 끌어다 놓거나 눌러서 선택하세요</div>
+      <div class="hint">증권사에서 받은 엑셀 파일(.xls, .xlsx) 또는 CSV 파일</div>
       <input type="file" id="fileInput" accept=".xls,.xlsx,.html,.htm,.csv,.txt">
     </div>
     <div class="status" id="status"></div>
   </div>
 
+  <div class="panel" id="rawPanel" style="display:none;">
+    <details class="raw" id="rawBox">
+      <summary id="rawSummary">결과가 이상한가요? 원본에서 제목 줄을 직접 골라주세요</summary>
+      <p class="raw-guide">아래는 원본 파일 내용입니다. <b>"거래일자", "종목명"처럼 항목 이름이 적힌 첫 줄</b>을 눌러주세요.<br>
+        누른 줄과 그 바로 아래 줄을 제목으로 보고, 그 아래부터 두 줄씩 한 건으로 합칩니다.</p>
+      <div class="tablewrap"><table id="rawTable"></table></div>
+    </details>
+  </div>
+
   <div class="panel" id="resultPanel" style="display:none;">
-    <h2>미리보기</h2>
+    <h2>변환 결과 미리보기</h2>
     <div class="meta" id="meta"></div>
     <div class="tablewrap"><table id="table"></table></div>
     <div class="actions">
-      <button id="downloadCsv">CSV로 다운로드</button>
-      <button id="downloadXlsx" class="secondary">엑셀(.xlsx)로 다운로드</button>
+      <button id="downloadXlsx">엑셀 다시 저장</button>
+      <button id="downloadCsv" class="secondary">CSV로 다운로드</button>
     </div>
     <div class="footer-note" id="xlsxNote"></div>
   </div>
@@ -145,87 +170,280 @@
   const downloadXlsxBtn = document.getElementById('downloadXlsx');
   const xlsxNote = document.getElementById('xlsxNote');
 
-  let sheetJsLoaded = false;
+  const rawPanel = document.getElementById('rawPanel');
+  const rawBox = document.getElementById('rawBox');
+  const rawSummary = document.getElementById('rawSummary');
+  const rawTableEl = document.getElementById('rawTable');
+
   let currentHeader = null;
   let currentRecords = null;
   let currentFileBase = 'converted';
+  let currentCandidates = null;
+  let manualStartIdx = null;   // 사용자가 원본 표에서 고른 제목 줄(0부터). null이면 자동 감지
+  let pickedIdx = null;        // 실제 변환에 쓰인 제목 줄(원본 표 강조용)
 
-  // SheetJS는 CDN에서 지연 로드한다. 오프라인이면 실패할 수 있으니 실패해도 CSV는 항상 동작하게 한다.
-  const sheetJsScript = document.createElement('script');
-  sheetJsScript.src = 'https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js';
-  sheetJsScript.onload = () => { sheetJsLoaded = true; };
-  sheetJsScript.onerror = () => {
-    sheetJsLoaded = false;
-    xlsxNote.textContent = '엑셀(.xlsx) 다운로드는 인터넷 연결이 필요합니다(변환 라이브러리 로드 실패). 대신 CSV 다운로드를 이용해주세요.';
-  };
-  document.head.appendChild(sheetJsScript);
+  // SheetJS는 CDN에서 지연 로드한다. 실제 엑셀(바이너리 xls/xlsx) 읽기와 xlsx 저장에만 쓰고,
+  // 실패해도 HTML형 xls·CSV 변환과 CSV 다운로드는 동작하게 한다.
+  const SHEETJS_URL = 'https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js';
+  let sheetJsPromise = null;
+  function loadSheetJs() {
+    if (typeof XLSX !== 'undefined') return Promise.resolve(XLSX);
+    if (!sheetJsPromise) {
+      sheetJsPromise = new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = SHEETJS_URL;
+        s.onload = () => resolve(window.XLSX);
+        s.onerror = () => {
+          sheetJsPromise = null;
+          s.remove();
+          reject(new Error('엑셀 변환 라이브러리를 불러오지 못했습니다(인터넷 연결 필요).'));
+        };
+        document.head.appendChild(s);
+      });
+    }
+    return sheetJsPromise;
+  }
+  loadSheetJs().catch(() => {
+    xlsxNote.textContent = '※ 지금 인터넷에 연결되어 있지 않아 일부 엑셀 원본은 읽지 못할 수 있습니다. 엑셀 저장은 정상적으로 됩니다.';
+  });
 
   function showStatus(type, msg) {
     statusEl.className = 'status ' + type;
     statusEl.textContent = msg;
   }
 
-  function cellsOf(tr) {
-    return Array.from(tr.children).map(td => td.textContent.replace(/\s+/g, ' ').trim());
+  function cleanText(s) {
+    return String(s == null ? '' : s).replace(/\s+/g, ' ').trim();
   }
 
-  // HTML 문자열에서 "2행=1건" 패턴의 표를 찾아 헤더/레코드로 병합한다.
-  function parseWorkbookHtml(text) {
+  // ---------- 파일 → 후보 표(rows) 목록 ----------
+  // 후보: { rows: string[][], lens: number[] }
+  //  - HTML 표: lens = 실제 칸 수(2행=1건 구조는 두 행의 칸 수가 서로 다름)
+  //  - 엑셀/CSV: 모든 행 폭이 같으므로 lens = 끝쪽 빈 칸을 뺀 칸 수
+
+  function makeCandidate(rows, uniformWidth) {
+    rows = rows.filter(r => r.some(c => c !== ''));   // 완전히 빈 행 제거
+    if (uniformWidth) {
+      const trimmedLen = r => { let n = r.length; while (n > 0 && r[n - 1] === '') n--; return n; };
+      const width = rows.reduce((m, r) => Math.max(m, trimmedLen(r)), 0);
+      const lens = rows.map(trimmedLen);
+      rows = rows.map(r => { const x = r.slice(0, width); while (x.length < width) x.push(''); return x; });
+      return { rows, lens };
+    }
+    return { rows, lens: rows.map(r => r.length) };
+  }
+
+  function candidatesFromHtml(text) {
     const doc = new DOMParser().parseFromString(text, 'text/html');
     const tables = Array.from(doc.querySelectorAll('table'));
-    if (!tables.length) {
-      throw new Error('이 파일 안에서 표(<table>)를 찾지 못했습니다. 지원하지 않는 형식일 수 있습니다.');
-    }
-
-    // 행이 가장 많은 표를 실제 거래내역 표로 간주한다.
-    let dataTable = tables[0], maxRows = 0;
-    for (const t of tables) {
-      const n = t.querySelectorAll('tr').length;
-      if (n > maxRows) { maxRows = n; dataTable = t; }
-    }
-
-    const rows = Array.from(dataTable.querySelectorAll('tr'));
-    if (rows.length < 4) {
-      throw new Error('데이터 행이 너무 적습니다(' + rows.length + '행). 이 표 구조는 지원 대상이 아닐 수 있습니다.');
-    }
-
-    const countA = cellsOf(rows[0]).length;
-    const countB = cellsOf(rows[1]).length;
-
-    if (countA === countB) {
-      throw new Error('첫 두 행의 칸 수가 같아서(각 ' + countA + '칸) "2행=1건" 패턴으로 보이지 않습니다.\n이 도구는 홀수행/짝수행이 한 세트로 묶인 거래내역 전용입니다.');
-    }
-
-    for (let i = 0; i < rows.length; i++) {
-      const c = cellsOf(rows[i]).length;
-      const expected = (i % 2 === 0) ? countA : countB;
-      if (c !== expected) {
-        throw new Error('행 패턴이 도중에 어긋납니다 (행 ' + (i + 1) + ': ' + c + '칸, 기대값 ' + expected + '칸).\n이 표는 단순 반복 패턴이 아니어서 자동 병합이 어렵습니다.');
-      }
-    }
-
-    const header = cellsOf(rows[0]).concat(cellsOf(rows[1]));
-    const records = [];
-    let leftover = 0;
-    for (let i = 2; i < rows.length; i += 2) {
-      if (i + 1 >= rows.length) { leftover = 1; break; }
-      records.push(cellsOf(rows[i]).concat(cellsOf(rows[i + 1])));
-    }
-
-    return { header, records, totalRows: rows.length, leftover };
+    if (!tables.length) return null;
+    // table.rows / tr.cells 는 중첩된 표의 행·칸을 포함하지 않는다.
+    const rowsOf = t => Array.from(t.rows).map(tr => Array.from(tr.cells).map(td => cleanText(td.textContent)));
+    const cands = tables.map(t => makeCandidate(rowsOf(t), false));
+    // 헤더와 데이터가 서로 다른 표로 나뉜 경우를 위해 최상위 표들을 이어붙인 후보도 추가
+    const top = tables.filter(t => !t.parentElement || !t.parentElement.closest('table'));
+    if (top.length > 1) cands.push(makeCandidate([].concat(...top.map(rowsOf)), false));
+    return cands;
   }
 
-  async function decodeFile(file) {
-    const buf = await file.arrayBuffer();
-    // 1차: UTF-8로 시도. 대체문자(�)가 다수 나오면 EUC-KR(구형 HTS 내보내기)로 재시도.
+  function parseCsv(text) {
+    const delim = (text.split(/\r?\n/, 1)[0].split('\t').length > text.split(/\r?\n/, 1)[0].split(',').length) ? '\t' : ',';
+    const rows = [];
+    let row = [], field = '', inQ = false;
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      if (inQ) {
+        if (ch === '"') {
+          if (text[i + 1] === '"') { field += '"'; i++; } else inQ = false;
+        } else field += ch;
+      } else if (ch === '"') inQ = true;
+      else if (ch === delim) { row.push(field); field = ''; }
+      else if (ch === '\n' || ch === '\r') {
+        if (ch === '\r' && text[i + 1] === '\n') i++;
+        row.push(field); rows.push(row); row = []; field = '';
+      } else field += ch;
+    }
+    if (field !== '' || row.length) { row.push(field); rows.push(row); }
+    return rows.map(r => r.map(cleanText));
+  }
+
+  async function candidatesFromWorkbook(buf) {
+    let X;
+    try { X = await loadSheetJs(); }
+    catch (e) { throw new Error('이 파일을 읽으려면 인터넷 연결이 필요합니다.\n인터넷 연결을 확인하거나, 엑셀에서 파일을 열어 "다른 이름으로 저장 → CSV"로 저장한 뒤 넣어주세요.'); }
+    const wb = X.read(new Uint8Array(buf), { type: 'array' });
+    return wb.SheetNames.map(name => {
+      const rows = X.utils.sheet_to_json(wb.Sheets[name], { header: 1, raw: false, defval: '', blankrows: false });
+      return makeCandidate(rows.map(r => r.map(cleanText)), true);
+    });
+  }
+
+  function decodeText(buf) {
+    const b = new Uint8Array(buf);
+    if (b[0] === 0xFF && b[1] === 0xFE) return new TextDecoder('utf-16le').decode(buf);
+    if (b[0] === 0xFE && b[1] === 0xFF) return new TextDecoder('utf-16be').decode(buf);
+    if (b[0] === 0xEF && b[1] === 0xBB && b[2] === 0xBF) return new TextDecoder('utf-8').decode(buf);
+    // HTML 안의 charset 선언(euc-kr, ks_c_5601-1987 등)을 우선 따른다.
+    const head = new TextDecoder('latin1').decode(b.subarray(0, 4096));
+    const m = head.match(/charset\s*=\s*["']?([\w-]+)/i);
+    if (m) {
+      try { return new TextDecoder(m[1].toLowerCase()).decode(buf); } catch (e) { /* 모르는 라벨이면 아래로 */ }
+    }
+    // 선언이 없으면 UTF-8로 시도하고, 깨진 글자(�)가 많으면 EUC-KR(구형 HTS 내보내기)로 재시도.
     let text = new TextDecoder('utf-8').decode(buf);
     const badRatio = (text.match(/�/g) || []).length / Math.max(text.length, 1);
-    if (badRatio > 0.005) {
-      try {
-        text = new TextDecoder('euc-kr').decode(buf);
-      } catch (e) { /* euc-kr 미지원 브라우저면 utf-8 결과 유지 */ }
+    if (badRatio > 0.001) {
+      try { text = new TextDecoder('euc-kr').decode(buf); } catch (e) { /* euc-kr 미지원 브라우저면 utf-8 결과 유지 */ }
     }
     return text;
+  }
+
+  async function loadCandidates(file) {
+    const buf = await file.arrayBuffer();
+    const b = new Uint8Array(buf);
+    const isZip = b[0] === 0x50 && b[1] === 0x4B;                                    // xlsx
+    const isOle = b[0] === 0xD0 && b[1] === 0xCF && b[2] === 0x11 && b[3] === 0xE0;  // 구형 바이너리 xls
+    if (isZip || isOle) return candidatesFromWorkbook(buf);
+
+    const text = decodeText(buf);
+    if (/<table[\s>]/i.test(text)) return candidatesFromHtml(text);
+    if (/<\?xml|<Workbook[\s>]/i.test(text.slice(0, 2000))) return candidatesFromWorkbook(buf); // 엑셀 2003 XML
+    if (/\.(csv|txt)$/i.test(file.name) || /[,\t]/.test(text.split(/\r?\n/, 1)[0])) {
+      return [makeCandidate(parseCsv(text.replace(/^﻿/, '')), true)];
+    }
+    throw new Error('거래내역 표가 들어 있지 않은 파일 같습니다. 증권사에서 받은 거래내역 파일이 맞는지 확인해주세요.');
+  }
+
+  // ---------- "2행=1건" 구간 찾기 ----------
+  // 칸 수가 A,B,A,B… 로 반복되는 가장 긴 구간을 찾는다(앞쪽 제목행·뒤쪽 합계행은 자동 제외).
+  function findPairRun(cand) {
+    const len = cand.lens;
+    let best = null;
+    for (let s = 0; s + 3 < len.length; s++) {
+      const a = len[s], b = len[s + 1];
+      if (a === b || !a || !b) continue;
+      let e = s;
+      while (e + 1 < len.length && len[e] === a && len[e + 1] === b) e += 2;
+      const pairs = (e - s) / 2;
+      if (pairs >= 2 && (!best || pairs > best.pairs)) best = { start: s, end: e, pairs };
+      s = Math.max(s, e - 2);
+    }
+    return best;
+  }
+
+  // 헤더(start, start+1)와 데이터(dataStart ~ end) 를 병합한다.
+  function buildResult(cand, start, end, dataStart) {
+    const d0 = (dataStart == null ? start + 2 : dataStart);
+    // 홀수행/짝수행 각각의 폭을 맞춰야 병합 후 열이 어긋나지 않는다(엑셀/CSV의 끝쪽 빈 칸 제거 포함).
+    let wA = cand.lens[start], wB = cand.lens[start + 1];
+    for (let i = d0; i + 1 < end; i += 2) { wA = Math.max(wA, cand.lens[i]); wB = Math.max(wB, cand.lens[i + 1]); }
+    const fit = (r, w) => { const x = r.slice(0, w); while (x.length < w) x.push(''); return x; };
+    const rows = cand.rows;
+    const header = fit(rows[start], wA).concat(fit(rows[start + 1], wB));
+    const records = [];
+    for (let i = d0; i + 1 < end; i += 2) records.push(fit(rows[i], wA).concat(fit(rows[i + 1], wB)));
+    // 행마다 칸 수가 다를 수 있으므로 헤더 폭에 맞춘다
+    const width = Math.max(header.length, ...records.map(r => r.length));
+    while (header.length < width) header.push('');
+    records.forEach(r => { while (r.length < width) r.push(''); });
+    return { header, records };
+  }
+
+  function largestCandidate(cands) {
+    return cands.reduce((m, c) => (c.rows.length > m.rows.length ? c : m), cands[0]);
+  }
+
+  function convert() {
+    const cands = currentCandidates;
+    if (!cands || !cands.length || !cands.some(c => c.rows.length)) {
+      throw new Error('파일 안에 거래 내용이 없습니다.');
+    }
+
+    let cand, start, end, dataStart = null, note = '';
+    if (manualStartIdx !== null) {
+      cand = largestCandidate(cands);
+      start = manualStartIdx;
+      if (start + 1 >= cand.rows.length) throw new Error('고른 줄 아래에 내용이 없습니다. 더 위쪽 줄을 골라주세요.');
+      end = cand.rows.length;
+      if ((end - start) % 2) { end--; note = '\n· 맨 끝의 짝이 없는 1줄(합계 등)은 뺐습니다.'; }
+    } else {
+      let best = null;
+      for (const c of cands) {
+        const run = findPairRun(c);
+        if (run && (!best || run.pairs > best.run.pairs)) best = { cand: c, run };
+      }
+      if (!best) {
+        const e = new Error('어디서부터 거래내역인지 자동으로 찾지 못했습니다.');
+        e.needPick = true;
+        throw e;
+      }
+      cand = best.cand; start = best.run.start; end = best.run.end;
+      // 헤더에 rowspan(세로 병합) 칸이 있으면 헤더 2행의 칸 수가 데이터와 달라 구간에서 빠진다.
+      // 구간 첫 쌍이 숫자 데이터이고 바로 앞 2행이 글자뿐이면 그 2행을 헤더로 쓴다.
+      const numeric = r => r.some(c => /^[-+]?\d[\d,.\-\/: ]*$/.test(c));
+      if (start >= 2 && numeric(cand.rows[start].concat(cand.rows[start + 1])) &&
+          !numeric(cand.rows[start - 2].concat(cand.rows[start - 1]))) {
+        dataStart = start;
+        start -= 2;
+        note += '\n· 제목 줄 모양이 거래 줄과 조금 달라서, 항목 이름이 한두 칸 밀렸을 수 있습니다. 미리보기를 확인해주세요.';
+      }
+      const skippedHead = start, skippedTail = cand.rows.length - end;
+      if (skippedHead) note += '\n· 맨 위 ' + skippedHead + '줄(조회 조건·안내 문구 등)은 거래가 아니라서 뺐습니다.';
+      if (skippedTail) note += '\n· 맨 아래 ' + skippedTail + '줄(합계 등)은 거래가 아니라서 뺐습니다.';
+    }
+    const res = buildResult(cand, start, end, dataStart);
+    if (!res.records.length) throw new Error('고른 제목 줄 아래에 거래 내용이 없습니다. 다른 줄을 골라주세요.');
+    res.note = note;
+    res.start = (cand === largestCandidate(cands)) ? start : null;
+    return res;
+  }
+
+  function renderRaw(cands) {
+    const cand = largestCandidate(cands);
+    const rows = cand.rows.slice(0, 40);
+    rawTableEl.innerHTML = '<tbody>' + rows.map((r, i) => {
+      const cls = pickedIdx === null ? '' : (i === pickedIdx ? 'picked' : (i === pickedIdx + 1 ? 'picked2' : ''));
+      return '<tr data-i="' + i + '" class="' + cls + '"><td class="rn">' + (i + 1) + '</td>' +
+        r.map(c => '<td>' + escapeHtml(c) + '</td>').join('') + '</tr>';
+    }).join('') + '</tbody>';
+    rawPanel.style.display = rows.length ? 'block' : 'none';
+  }
+
+  rawTableEl.addEventListener('click', (e) => {
+    const tr = e.target.closest('tr[data-i]');
+    if (!tr || !currentCandidates) return;
+    manualStartIdx = parseInt(tr.dataset.i, 10);
+    runConvert();
+    resultPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  function runConvert() {
+    try {
+      const { header, records, note, start } = convert();
+      currentHeader = header;
+      currentRecords = records;
+      pickedIdx = start;
+      let msg = '✅ 완료! 거래 ' + records.length + '건을 한 줄씩 정리했습니다.';
+      try {
+        msg += '\n엑셀 파일 "' + saveXlsx() + '"이(가) 다운로드 폴더에 저장되었습니다.';
+      } catch (e) {
+        msg += '\n엑셀 자동 저장이 되지 않았습니다. 아래 "엑셀 다시 저장" 버튼을 눌러주세요.';
+      }
+      showStatus('ok', msg + note);
+      metaEl.textContent = '항목 ' + header.length + '개 · 거래 ' + records.length + '건' + (records.length > 200 ? ' (앞 200건만 표시)' : '');
+      renderPreview(header, records);
+      resultPanel.style.display = 'block';
+      rawSummary.textContent = '결과가 이상한가요? 원본에서 제목 줄을 직접 골라주세요';
+      rawBox.open = false;
+    } catch (err) {
+      currentHeader = currentRecords = null;
+      pickedIdx = null;
+      resultPanel.style.display = 'none';
+      showStatus('err', '⚠️ ' + err.message + '\n아래 원본 내용에서 "거래일자", "종목명"처럼 항목 이름이 적힌 첫 줄을 눌러주세요.');
+      rawSummary.textContent = '원본 내용 (항목 이름이 적힌 첫 줄을 눌러주세요)';
+      rawBox.open = true;
+    }
+    renderRaw(currentCandidates);
   }
 
   function renderPreview(header, records) {
@@ -246,7 +464,7 @@
   function toCsv(header, records) {
     const esc = (v) => {
       const s = String(v == null ? '' : v);
-      return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+      return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
     };
     const lines = [header.map(esc).join(',')];
     for (const r of records) lines.push(r.map(esc).join(','));
@@ -266,24 +484,19 @@
 
   async function handleFile(file) {
     currentFileBase = (file.name || 'converted').replace(/\.[^.]+$/, '');
+    currentCandidates = null;
+    manualStartIdx = pickedIdx = null;
+    rawPanel.style.display = 'none';
+    resultPanel.style.display = 'none';
     showStatus('info', '파일을 읽는 중입니다…');
     try {
-      const text = await decodeFile(file);
-      const { header, records, totalRows, leftover } = parseWorkbookHtml(text);
-      currentHeader = header;
-      currentRecords = records;
-
-      let msg = '변환 완료: 원본 ' + totalRows + '행 → 거래 ' + records.length + '건(각 1행)으로 병합했습니다.';
-      if (leftover) msg += '\n※ 마지막에 짝이 맞지 않는 행이 1개 있어 제외했습니다.';
-      showStatus('ok', msg);
-
-      metaEl.textContent = '열 ' + header.length + '개 · 행 ' + records.length + '개 (미리보기는 최대 200행)';
-      renderPreview(header, records);
-      resultPanel.style.display = 'block';
+      currentCandidates = await loadCandidates(file);
+      if (!currentCandidates || !currentCandidates.some(c => c.rows.length)) throw new Error('파일 안에 거래 내용이 없습니다.');
     } catch (err) {
-      resultPanel.style.display = 'none';
-      showStatus('err', '변환 실패: ' + err.message);
+      showStatus('err', '⚠️ 파일을 읽지 못했습니다.\n' + err.message);
+      return;
     }
+    runConvert();
   }
 
   dropEl.addEventListener('click', () => fileInput.click());
@@ -296,6 +509,7 @@
   });
   fileInput.addEventListener('change', () => {
     if (fileInput.files && fileInput.files[0]) handleFile(fileInput.files[0]);
+    fileInput.value = '';   // 같은 파일을 다시 선택해도 change가 발생하도록
   });
 
   downloadCsvBtn.addEventListener('click', () => {
@@ -305,17 +519,133 @@
   });
 
   downloadXlsxBtn.addEventListener('click', () => {
-    if (!currentRecords) return;
-    if (!sheetJsLoaded || typeof XLSX === 'undefined') {
-      showStatus('err', '엑셀 변환 라이브러리를 아직 불러오지 못했습니다. 인터넷 연결을 확인하거나 CSV 다운로드를 이용해주세요.');
-      return;
-    }
-    const aoa = [currentHeader, ...currentRecords];
-    const ws = XLSX.utils.aoa_to_sheet(aoa);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, '거래내역');
-    XLSX.writeFile(wb, currentFileBase + '_변환.xlsx');
+    if (currentRecords) saveXlsx();
   });
+
+  // ---------- xlsx 직접 생성 (외부 라이브러리 없이, 오프라인에서도 동작) ----------
+  function saveXlsx() {
+    const blob = buildXlsx(currentHeader, currentRecords, '거래내역');
+    const name = currentFileBase + '_변환.xlsx';
+    downloadBlob(blob, name);
+    return name;
+  }
+
+  const CRC_TABLE = (() => {
+    const t = new Uint32Array(256);
+    for (let n = 0; n < 256; n++) {
+      let c = n;
+      for (let k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+      t[n] = c >>> 0;
+    }
+    return t;
+  })();
+  function crc32(bytes) {
+    let c = 0xFFFFFFFF;
+    for (let i = 0; i < bytes.length; i++) c = CRC_TABLE[(c ^ bytes[i]) & 0xFF] ^ (c >>> 8);
+    return (c ^ 0xFFFFFFFF) >>> 0;
+  }
+
+  // 무압축(store) zip
+  function zipStore(files) {
+    const enc = new TextEncoder();
+    const parts = [], central = [];
+    let offset = 0;
+    for (const f of files) {
+      const name = enc.encode(f.name), data = enc.encode(f.data), crc = crc32(data);
+      const local = new DataView(new ArrayBuffer(30));
+      local.setUint32(0, 0x04034B50, true); local.setUint16(4, 20, true); local.setUint16(6, 0x0800, true);
+      local.setUint32(14, crc, true); local.setUint32(18, data.length, true); local.setUint32(22, data.length, true);
+      local.setUint16(26, name.length, true);
+      parts.push(local.buffer, name, data);
+      const cd = new DataView(new ArrayBuffer(46));
+      cd.setUint32(0, 0x02014B50, true); cd.setUint16(4, 20, true); cd.setUint16(6, 20, true); cd.setUint16(8, 0x0800, true);
+      cd.setUint32(16, crc, true); cd.setUint32(20, data.length, true); cd.setUint32(24, data.length, true);
+      cd.setUint16(28, name.length, true); cd.setUint32(42, offset, true);
+      central.push(cd.buffer, name);
+      offset += 30 + name.length + data.length;
+    }
+    const cdSize = central.reduce((s, p) => s + p.byteLength, 0);
+    const end = new DataView(new ArrayBuffer(22));
+    end.setUint32(0, 0x06054B50, true); end.setUint16(8, files.length, true); end.setUint16(10, files.length, true);
+    end.setUint32(12, cdSize, true); end.setUint32(16, offset, true);
+    return new Blob([...parts, ...central, end.buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  }
+
+  function buildXlsx(header, records, sheetName) {
+    const xmlEsc = s => String(s).replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]))
+      .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '');
+    const colName = i => { let s = ''; i++; while (i) { const m = (i - 1) % 26; s = String.fromCharCode(65 + m) + s; i = (i - m - 1) / 26; } return s; };
+    // 금액·수량처럼 보이는 값은 숫자로 저장(합계 등 계산 가능). 0으로 시작하는 종목코드·계좌번호는 글자로 유지.
+    const asNumber = s => {
+      if (!/^-?(\d{1,3}(,\d{3})+|\d+)(\.\d+)?$/.test(s)) return null;
+      if (/^-?0\d/.test(s)) return null;
+      if (s.replace(/[^\d]/g, '').length > 15) return null;
+      return Number(s.replace(/,/g, ''));
+    };
+    const width = header.length;
+    const colW = header.map(h => Math.max(8, String(h).length * 2 + 2));
+    records.slice(0, 500).forEach(r => r.forEach((c, i) => { colW[i] = Math.min(40, Math.max(colW[i] || 8, String(c).length * 1.3 + 2)); }));
+
+    const rowXml = (cells, r, isHeader) => '<row r="' + r + '">' + cells.map((c, i) => {
+      const ref = colName(i) + r;
+      if (c === '' || c == null) return '';
+      if (isHeader) return '<c r="' + ref + '" t="inlineStr" s="1"><is><t>' + xmlEsc(c) + '</t></is></c>';
+      const n = asNumber(c);
+      if (n !== null) return '<c r="' + ref + '" s="' + (/\./.test(c) ? 3 : 2) + '"><v>' + n + '</v></c>';
+      return '<c r="' + ref + '" t="inlineStr"><is><t xml:space="preserve">' + xmlEsc(c) + '</t></is></c>';
+    }).join('') + '</row>';
+
+    const lastRef = colName(Math.max(width, 1) - 1) + (records.length + 1);
+    const sheet = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+      '<sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews>' +
+      '<cols>' + colW.map((w, i) => '<col min="' + (i + 1) + '" max="' + (i + 1) + '" width="' + w.toFixed(1) + '" customWidth="1"/>').join('') + '</cols>' +
+      '<sheetData>' + rowXml(header, 1, true) + records.map((r, i) => rowXml(r, i + 2, false)).join('') + '</sheetData>' +
+      '<autoFilter ref="A1:' + lastRef + '"/>' +
+      '</worksheet>';
+
+    const styles = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+      '<numFmts count="1"><numFmt numFmtId="164" formatCode="#,##0.####"/></numFmts>' +
+      '<fonts count="2"><font><sz val="10"/><name val="맑은 고딕"/></font><font><b/><sz val="10"/><name val="맑은 고딕"/></font></fonts>' +
+      '<fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill>' +
+      '<fill><patternFill patternType="solid"><fgColor rgb="FFF2F2F2"/></patternFill></fill></fills>' +
+      '<borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders>' +
+      '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
+      '<cellXfs count="4">' +
+      '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>' +
+      '<xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"/>' +
+      '<xf numFmtId="3" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/>' +
+      '<xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/>' +
+      '</cellXfs></styleSheet>';
+
+    return zipStore([
+      { name: '[Content_Types].xml', data: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' +
+        '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
+        '<Default Extension="xml" ContentType="application/xml"/>' +
+        '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>' +
+        '<Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>' +
+        '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>' +
+        '</Types>' },
+      { name: '_rels/.rels', data: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+        '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>' +
+        '</Relationships>' },
+      { name: 'xl/workbook.xml', data: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">' +
+        '<sheets><sheet name="' + xmlEsc(sheetName) + '" sheetId="1" r:id="rId1"/></sheets>' +
+        '<definedNames><definedName name="_xlnm._FilterDatabase" localSheetId="0" hidden="1">\'' + xmlEsc(sheetName) + '\'!$A$1:$' + lastRef.replace(/(\d+)$/, '$$$1') + '</definedName></definedNames>' +
+        '</workbook>' },
+      { name: 'xl/_rels/workbook.xml.rels', data: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+        '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/>' +
+        '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>' +
+        '</Relationships>' },
+      { name: 'xl/worksheets/sheet1.xml', data: sheet },
+      { name: 'xl/styles.xml', data: styles },
+    ]);
+  }
 })();
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap" rel="stylesheet">
