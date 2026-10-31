@@ -114,6 +114,13 @@
   #rawTable tr.picked td { background: #e3ede7; font-weight: 600; }
   #rawTable tr.picked2 td { background: #eef4f0; }
   #rawTable td.rn { color: var(--muted); background: #f8f5f0; text-align: center; }
+  .sortbar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0 0 10px; font-size: 13px; }
+  .sortbar label { color: var(--muted); font-weight: 600; }
+  .sortbar select {
+    font: inherit; font-size: 13px; color: var(--text);
+    padding: 6px 10px; border: 1px solid var(--border); border-radius: 7px; background: #fff; cursor: pointer;
+  }
+  .sortbar select:focus { outline: 2px solid var(--accent-light); border-color: var(--accent); }
 </style>
 </head>
 <body>
@@ -124,7 +131,7 @@
   <ol class="steps">
     <li>증권사 프로그램(HTS)에서 거래내역을 엑셀로 내려받습니다.</li>
     <li>그 파일을 아래 상자에 끌어다 놓거나, 상자를 눌러 선택합니다.</li>
-    <li>한 줄로 정리된 엑셀 파일이 <b>다운로드 폴더</b>에 자동 저장됩니다.</li>
+    <li>미리보기를 확인하고(필요하면 날짜순으로 정렬) <b>엑셀로 저장</b>을 누르면 <b>다운로드 폴더</b>에 저장됩니다.</li>
   </ol>
 
   <div class="panel">
@@ -149,9 +156,18 @@
   <div class="panel" id="resultPanel" style="display:none;">
     <h2>변환 결과 미리보기</h2>
     <div class="meta" id="meta"></div>
+    <div class="sortbar" id="sortBar">
+      <label for="sortOrder">정렬</label>
+      <select id="sortOrder">
+        <option value="">원본 순서 그대로</option>
+        <option value="asc">날짜 오래된 순</option>
+        <option value="desc">날짜 최신 순</option>
+      </select>
+      <select id="sortCol" title="정렬 기준 날짜 칸"></select>
+    </div>
     <div class="tablewrap"><table id="table"></table></div>
     <div class="actions">
-      <button id="downloadXlsx">엑셀 다시 저장</button>
+      <button id="downloadXlsx">엑셀로 저장</button>
       <button id="downloadCsv" class="secondary">CSV로 다운로드</button>
     </div>
     <div class="footer-note" id="xlsxNote"></div>
@@ -181,6 +197,16 @@
   let currentCandidates = null;
   let manualStartIdx = null;   // 사용자가 원본 표에서 고른 제목 줄(0부터). null이면 자동 감지
   let pickedIdx = null;        // 실제 변환에 쓰인 제목 줄(원본 표 강조용)
+
+  const sortBar = document.getElementById('sortBar');
+  const sortOrderEl = document.getElementById('sortOrder');
+  const sortColEl = document.getElementById('sortCol');
+  let baseRecords = null;      // 변환 직후(원본 순서) 거래 목록. currentRecords는 정렬이 적용된 목록
+  let sortCol = null;          // 정렬 기준 날짜 칸 번호
+  // 정렬 방식은 다음 파일에도 그대로 쓰도록 기억한다.
+  let sortOrder = '';
+  try { sortOrder = localStorage.getItem('stockConv.sortOrder') || ''; } catch (e) { /* 저장소 사용 불가 */ }
+  sortOrderEl.value = sortOrder;
 
   // SheetJS는 CDN에서 지연 로드한다. 실제 엑셀(바이너리 xls/xlsx) 읽기와 xlsx 저장에만 쓰고,
   // 실패해도 HTML형 xls·CSV 변환과 CSV 다운로드는 동작하게 한다.
@@ -417,26 +443,93 @@
     resultPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 
+  // ---------- 날짜 정렬 ----------
+  // "2026/10/31", "2026.10.31", "2026-10-31 09:30:00", "20261031", "26/10/31", "2026년 10월 31일" 등을
+  // 비교용 숫자(yyyymmddhhmmss)로 바꾼다. 날짜로 볼 수 없으면 null.
+  function dateKey(s) {
+    s = String(s == null ? '' : s).trim();
+    const m = s.match(/(\d{4}|\d{2})\s*[.\-\/년]\s*(\d{1,2})\s*[.\-\/월]\s*(\d{1,2})/) || s.match(/^(\d{4})(\d{2})(\d{2})(?!\d)/);
+    if (!m) return null;
+    let y = +m[1];
+    if (m[1].length === 2) y += 2000;
+    const mo = +m[2], d = +m[3];
+    if (y < 1980 || y > 2100 || mo < 1 || mo > 12 || d < 1 || d > 31) return null;
+    const t = s.slice(m.index + m[0].length).match(/(\d{1,2}):(\d{2})(?::(\d{2}))?/);
+    const time = t ? (+t[1]) * 10000 + (+t[2]) * 100 + (+(t[3] || 0)) : 0;
+    return ((y * 100 + mo) * 100 + d) * 1e6 + time;
+  }
+
+  // 날짜가 들어 있는 칸 찾기. 이름에 "일자/날짜" 등이 있는 칸을 앞에 둔다.
+  function findDateCols(header, records) {
+    const sample = records.slice(0, 300);
+    const cols = [];
+    header.forEach((h, i) => {
+      const vals = sample.map(r => r[i]).filter(v => v !== '');
+      if (!vals.length) return;
+      const ratio = vals.filter(v => dateKey(v) !== null).length / vals.length;
+      const named = /일자|날짜|일시|거래일|결제일|date/i.test(h);
+      if (ratio >= (named ? 0.8 : 0.95)) cols.push({ i, named, label: h || ((i + 1) + '번째 칸') });
+    });
+    return cols.sort((a, b) => (b.named - a.named) || (a.i - b.i));
+  }
+
+  function setupSort(header, records) {
+    const cols = findDateCols(header, records);
+    if (!cols.length) {
+      sortCol = null;
+      sortBar.style.display = 'none';
+      return;
+    }
+    if (!cols.some(c => c.i === sortCol)) sortCol = cols[0].i;
+    sortColEl.innerHTML = cols.map(c => '<option value="' + c.i + '">' + escapeHtml(c.label) + ' 기준</option>').join('');
+    sortColEl.value = String(sortCol);
+    sortColEl.style.display = cols.length > 1 ? '' : 'none';
+    sortBar.style.display = 'flex';
+  }
+
+  // 같은 날짜끼리는 원본 순서를 유지하고, 날짜를 읽을 수 없는 줄은 맨 뒤로 보낸다.
+  function applySort() {
+    if (!baseRecords) return;
+    if (!sortOrder || sortCol === null) { currentRecords = baseRecords.slice(); return; }
+    const dir = sortOrder === 'desc' ? -1 : 1;
+    currentRecords = baseRecords
+      .map((r, idx) => ({ r, idx, k: dateKey(r[sortCol]) }))
+      .sort((a, b) => {
+        if (a.k === null || b.k === null) return (a.k === null) - (b.k === null) || a.idx - b.idx;
+        return (a.k - b.k) * dir || a.idx - b.idx;
+      })
+      .map(x => x.r);
+  }
+
+  function onSortChange() {
+    sortOrder = sortOrderEl.value;
+    sortCol = parseInt(sortColEl.value, 10);
+    try { localStorage.setItem('stockConv.sortOrder', sortOrder); } catch (e) { /* 저장소 사용 불가 */ }
+    applySort();
+    renderPreview(currentHeader, currentRecords);
+  }
+  sortOrderEl.addEventListener('change', onSortChange);
+  sortColEl.addEventListener('change', onSortChange);
+
   function runConvert() {
     try {
       const { header, records, note, start } = convert();
       currentHeader = header;
-      currentRecords = records;
+      baseRecords = records;
+      setupSort(header, records);
+      applySort();
       pickedIdx = start;
       let msg = '✅ 완료! 거래 ' + records.length + '건을 한 줄씩 정리했습니다.';
-      try {
-        msg += '\n엑셀 파일 "' + saveXlsx() + '"이(가) 다운로드 폴더에 저장되었습니다.';
-      } catch (e) {
-        msg += '\n엑셀 자동 저장이 되지 않았습니다. 아래 "엑셀 다시 저장" 버튼을 눌러주세요.';
-      }
+      if (sortOrder && sortCol !== null) msg += '\n· ' + (sortOrder === 'desc' ? '날짜 최신 순' : '날짜 오래된 순') + '으로 정렬했습니다.';
+      msg += '\n아래 미리보기를 확인한 뒤 "엑셀로 저장" 버튼을 눌러주세요.';
       showStatus('ok', msg + note);
       metaEl.textContent = '항목 ' + header.length + '개 · 거래 ' + records.length + '건' + (records.length > 200 ? ' (앞 200건만 표시)' : '');
-      renderPreview(header, records);
+      renderPreview(header, currentRecords);
       resultPanel.style.display = 'block';
       rawSummary.textContent = '결과가 이상한가요? 원본에서 제목 줄을 직접 골라주세요';
       rawBox.open = false;
     } catch (err) {
-      currentHeader = currentRecords = null;
+      currentHeader = currentRecords = baseRecords = null;
       pickedIdx = null;
       resultPanel.style.display = 'none';
       showStatus('err', '⚠️ ' + err.message + '\n아래 원본 내용에서 "거래일자", "종목명"처럼 항목 이름이 적힌 첫 줄을 눌러주세요.');
