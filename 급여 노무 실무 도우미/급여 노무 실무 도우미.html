@@ -585,6 +585,11 @@ body.pm .cost-tbl td,body.pm .cost-tbl th{padding-top:4px;padding-bottom:4px}
         <label class="chk"><input type="checkbox" id="mealInKind">식사를 현물로도 제공함</label></div>
       <div class="f"><label for="ntCar">자가운전보조금 <em>비과세 월 20만</em></label><input id="ntCar" class="money" inputmode="numeric" placeholder="0"></div>
     </div>
+    <div class="fgrid c5">
+      <div class="f"><label for="npsFixType">국민연금 <em>비우면 과세급여 기준 자동</em></label>
+        <select id="npsFixType"><option value="base">기준소득월액으로 지정</option><option value="amt">근로자 부담액으로 지정</option></select></div>
+      <div class="f"><label for="npsFix" id="npsFixLabel">기준소득월액 <em>고지 기준 금액</em></label><input id="npsFix" class="money" inputmode="numeric" placeholder="자동"></div>
+    </div>
 
     <div class="pr-box" id="prBox">
       <label class="chk pr-switch"><input type="checkbox" id="prorate"><b>입·퇴사 월 일할 계산</b><span class="hint">금액은 한 달 기준으로 입력 · 달력 일수로 나눔</span></label>
@@ -1488,12 +1493,17 @@ function thisMonth() { const d = new Date(); return `${d.getFullYear()}-${String
 
 /* ---------------- 4대보험 ---------------- */
 // o.npsPay / o.nhiPay: 일할 월에 국민연금·건강보험을 월 보수(일할 전) 기준으로 계산할 때 사용
+// o.npsBase / o.npsAmt: 국민연금을 사용자가 정한 기준소득월액 / 근로자 부담액으로 고정 (급여와 무관, 역산 시에도 고정)
 function insurance(pay, rs, o) {
   const z = { w: 0, e: 0 };
   const r = { nps: { ...z }, nhi: { ...z }, ltc: { ...z }, ei: { ...z }, ia: { ...z }, base: {} };
-  const npsPay = o.npsPay ?? pay, nhiPay = o.nhiPay ?? pay;
-  if (pay <= 0 && npsPay <= 0) return finish(r);
-  if (o.useNps && npsPay > 0) {
+  const npsPay = o.npsBase || (o.npsPay ?? pay), nhiPay = o.nhiPay ?? pay;
+  if (pay <= 0 && npsPay <= 0 && !o.npsAmt) return finish(r);
+  if (o.useNps && o.npsAmt) {
+    // 근로자·사업주 요율이 같으므로 사업주 부담도 같은 금액
+    r.base.nps = null;
+    r.nps.w = o.npsAmt; r.nps.e = o.npsAmt;
+  } else if (o.useNps && npsPay > 0) {
     const b = clamp(Math.floor(npsPay / 1000) * 1000, rs.nps.min, rs.nps.max);
     r.base.nps = b;
     r.nps.w = prem(b, rs.nps.w); r.nps.e = prem(b, rs.nps.e);
@@ -1578,6 +1588,8 @@ function readWageInputs() {
     child: money('ntChild'), kidsU6: Math.max(0, intv('kidsU6', 0)),
     research: money('ntResearch'), other: money('ntOther'),
     ot: money('ntOT'), otType: $('otType').value, otYtd: money('otYtd'),
+    npsBase: $('npsFixType').value === 'base' ? money('npsFix') : 0,
+    npsAmt: $('npsFixType').value === 'amt' ? money('npsFix') : 0,
     pr: $('prorate').checked ? makePr(ymdVal('joinDate'), ymdVal('leaveDate'), {
       meal: $('prMeal').checked, car: $('prCar').checked, child: $('prChild').checked,
       research: $('prResearch').checked, other: $('prOther').checked, ot: $('prOT').checked }) : null
@@ -1691,6 +1703,9 @@ function calcWage(p, quiet) {
       else info(`국민연금·건강보험은 퇴사일이 속한 달까지 월 단위로 부과되어 일할하지 않습니다. 건강보험은 월 보수 ${won(fullTaxable)} 기준 한 달치, 국민연금은 ${npsTxt}(국민연금법 제17조 제1항, 국민건강보험법 제69조 제2항). 고용·산재는 실제 지급액 기준입니다.`);
       if (pr.leave) warn('퇴사월 소득세는 중도퇴사 연말정산으로 확정되므로 간이세액은 참고용입니다. 건강보험은 퇴직정산 보험료가 따로 있을 수 있습니다.');
     }
+    if (p.useNps && (p.npsBase || p.npsAmt)) info(p.npsAmt
+      ? `국민연금: 직접 지정한 근로자 부담액 ${won(p.npsAmt)}을 공제했습니다(사업주도 같은 금액). 기본급이 바뀌어도 고정입니다.`
+      : `국민연금: 직접 지정한 기준소득월액 ${won(p.npsBase)} 기준으로 계산했습니다(1,000원 미만 절사 · 상·하한 적용). 기본급이 바뀌어도 고정입니다.`);
     if (p.meal > NONTAX_LIMIT && !p.mealInKind) warn(`식대: 월 20만원 초과분 ${won(p.meal - NONTAX_LIMIT)}은 과세로 전환했습니다.`);
     if (p.meal && p.mealInKind) warn('식대: 식사를 현물로 제공하면 식대는 비과세되지 않아 전액 과세로 처리했습니다.');
     if (p.car > NONTAX_LIMIT) warn(`자가운전보조금: 월 20만원 초과분 ${won(p.car - NONTAX_LIMIT)}은 과세로 전환했습니다.`);
@@ -1815,7 +1830,7 @@ function showWage(r, extraNotes, target) {
 
   const taxBasis = `간이세액표 ${fmt(r.it.table)}` + (p.kids ? ` − 자녀공제 ${fmt(kidsDeduction(p.kids))}` : '') + (p.ratio !== 100 ? ` × ${p.ratio}%` : '');
   const dedRows = [
-    ['국민연금', i.nps.w, i.duru && i.duru.npsW ? `두루누리 지원 −${fmt(i.duru.npsW)}` : '', '', `${rs.nps.w}% · 기준소득월액 ${fmt(i.base.nps || 0)}`],
+    ['국민연금', i.nps.w, i.duru && i.duru.npsW ? `두루누리 지원 −${fmt(i.duru.npsW)}` : '', '', p.npsAmt && p.useNps ? '직접 지정한 부담액' : `${rs.nps.w}% · 기준소득월액 ${fmt(i.base.nps || 0)}${p.npsBase ? ' (직접 지정)' : ''}`],
     ['건강보험', i.nhi.w, '', '', `${rs.nhi.w}% · 보수월액 ${fmt(i.base.nhi || 0)}`],
     ['장기요양보험', i.ltc.w, '', '', `건강보험료 × ${rs.nhi.ltc} ÷ ${rs.nhi.total}`],
     ['고용보험', i.ei.w, i.duru && i.duru.eiW ? `두루누리 지원 −${fmt(i.duru.eiW)}` : '', '', `${rs.ei.w}%`],
@@ -1866,6 +1881,7 @@ function updateSummaries(p) {
   $('prFields').classList.toggle('hidden', !on);
   $('prBox').classList.toggle('on', on);
   $('rowBasic').querySelector('label').textContent = on ? '기본급 (월 기준)' : '기본급';
+  $('npsFixLabel').innerHTML = $('npsFixType').value === 'amt' ? '근로자 부담액 <em>매월 공제할 국민연금</em>' : '기준소득월액 <em>고지 기준 금액</em>';
   if (on) {
     const pr = p.pr;
     if (pr.err) $('prDays').innerHTML = `<span style="color:#7a4040">${pr.err}</span>`;
